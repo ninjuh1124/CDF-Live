@@ -1,0 +1,9 @@
+{
+	"name": "CDF",
+	"description": "Live feed of Casual Discussion Friday",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"snoowrap": "^1.14.1",
+		"dotenv": "^6.0.0"
+}
