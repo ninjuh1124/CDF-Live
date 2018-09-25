@@ -14,31 +14,33 @@ const reddit = new snoowrap({
     anime = reddit.getSubreddit('anime');
 
 async function pollThread() {
-    let numComments;
+    let newestParent;
 
-    while (true) {
-        // refresh thread
-        const listing = await anime.search({
-            'query': 'Casual Discussion Friday',
-            'time': 'week',
-            'sort': 'new'
-        });
+    // get latest thread
+    const listing = await anime.search({
+        'query': 'Casual Discussion Friday',
+        'time': 'week',
+        'sort': 'new'
+    });
+    let latestThread = await listing[0];
 
-        const latestThread = await listing[0];
-
+    while (!latestThread.locked) {
+        latestThread = await latestThread.refresh()
         // get comment list
         const comments = await latestThread.comments.fetchAll();
-        numComments = latestThread.num_comments;
 
+        // load comment list
         const parents = await Promise.all(comments
             .filter(comment => {
                 return !comment.stickied;
             })
             .map(comment => {
-                return { 'author': comment.author.name,
-                         'body' : comment.body };
+                comment.toJSON()
             })
         );
+
+        // check for new comments
+        // TODO
     }
 }
 
