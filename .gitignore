@@ -80,6 +80,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Node package-lock
 package-lock.json
-
-praw.ini

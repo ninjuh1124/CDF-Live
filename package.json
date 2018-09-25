@@ -1,10 +1,10 @@
 {
-	"name": "CDF",
+	"name": "CDF-Feed",
 	"description": "Live feed of Casual Discussion Friday",
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
 		"dotenv": "^6.0.0",
-		"python-shell": "^1.0.4"
+		"snoowrap": ""
 	}
 }
