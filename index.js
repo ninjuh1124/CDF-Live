@@ -13,8 +13,18 @@ const reddit = new snoowrap({
 }),
     anime = reddit.getSubreddit('anime');
 
-async function pollThread() {
-    let newestParent;
+    anime.config({
+        'requestDelay': 2000,
+        'debug': true
+    });
+
+async function pollComments() {
+    let latestComment;
+
+    /*
+
+    ***THIS SECTION IS BEING SAVED IN CASE IN CASE I
+    RANDOMLY DECIDE TO CHANGE HOW THIS PROGRAM FUNCTIONS***
 
     // get latest thread
     const listing = await anime.search({
@@ -39,9 +49,39 @@ async function pollThread() {
             })
         );
 
+
         // check for new comments
-        // TODO
+        if (newestParent != parents[0]) {
+            let i = 0;
+            do {
+                // handle new comments
+            } while (parents[i++].name != newestParent)
+            newestParent = await parents[0].name;
+        }
+        */
+
+    while (true) {
+        // retrieve new comments from subreddit
+        const comments = await anime.getNewComments({
+            'before': latestComment,
+            'show': 'all',
+            'amount': 500       // may or may not be too much
+        });
+
+        // filter to CDF comments
+        await Promise.all(comments
+            .filter(comment => {
+                const threadID = comment.link_id;
+                const threadTitle = Promise.resolve(reddit.getSubmission(threadID.substring(3)).title);                 // fix: promise rejection
+                return ("Casual Discussion Friday" == threadTitle.substring(0, "Casual Discussion Friday".length));     // i deserve to be slapped for this line
+            }).map(comment => {
+                comment.toJSON();
+            }).map(comment => {
+                // TODO: handle new comments
+                console.log(JSON.stringify(comment));
+            })
+        );
     }
 }
 
-pollThread()
+pollComments();
