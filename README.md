@@ -1,3 +1,3 @@
 # Casual Discussion Friday Live Feed
 
-UNDER CONSTRUCTION
+Polls /r/anime comment feed for new comments in the weekly Casual Discussion Friday
