@@ -71,9 +71,8 @@ async function pollComments() {
         // retrieve new comments from subreddit
         const comments = await anime.getNewComments({
             'before': latestComment,
-            'show': 'all',
             'skipReplies': true,
-            'limit': 500       // may or may not be too much
+            'limit': 100       // may or may not be too much
         });
 
         if (comments.length > 0) {
