@@ -18,6 +18,14 @@ anime.config({
     'debug': true
 });
 
+
+var threadNames = ['t3_9ji73y', 't3_9hkgi6'];
+
+/**
+ * polls /r/anime for new comments
+ * filters out comments not in CDF threads
+ * TODO: emit comment JSON to websocket **eventually**
+ */
 async function pollComments() {
     /*
 
@@ -64,25 +72,18 @@ async function pollComments() {
         const comments = await anime.getNewComments({
             'before': latestComment,
             'show': 'all',
-            'amount': 500       // may or may not be too much
+            'skipReplies': true,
+            'limit': 500       // may or may not be too much
         });
 
         if (comments.length > 0) {
             latestComment = comments[0].name;
         }
 
-        // get active thread IDs
-        const threadID = await Promise.all(anime.search({
-            'query':    'Casual Discussion Friday',
-            'time':     'week',
-            'sort':     'new',
-            'amount':   2       // in case a thread gets locked late or something
-        }).map(thread => thread.id));
-
         // filter to CDF comments
         await Promise.all(comments
             .filter(comment => {
-                return (comment.link_id.substring(3) == threadID[0] || comment.link_id.substring(3) == threadID[1]);
+                threadNames.includes(comment.link_id);
             }).map(comment => {
                 comment.toJSON();
             }).map(comment => {
@@ -93,4 +94,31 @@ async function pollComments() {
     }
 }
 
-pollComments();
+/*
+ * checks /r/anime for a new thread every 10 minutes
+ * that still might be a bit excessive
+ */
+async function getThreadID() {
+    while (true) {
+        setTimeout(() => {
+            Promise.all(anime.search({
+                'query': 'Casual Discussion Friday',
+                'sort': 'new',
+                'time': 'week'
+            }).map(thread => thread.name)
+              .map(name => {
+                    if (!threadNames.includes(name)) {
+                        threadNames.unshift(name)
+                    }
+              })
+			)
+		}, 600000);
+	}
+}
+
+function main() {
+    getThreadID();
+	pollComments();
+}
+
+main();
