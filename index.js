@@ -13,18 +13,15 @@ const reddit = new snoowrap({
 }),
     anime = reddit.getSubreddit('anime');
 
-    anime.config({
-        'requestDelay': 2000,
-        'debug': true
-    });
+anime.config({
+    'requestDelay': 5000,
+    'debug': true
+});
 
 async function pollComments() {
-    let latestComment;
-
     /*
 
-    ***THIS SECTION IS BEING SAVED IN CASE IN CASE I
-    RANDOMLY DECIDE TO CHANGE HOW THIS PROGRAM FUNCTIONS***
+    ***THIS SECTION IS BEING SAVED IN CASE IN CASE I NEED IT LATER***
 
     // get latest thread
     const listing = await anime.search({
@@ -60,6 +57,8 @@ async function pollComments() {
         }
         */
 
+    let latestComment;
+
     while (true) {
         // retrieve new comments from subreddit
         const comments = await anime.getNewComments({
@@ -68,12 +67,22 @@ async function pollComments() {
             'amount': 500       // may or may not be too much
         });
 
+        if (comments.length > 0) {
+            latestComment = comments[0].name;
+        }
+
+        // get active thread IDs
+        const threadID = await Promise.all(anime.search({
+            'query':    'Casual Discussion Friday',
+            'time':     'week',
+            'sort':     'new',
+            'amount':   2       // in case a thread gets locked late or something
+        }).map(thread => thread.id));
+
         // filter to CDF comments
         await Promise.all(comments
             .filter(comment => {
-                const threadID = comment.link_id;
-                const threadTitle = Promise.resolve(reddit.getSubmission(threadID.substring(3)).title);                 // fix: promise rejection
-                return ("Casual Discussion Friday" == threadTitle.substring(0, "Casual Discussion Friday".length));     // i deserve to be slapped for this line
+                return (comment.link_id.substring(3) == threadID[0] || comment.link_id.substring(3) == threadID[1]);
             }).map(comment => {
                 comment.toJSON();
             }).map(comment => {
