@@ -13,12 +13,11 @@ const reddit = new snoowrap({
 }),
     anime = reddit.getSubreddit('anime');
 
-anime.config({
-    'requestDelay': 5000,
+reddit.config({
     'debug': true
 });
 
-
+// threads names included here to help the program along
 var threadNames = ['t3_9ji73y', 't3_9hkgi6'];
 
 /**
@@ -65,31 +64,47 @@ async function pollComments() {
         }
         */
 
-    let latestComment;
+    let latestComment = null;
+    let comments = [];
 
     while (true) {
         // retrieve new comments from subreddit
-        const comments = await anime.getNewComments({
-            'before': latestComment,
-            'skipReplies': true,
-            'limit': 100       // may or may not be too much
-        });
+        // FIX: UnhandledPromiseRejectionWarning
+        if (latestComment != null) {
+            comments = await anime.getNewComments({
+                'before': latestComment,
+                'skipReplies': true,
+                'limit': 100       // may or may not be too much
+            }).catch((err) => {
+                console.log(err);
+            });
+        } else {
+            const comments = await anime.getNewComments({
+                'skipReplies': true,
+                'limit': 100
+            });
+        }
 
         if (comments.length > 0) {
             latestComment = comments[0].name;
         }
 
         // filter to CDF comments
+        // FIX: UnhandledPromiseRejectionWarning
         await Promise.all(comments
             .filter(comment => {
                 threadNames.includes(comment.link_id);
             }).map(comment => {
                 comment.toJSON();
             }).map(comment => {
-                // TODO: handle new comments
+                // TODO: do something with these comments
                 console.log(JSON.stringify(comment));
             })
-        );
+        ).catch((err) => {
+            console.log(err)
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 10000))
     }
 }
 
@@ -99,19 +114,20 @@ async function pollComments() {
  */
 async function getThreadID() {
     while (true) {
-        setTimeout(() => {
-            Promise.all(anime.search({
-                'query': 'Casual Discussion Friday',
-                'sort': 'new',
-                'time': 'week'
-            }).map(thread => thread.name)
-              .map(name => {
-                    if (!threadNames.includes(name)) {
-                        threadNames.unshift(name)
-                    }
-              })
-			)
-		}, 600000);
+        await Promise.all(anime.search({
+            'query': 'Casual Discussion Friday',
+            'sort': 'new',
+            'time': 'week'
+        })
+          .filter(thread => !threadNames.includes(thread.name))
+          .map(name => {
+                threadNames.unshift(name);
+          })
+      ).catch((err) => {
+          console.log(err)
+      });
+
+        await new Promise(resolve => setTimeout(resolve, 600000));
 	}
 }
 
