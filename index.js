@@ -69,7 +69,6 @@ async function pollComments() {
 
     while (true) {
         // retrieve new comments from subreddit
-        // FIX: UnhandledPromiseRejectionWarning
         if (latestComment != null) {
             comments = await anime.getNewComments({
                 'before': latestComment,
@@ -90,7 +89,6 @@ async function pollComments() {
         }
 
         // filter to CDF comments
-        // FIX: UnhandledPromiseRejectionWarning
         await Promise.all(comments
             .filter(comment => {
                 threadNames.includes(comment.link_id);
@@ -98,7 +96,7 @@ async function pollComments() {
                 comment.toJSON();
             }).map(comment => {
                 // TODO: do something with these comments
-                console.log(JSON.stringify(comment));
+                console.log("********NEW COMMENT BY " + comment.author);
             })
         ).catch((err) => {
             console.log(err)
@@ -114,13 +112,15 @@ async function pollComments() {
  */
 async function getThreadID() {
     while (true) {
+        // FIX: undefined is not a function
         await Promise.all(anime.search({
             'query': 'Casual Discussion Friday',
             'sort': 'new',
             'time': 'week'
         })
-          .filter(thread => !threadNames.includes(thread.name))
-          .map(name => {
+          .filter(thread => {
+              return !threadNames.includes(thread.name)
+          }).map(name => {
                 threadNames.unshift(name);
           })
       ).catch((err) => {
