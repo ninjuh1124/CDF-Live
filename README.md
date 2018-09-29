@@ -5,9 +5,9 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 ##Todo:
 
 *Backend*
-* ~~Fix filter
-* Fetch Thread IDs
-* Handle new comments~~
+* ~~Fix filter~~
+* ~~Fetch Thread IDs~~
+* ~~Handle new comments~~
 * Implement websocket
 
 *Frontend*
