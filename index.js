@@ -14,6 +14,7 @@ const reddit = new snoowrap({
     anime = reddit.getSubreddit('anime');
 
 reddit.config({
+    'requestDelay': 5000,
     'debug': true
 });
 
@@ -69,20 +70,15 @@ async function pollComments() {
 
     while (true) {
         // retrieve new comments from subreddit
-        if (latestComment != null) {
-            comments = await anime.getNewComments({
-                'before': latestComment,
-                'skipReplies': true,
-                'limit': 100       // may or may not be too much
-            }).catch((err) => {
-                console.log(err);
-            });
-        } else {
-            const comments = await anime.getNewComments({
-                'skipReplies': true,
-                'limit': 100
-            });
-        }
+        comments = await anime.getNewComments({
+            before: latestComment,
+            skipReplies: false,
+            show: 'all',
+            amount: 1000,
+            limit: 1000       // may or may not be too much
+        }).catch((err) => {
+            console.log(err);
+        });
 
         if (comments.length > 0) {
             latestComment = comments[0].name;
@@ -95,14 +91,20 @@ async function pollComments() {
             }).map(comment => {
                 comment.toJSON();
             }).map(comment => {
-                // TODO: do something with these comments
-                console.log("********NEW COMMENT BY " + comment.author);
+                handleComment(comment);
             })
         ).catch((err) => {
             console.log(err)
         });
 
         await new Promise(resolve => setTimeout(resolve, 10000))
+    }
+}
+
+// TODO: make this more useful
+function handleComment(comment) {
+    if (comment != null) {
+        console.log(comment.author + " has made a comment");
     }
 }
 
@@ -114,18 +116,18 @@ async function getThreadID() {
     while (true) {
         // FIX: undefined is not a function
         await Promise.all(anime.search({
-            'query': 'Casual Discussion Friday',
-            'sort': 'new',
-            'time': 'week'
+            query: 'Casual Discussion Friday',
+            sort: 'new',
+            time: 'week'
         })
-          .filter(thread => {
-              return !threadNames.includes(thread.name)
-          }).map(name => {
+            .filter(thread => {
+                return !threadNames.includes(thread.name)
+            }).map(name => {
                 threadNames.unshift(name);
           })
-      ).catch((err) => {
+        ).catch((err) => {
           console.log(err)
-      });
+        });
 
         await new Promise(resolve => setTimeout(resolve, 600000));
 	}
@@ -133,7 +135,7 @@ async function getThreadID() {
 
 function main() {
     getThreadID();
-	pollComments();
+    pollComments();
 }
 
 main();
