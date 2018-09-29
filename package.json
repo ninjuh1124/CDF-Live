@@ -5,6 +5,7 @@
 	"private": true,
 	"dependencies": {
 		"dotenv": "^6.0.0",
-		"snoowrap": ""
+		"snoowrap": "",
+		"snoostorm": ""
 	}
 }
