@@ -1,6 +1,13 @@
 const dotenv = require('dotenv'),
     snoowrap = require('snoowrap'),
-    snoostorm = require('snoostorm');
+    snoostorm = require('snoostorm'),
+    express = require('express');
+
+/**
+ * 
+ * BACKEND STUFF
+ *
+ */
 
 dotenv.load()
 
@@ -41,9 +48,11 @@ var threadStream = client.SubmissionStream({
  * and updates the active thread list accordingly
  */
 threadStream.on("thread", thread => {
-    if (thread.title.includes("Casual Discussion Friday")) {
+    if (thread.title.includes("Casual Discussion Friday") && thread.author == "AutoModerator") {
         threadNames.pop();
         threadNames.unshift(thread.name);
+        console.log("*****NEW THREAD HYPE*****");
+        console.log("------------------------------------------------------------");
     }
 });
 
@@ -54,6 +63,27 @@ threadStream.on("thread", thread => {
 commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
         // TODO: actually handle the comment
-        console.log(comment);
+        comment = comment.toJSON();
+        console.log(comment.author + ":");
+        console.log(comment.body);
+        console.log("------------------------------------------------------------");
     }
+});
+
+/**
+ *
+ * FRONT END STUFF
+ *
+ */
+
+var app = express();
+
+app.use((req, res, next) => {
+    res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
+    next();
+});
+
+app.get("/", (req, res) => {
+    res.redirect("/home");
+    res.end();
 });
