@@ -6,6 +6,7 @@
 	"dependencies": {
 		"dotenv": "^6.0.0",
 		"snoowrap": "",
-		"snoostorm": ""
+		"snoostorm": "",
+        "express": ""
 	}
 }
