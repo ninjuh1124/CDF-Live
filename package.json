@@ -6,7 +6,12 @@
 	"dependencies": {
 		"dotenv": "^6.0.0",
 		"snoowrap": "",
+<<<<<<< HEAD
 		"websocket": "",
 		"snoostorm": ""
+=======
+		"snoostorm": "",
+        "express": ""
+>>>>>>> 4b4ae93b1c6150c1507a2add69e2d0f7dac6beab
 	}
 }
