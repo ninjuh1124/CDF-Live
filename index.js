@@ -47,7 +47,7 @@ var threadStream = client.SubmissionStream({
  * checks /r/anime thread stream every minute for a new CDF thread
  * and updates the active thread list accordingly
  */
-threadStream.on("thread", thread => {
+threadStream.on("submission", thread => {
     if (thread.title.includes("Casual Discussion Friday") && thread.author == "AutoModerator") {
         threadNames.pop();
         threadNames.unshift(thread.name);
