@@ -1,7 +1,9 @@
 const dotenv = require('dotenv'),
     snoowrap = require('snoowrap'),
     snoostorm = require('snoostorm'),
-		express = require('express');
+    app = require('express')();
+    http = require('http').Server(app),
+    feed = require('socket.io')(http);
 
 /**
  * 
@@ -29,7 +31,7 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['9lhfll', 't3_9ji73y'];	// retains last 2 threads
+var threadNames = ['t3_9lhfll', 't3_9ji73y'];	// retains last 2 threads
 var history = [];							// retains last 100 comments
 
 var commentStream = client.CommentStream({
@@ -57,6 +59,8 @@ threadStream.on("submission", thread => {
     }
 });
 
+
+
 /**
  * checks /r/anime every minute
  * handles comments posted to active CDF threads
@@ -65,21 +69,25 @@ commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
         // TODO: actually handle the comment
         comment = comment.toJSON();
-        history = history.push(comment);
-        history = history.slice(0, 100);
+        history.push(comment);
+        if (history.length > 100) {
+            history.shift();
+        }
         console.log(comment.author + ":");
         console.log(comment.body);
         console.log("------------------------------------------------------------");
     }
 });
 
+function commentToHTML(comment) {
+	// TODO: this
+}
+
 /**
  *
  * FRONT END STUFF
  *
  */
-
-var app = express();
 
 app.use((req, res, next) => {
     res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
@@ -100,7 +108,7 @@ app.get("/home", (req, res) => {
 
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end(contents);
-    }
+    });
 });
 
 
