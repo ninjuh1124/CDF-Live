@@ -1,7 +1,7 @@
 const dotenv = require('dotenv'),
     snoowrap = require('snoowrap'),
     snoostorm = require('snoostorm'),
-    express = require('express');
+		express = require('express');
 
 /**
  * 
@@ -29,7 +29,8 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['t3_9ji73y', 't3_9hkgi6'];
+var threadNames = ['9lhfll', 't3_9ji73y'];	// retains last 2 threads
+var history = [];							// retains last 100 comments
 
 var commentStream = client.CommentStream({
     'subreddit': 'anime',
@@ -64,6 +65,8 @@ commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
         // TODO: actually handle the comment
         comment = comment.toJSON();
+        history = history.push(comment);
+        history = history.slice(0, 100);
         console.log(comment.author + ":");
         console.log(comment.body);
         console.log("------------------------------------------------------------");
@@ -87,3 +90,17 @@ app.get("/", (req, res) => {
     res.redirect("/home");
     res.end();
 });
+app.get("/home", (req, res) => {
+    fs.readFile('home.html', (err, contents) => {
+        if (err) {
+            // TODO: handle server error
+        }
+
+        contents = contents.toString('utf8');
+
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end(contents);
+    }
+});
+
+
