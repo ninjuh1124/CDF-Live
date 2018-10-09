@@ -67,21 +67,31 @@ threadStream.on("submission", thread => {
  */
 commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
-        // TODO: actually handle the comment
-        comment = comment.toJSON();
-        history.push(comment);
+        let obj = ((comment.toJSON()) => {
+            // turn the comment into something more usable
+   			return {
+                'kind': 'comment',
+                'author': comment.author,
+                'permalink': 'https://reddit.com' + comment.permalink,
+                'parent': comment.parent_id,
+                'body': comment.body,
+                'html': comment.body_html
+                    .replace('&lt;', '<')
+                    .replace('&gt;', '>')
+                    .replace('<a href="/u/', '<a href="https://reddit.com/u/')
+                    .replace('<a href="/r/', '<a href="https://reddit.com/r/')
+                    .replace('<p>', '<p class="text-justify">')
+    		}
+        })(comment);
+        history.push(obj);
         if (history.length > 100) {
             history.shift();
         }
-        console.log(comment.author + ":");
-        console.log(comment.body);
+        console.log(obj.author + ":");
+        console.log(obj.body);
         console.log("------------------------------------------------------------");
     }
 });
-
-function commentToHTML(comment) {
-	// TODO: this
-}
 
 /**
  *
@@ -110,5 +120,3 @@ app.get("/home", (req, res) => {
         res.end(contents);
     });
 });
-
-
