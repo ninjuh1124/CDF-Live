@@ -10,11 +10,14 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 * ~~Fix filter~~
 * ~~Fetch Thread IDs~~
 * ~~Handle new comments~~
-* Handle spoiler text
-* Handle comment faces
-* Implement websocket
+* Handle spoiler text   *possibly move these*
+* Handle comment faces  *to front end handlers?*
+* ~~Implement websocket~~
 
 *Frontend*
 * Build HTML templates
-* JQuery with incoming comments
-* ~~CSS~~ *good enough* Add dark theme
+* ~~JQuery with incoming comments~~
+* ~~CSS *good enough*~~ Add dark theme
+
+*Cleaning up*
+* Restructure files
