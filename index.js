@@ -1,9 +1,11 @@
 const dotenv = require('dotenv'),
     snoowrap = require('snoowrap'),
     snoostorm = require('snoostorm'),
-    app = require('express')();
-    http = require('http').Server(app),
-    feed = require('socket.io')(http);
+    express = require('express'),
+    app = express();
+    fs = require('fs');
+var server = app.listen(8080);
+var feed = require('socket.io').listen(server);
 
 /**
  * 
@@ -31,7 +33,7 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['t3_9lhfll', 't3_9ji73y'];	// retains last 2 threads
+var threadNames = ['t3_9ji73y', 't3_9nffyy'];	// retains last 2 threads
 var history = [];							// retains last 100 comments
 
 var commentStream = client.CommentStream({
@@ -67,8 +69,9 @@ threadStream.on("submission", thread => {
  */
 commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
-        let obj = ((comment.toJSON()) => {
+        let obj = ((comment) => {
             // turn the comment into something more usable
+            comment = comment.toJSON();
    			return {
                 'kind': 'comment',
                 'author': comment.author,
@@ -87,11 +90,15 @@ commentStream.on("comment", comment => {
         if (history.length > 100) {
             history.shift();
         }
-        console.log(obj.author + ":");
-        console.log(obj.body);
+        feed.emit('comment', obj);
+        console.log(obj.html);
         console.log("------------------------------------------------------------");
     }
 });
+
+feed.on('connection', () => {
+    console.log("New connection");
+})
 
 /**
  *
@@ -120,3 +127,4 @@ app.get("/home", (req, res) => {
         res.end(contents);
     });
 });
+
