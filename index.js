@@ -75,10 +75,11 @@ commentStream.on("comment", comment => {
    			return {
                 'kind': 'comment',
                 'author': comment.author,
+                'id': comment.name,
                 'permalink': 'https://reddit.com' + comment.permalink,
                 'parent': comment.parent_id,
                 'body': comment.body,
-                'html': comment.body_html
+                'body_html': comment.body_html
                     .replace('&lt;', '<')
                     .replace('&gt;', '>')
                     .replace('<a href="/u/', '<a href="https://reddit.com/u/')
@@ -91,14 +92,10 @@ commentStream.on("comment", comment => {
             history.shift();
         }
         feed.emit('comment', obj);
-        console.log(obj.html);
+        console.log(obj.body);
         console.log("------------------------------------------------------------");
     }
 });
-
-feed.on('connection', () => {
-    console.log("New connection");
-})
 
 /**
  *
