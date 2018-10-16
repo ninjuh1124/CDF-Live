@@ -10,8 +10,6 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 * ~~Fix filter~~
 * ~~Fetch Thread IDs~~
 * ~~Handle new comments~~
-* Handle spoiler text   *possibly move these*
-* Handle comment faces  *to front end handlers?*
 * ~~Implement websocket~~
 
 *Frontend*
@@ -23,3 +21,4 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 * Restructure files
 * Move helpers to dedicated scripts
 * Write more helpful comments
+* Handle spoilers/comment faces
