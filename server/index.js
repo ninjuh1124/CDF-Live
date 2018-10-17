@@ -127,5 +127,5 @@ app.get("/home", (req, res) => {
 });
 app.get("/v1/history.json", (req, res) => {
 	res.writeHead(200, {"Content-Type" : "application/json"});
-	res.end(JSON.stringify({history: history) + "\n");
+	res.end(JSON.stringify({history: history}) + "\n");
 });
