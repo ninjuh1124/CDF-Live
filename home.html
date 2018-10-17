@@ -22,15 +22,25 @@
 
 			socket.on('comment', obj => {
                 console.log(obj.author + ":");
-				console.log(obj.body_html);
+				console.log(obj.body);
                 console.log('---------------------');
-				parents.prepend(tmpl
-					.replace(/{{COMMENT_ID}}/g, obj.id)
-					.replace(/{{COMMENT_LINK}}/g, obj.permalink)
-					.replace(/{{COMMENT_AUTHOR}}/g, obj.author)
-					.replace(/{{PARENT}}/g, obj.parent)
-					.replace(/{{COMMENT_BODY}}/g, obj.body_html)
-				);
+				if ($('#'+obj.parent).length == 0) {
+					parents.prepend(tmpl
+						.replace(/{{COMMENT_ID}}/g, obj.id)
+						.replace(/{{COMMENT_LINK}}/g, obj.permalink)
+						.replace(/{{COMMENT_AUTHOR}}/g, obj.author)
+						.replace(/{{PARENT}}/g, obj.parent)
+						.replace(/{{COMMENT_BODY}}/g, obj.body_html)
+					);
+				} else {
+					$('#'+obj.parent+'-replies').prepend(tmpl
+						.replace(/{{COMMENT_ID}}/g, obj.id)
+						.replace(/{{COMMENT_LINK}}/g, obj.permalink)
+						.replace(/{{COMMENT_AUTHOR}}/g, obj.author)
+						.replace(/{{PARENT}}/g, obj.parent)
+						.replace(/{{COMMENT_BODY}}/g, obj.body_html)
+					);
+				}
     		}); 
 		})
 

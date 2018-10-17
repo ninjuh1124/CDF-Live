@@ -77,7 +77,7 @@ commentStream.on("comment", comment => {
                 'author': comment.author,
                 'id': comment.name,
                 'permalink': 'https://reddit.com' + comment.permalink,
-                'parent': comment.parent_id,
+                'parentID': comment.parent_id,
                 'body': comment.body,
                 'body_html': comment.body_html
                     .replace('&lt;', '<')
@@ -107,6 +107,7 @@ app.use((req, res, next) => {
     res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
     next();
 });
+app.use(express.static(__dirname + "/../static"));
 
 app.get("/", (req, res) => {
     res.redirect("/home");
@@ -124,4 +125,7 @@ app.get("/home", (req, res) => {
         res.end(contents);
     });
 });
-
+app.get("/v1/history.json", (req, res) => {
+	res.writeHead(200, {"Content-Type" : "application/json"});
+	res.end(JSON.stringify({history: history) + "\n");
+});
