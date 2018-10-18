@@ -3,7 +3,9 @@ const dotenv = require('dotenv'),
     snoostorm = require('snoostorm'),
     express = require('express'),
     app = express();
-    fs = require('fs');
+    fs = require('fs'),
+    helpers = require('./helpers.js'),
+    page = require('./page.js');
 var server = app.listen(8080);
 var feed = require('socket.io').listen(server);
 
@@ -108,24 +110,13 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.static(__dirname + "/../static"));
+app.use((req, res, next) => {
+    console.log("Incoming request: " + req.method + " " + req.url);
+    next();
+});
 
 app.get("/", (req, res) => {
     res.redirect("/home");
     res.end();
 });
-app.get("/home", (req, res) => {
-    fs.readFile('home.html', (err, contents) => {
-        if (err) {
-            // TODO: handle server error
-        }
-
-        contents = contents.toString('utf8');
-
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(contents);
-    });
-});
-app.get("/v1/history.json", (req, res) => {
-	res.writeHead(200, {"Content-Type" : "application/json"});
-	res.end(JSON.stringify({history: history}) + "\n");
-});
+app.get("/home", page.generate);
