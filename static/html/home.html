@@ -1,8 +1,17 @@
 <!-- SCRIPTS -->
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="/socket.io/socket.io.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
 	// start socket
     var socket = io();
+	var parents = $('#parent-comments');
+	var tmpl;
+
+	// load comment template
+	$.get('/html/comment-template.html', d => {
+		tmpl = d;
+	});
 
     socket.on('comment', obj => {
         if (obj.kind == 'comment') {
@@ -29,11 +38,6 @@ $(function() {
 </script>
 
 <div id="content">
-	<!-- SCRIPTS -->
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-	<script src="/socket.io/socket.io.js" type="text/javascript"></script>
-	<script type="text/javascript" src="/scripts/home.js></script>
-
     <div id="content" class="container">
         <div class="title">
             <h2 class="text-center">Casual Discussion Friday</h3>

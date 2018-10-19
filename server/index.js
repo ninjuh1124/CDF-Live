@@ -35,7 +35,7 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['t3_9ji73y', 't3_9nffyy'];	// retains last 2 threads
+var threadNames = ['t3_9perly', 't3_9ji73y'];	// retains last 2 threads
 var history = [];							// retains last 100 comments
 
 var commentStream = client.CommentStream({
