@@ -1,52 +1,13 @@
 <!-- SCRIPTS -->
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="/socket.io/socket.io.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function() {
-	// start socket
-    var socket = io();
-	var parents = $('#parent-comments');
-	var tmpl;
+<script type="text/javascript" src="/scripts/feed.js"></script>
+<div id="content" class="container">
+	<div class="title">
+		<h2 class="text-center">Casual Discussion Friday</h3>
+	</div>
+	<hr/>
+	<ul id="parent-comments" class="list-group list-group-flush">
 
-	// load comment template
-	$.get('/html/comment-template.html', d => {
-		tmpl = d;
-	});
-
-    socket.on('comment', obj => {
-        if (obj.kind == 'comment') {
-            if ($('#'+obj.parentID).length == 0) {
-                parents.prepend(tmpl
-                    .replace(/{{COMMENT_ID}}/g, obj.id)
-                    .replace(/{{COMMENT_LINK}}/g, obj.permalink)
-                    .replace(/{{COMMENT_AUTHOR}}/g, obj.author)
-                    .replace(/{{PARENT}}/g, obj.parentID)
-                    .replace(/{{COMMENT_BODY}}/g, obj.body_html)
-                );
-            } else {
-                $('#'+obj.parentID+'-replies').prepend(tmpl
-                    .replace(/{{COMMENT_ID}}/g, obj.id)
-                    .replace(/{{COMMENT_LINK}}/g, obj.permalink)
-                    .replace(/{{COMMENT_AUTHOR}}/g, obj.author)
-                    .replace(/{{PARENT}}/g, obj.parentID)
-                    .replace(/{{COMMENT_BODY}}/g, obj.body_html)
-                );
-            }
-        }
-    });
-})
-</script>
-
-<div id="content">
-    <div id="content" class="container">
-        <div class="title">
-            <h2 class="text-center">Casual Discussion Friday</h3>
-        </div>
-
-        <hr/>
-
-        <ul id="parent-comments" class="list-group list-group-flush">
- 
-        </ul>
-    </div>
+	</ul>
 </div>
