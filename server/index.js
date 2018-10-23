@@ -55,15 +55,14 @@ var threadStream = client.SubmissionStream({
  * and updates the active thread list accordingly
  */
 threadStream.on("submission", thread => {
-    if (thread.title.includes("Casual Discussion Friday") && thread.author == "AutoModerator") {
+    if (helpers.isNewCDF(thread)) {
         threadNames.pop();
         threadNames.unshift(thread.name);
-        console.log("*****NEW THREAD HYPE*****");
-        console.log("------------------------------------------------------------");
+        let obj = (helpers.handleThread(thread));
+        console.log("NEW THREAD HYPE: " + obj.permalink);
+        feed.emit('thread', obj);
     }
 });
-
-
 
 /**
  * checks /r/anime every minute
@@ -71,33 +70,19 @@ threadStream.on("submission", thread => {
  */
 commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
-        let obj = ((comment) => {
-            // turn the comment into something more usable
-            comment = comment.toJSON();
-   			return {
-                'kind': 'comment',
-                'author': comment.author,
-                'id': comment.name,
-                'permalink': 'https://reddit.com' + comment.permalink,
-                'parentID': comment.parent_id,
-                'body': comment.body,
-                'body_html': comment.body_html
-                    .replace('&lt;', '<')
-                    .replace('&gt;', '>')
-                    .replace('<a href="/u/', '<a href="https://reddit.com/u/')
-                    .replace('<a href="/r/', '<a href="https://reddit.com/r/')
-                    .replace('<p>', '<p class="text-justify">')
-    		}
-        })(comment);
+		console.log("New comment:");
+        let obj = helpers.handleComment(comment); 
         history.push(obj);
         if (history.length > 100) {
             history.shift();
         }
+		console.log(obj.author);
+        console.log(obj.body);
+        console.log('-----------------------------------------------');
         feed.emit('comment', obj);
-        //console.log(obj.body);
-        //console.log("------------------------------------------------------------");
     }
 });
+
 
 /**
  *
@@ -110,10 +95,6 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.static(__dirname + "/../static"));
-app.use((req, res, next) => {
-    console.log("Incoming request: " + req.method + " " + req.url);
-    next();
-});
 
 app.get("/", (req, res) => {
     res.redirect("/home");

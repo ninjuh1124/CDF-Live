@@ -13,12 +13,12 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 * ~~Implement websocket~~
 
 *Frontend*
-* Build HTML templates
+* ~~Build HTML templates~~
 * ~~JQuery with incoming comments~~
 * ~~CSS *good enough*~~ Add dark theme
 
 *Cleaning up*
-* Restructure files
-* Move helpers to dedicated scripts
+* ~~Restructure files~~
+* ~~Move helpers to dedicated scripts~~
 * Write more helpful comments
 * Handle spoilers/comment faces

@@ -4,7 +4,6 @@ var helpers = require('./helpers.js'),
 
 exports.generate = (req, res) => {
 	var page = 'home';
-	console.log("\tServing page: " + page);
 
 	fs.readFile('template.html', (err, contents) => {
 		if (err) {

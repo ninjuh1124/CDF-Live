@@ -1,5 +1,12 @@
 <li class="comment list-group-item" id="{{COMMENT_ID}}">
-	<h5><a href="{{COMMENT_LINK}}" target="_blank">{{COMMENT_AUTHOR}}</a><small> <a href="#{{PARENT}}">replied to {{PARENT}}</a></small></h5>
+	<div class="row">
+		<div class="col-xs-4">
+			<h5><a href="{{COMMENT_LINK}}" target="_blank">{{COMMENT_AUTHOR}}</a></h5>
+		</div>
+		<div class="col-xs-8">
+			<small><a href="#{{PARENT}}">replied to {{PARENT}}</a></small>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-xs-11">
 			{{COMMENT_BODY}}

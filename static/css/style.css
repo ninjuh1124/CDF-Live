@@ -1,8 +1,23 @@
 #content {
 	max-width: 1200px;
 }
-
+/*
 small {
-	padding-left: 3em;
-	
+	a:link {
+		color: LightGray;
+		text-decoration: none;
+	}
+	a:visited {
+		color: LightGray;
+		text-decoration: none;
+	}
+	a:hover {
+		color: LightGray;
+		text-decoration: underline;
+	}
+	a:active {
+		color: Gray;
+		text-decoration: underline;
+	}
 }
+*/
