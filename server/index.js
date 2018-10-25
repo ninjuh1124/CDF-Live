@@ -3,7 +3,9 @@ const dotenv = require('dotenv'),
     snoostorm = require('snoostorm'),
     express = require('express'),
     app = express();
-    fs = require('fs');
+    fs = require('fs'),
+    helpers = require('./helpers.js'),
+    page = require('./page.js');
 var server = app.listen(8080);
 var feed = require('socket.io').listen(server);
 
@@ -33,7 +35,7 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['t3_9ji73y', 't3_9nffyy'];	// retains last 2 threads
+var threadNames = ['t3_9perly', 't3_9nffyy'];	// retains last 2 threads
 var history = [];							// retains last 100 comments
 
 var commentStream = client.CommentStream({
@@ -53,15 +55,14 @@ var threadStream = client.SubmissionStream({
  * and updates the active thread list accordingly
  */
 threadStream.on("submission", thread => {
-    if (thread.title.includes("Casual Discussion Friday") && thread.author == "AutoModerator") {
+    if (helpers.isNewCDF(thread)) {
         threadNames.pop();
         threadNames.unshift(thread.name);
-        console.log("*****NEW THREAD HYPE*****");
-        console.log("------------------------------------------------------------");
+        let obj = (helpers.handleThread(thread));
+        console.log("NEW THREAD HYPE: " + obj.permalink);
+        feed.emit('thread', obj);
     }
 });
-
-
 
 /**
  * checks /r/anime every minute
@@ -69,33 +70,19 @@ threadStream.on("submission", thread => {
  */
 commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
-        let obj = ((comment) => {
-            // turn the comment into something more usable
-            comment = comment.toJSON();
-   			return {
-                'kind': 'comment',
-                'author': comment.author,
-                'id': comment.name,
-                'permalink': 'https://reddit.com' + comment.permalink,
-                'parent': comment.parent_id,
-                'body': comment.body,
-                'body_html': comment.body_html
-                    .replace('&lt;', '<')
-                    .replace('&gt;', '>')
-                    .replace('<a href="/u/', '<a href="https://reddit.com/u/')
-                    .replace('<a href="/r/', '<a href="https://reddit.com/r/')
-                    .replace('<p>', '<p class="text-justify">')
-    		}
-        })(comment);
+		console.log("New comment:");
+        let obj = helpers.handleComment(comment); 
         history.push(obj);
         if (history.length > 100) {
             history.shift();
         }
-        feed.emit('comment', obj);
+		console.log(obj.author);
         console.log(obj.body);
-        console.log("------------------------------------------------------------");
+        console.log('-----------------------------------------------');
+        feed.emit('comment', obj);
     }
 });
+
 
 /**
  *
@@ -107,21 +94,10 @@ app.use((req, res, next) => {
     res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
     next();
 });
+app.use(express.static(__dirname + "/../static"));
 
 app.get("/", (req, res) => {
     res.redirect("/home");
     res.end();
 });
-app.get("/home", (req, res) => {
-    fs.readFile('home.html', (err, contents) => {
-        if (err) {
-            // TODO: handle server error
-        }
-
-        contents = contents.toString('utf8');
-
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(contents);
-    });
-});
-
+app.get("/:pageName", page.generate);
