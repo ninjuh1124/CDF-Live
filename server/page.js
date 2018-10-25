@@ -3,7 +3,7 @@ var helpers = require('./helpers.js'),
 	path = require('path');
 
 exports.generate = (req, res) => {
-	var page = 'home';
+	var page = req.params.pageName;
 
 	fs.readFile('template.html', (err, contents) => {
 		if (err) {

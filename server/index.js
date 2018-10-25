@@ -100,4 +100,4 @@ app.get("/", (req, res) => {
     res.redirect("/home");
     res.end();
 });
-app.get("/home", page.generate);
+app.get("/:pageName", page.generate);
