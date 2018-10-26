@@ -35,7 +35,7 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['t3_9perly', 't3_9nffyy'];	// retains last 2 threads
+var threadNames = ['t3_9rftos', 't3_9perly'];	// retains last 2 threads
 var history = [];							// retains last 100 comments
 
 var commentStream = client.CommentStream({
@@ -70,16 +70,12 @@ threadStream.on("submission", thread => {
  */
 commentStream.on("comment", comment => {
     if (threadNames.includes(comment.link_id)) {
-		console.log("New comment:");
         let obj = helpers.handleComment(comment); 
         history.push(obj);
         if (history.length > 100) {
             history.shift();
         }
-		console.log(obj.author);
-        console.log(obj.body);
-        console.log('-----------------------------------------------');
-        feed.emit('comment', obj);
+		feed.emit('comment', obj)
     }
 });
 
@@ -101,3 +97,6 @@ app.get("/", (req, res) => {
     res.end();
 });
 app.get("/:pageName", page.generate);
+app.get("/history.json", (req, res) => {
+    helpers.sendHistory(req, res, history);
+});

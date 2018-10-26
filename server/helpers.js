@@ -58,3 +58,10 @@ exports.handleThread = (submission) => {
 		'permalink': 'https://reddit.com' + submission.permalink
 	}
 }
+
+exports.sendHistory = (req, res, history) => {
+	helpers.sendSuccess(res, { 
+		'kind': 'history',
+		'obj': history
+	});
+}
