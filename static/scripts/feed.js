@@ -1,6 +1,7 @@
 $(function() {
 	var socket = io();
 	var tmpl;
+	var history = [];
 	const parentComments = $('#parent-comments');
 
 	$.get('/html/comment-template.html', d => {
@@ -19,6 +20,21 @@ $(function() {
 			.replace(/{{COMMENT_BODY}}/g, obj.body_html)
 		);
 	}
+
+	socket.on('history', arr => {
+		console.log("History" + arr);
+		if (kind == 'history' && history.length == 0) {
+			history == arr;
+
+			history.forEach(obj => {
+				if ($('#'+obj.parentID).length == 0) {	// parent is not on page
+					attachComment(obj, parentComments);
+				} else {
+					attachComment(obj, $('#'+obj.parentID+'-replies'));
+				}
+			});
+		}
+	});
 
 	socket.on('comment', obj => {
 		if (obj.kind == 'comment') {	// just to make sure
