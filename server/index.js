@@ -1,3 +1,4 @@
+// maybe I should organize these better
 const dotenv = require('dotenv'),
     snoowrap = require('snoowrap'),
     snoostorm = require('snoostorm'),
@@ -5,6 +6,7 @@ const dotenv = require('dotenv'),
     app = express();
     fs = require('fs'),
     helpers = require('./helpers.js'),
+    MongoClient = require('mongodb').MongoClient,
     page = require('./page.js');
 var server = app.listen(8080);
 var feed = require('socket.io').listen(server);
@@ -15,7 +17,20 @@ var feed = require('socket.io').listen(server);
  *
  */
 
-dotenv.load()
+dotenv.load();
+const uri = "mongodb://localhost/CDF-Live";
+
+// get thread history
+var threads = [];
+MongoClient.connect(uri, (err, db) => {
+    let coll = db.collection('threads');
+    coll.find({'kind': 'submission'})
+        .toArray()
+        .then(arr => {
+            threads = arr.map(d => d._id);
+        });
+    db.close();
+});
 
 // load reddit and subreddit instances
 const cred = {
@@ -35,9 +50,6 @@ reddit.config({
     'debug': true
 });
 
-var threadNames = ['t3_9rftos', 't3_9perly'];	// retains last 2 threads
-var history = [];							// retains last 100 comments
-
 var commentStream = client.CommentStream({
     'subreddit': 'anime',
     'results': 100,
@@ -56,9 +68,12 @@ var threadStream = client.SubmissionStream({
  */
 threadStream.on("submission", thread => {
     if (helpers.isNewCDF(thread)) {
-        threadNames.pop();
-        threadNames.unshift(thread.name);
         let obj = (helpers.handleThread(thread));
+        MongoClient.connect(uri, (err, db) => {
+            db.collection('threads').insertOne(obj)
+            db.close();
+        });
+        threads.push(obj._id);
         console.log("NEW THREAD HYPE: " + obj.permalink);
         feed.emit('thread', obj);
     }
@@ -69,12 +84,13 @@ threadStream.on("submission", thread => {
  * handles comments posted to active CDF threads
  */
 commentStream.on("comment", comment => {
-    if (threadNames.includes(comment.link_id)) {
+    if (threads.includes(comment.link_id)) {
         let obj = helpers.handleComment(comment); 
-        history.push(obj);
-        if (history.length > 100) {
-            history.shift();
-        }
+        console.log(obj.body);
+        MongoClient.connect(uri, (err, db) => {
+            db.collection('comments').insertOne(obj);
+            db.close();
+        });
 		feed.emit('comment', obj)
     }
 });
@@ -98,5 +114,5 @@ app.get("/", (req, res) => {
 });
 app.get("/:pageName", page.generate);
 app.get("/history.json", (req, res) => {
-    helpers.sendHistory(req, res, history);
+    
 });

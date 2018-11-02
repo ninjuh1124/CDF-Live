@@ -8,6 +8,7 @@
 		"snoowrap": "",
 		"snoostorm": "",
 		"socket.io": "",
-		"express": ""
+		"express": "",
+		"mongodb": "^2.2.33"
 	}
 }

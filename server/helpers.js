@@ -32,7 +32,7 @@ exports.handleComment = (comment) => {
 	return {
 		'kind': 'comment',
 		'author': comment.author,
-		'id': comment.name,
+		'_id': comment.name,
 		'permalink': 'https://reddit.com' + comment.permalink + '?context=10',
 		'parentID': comment.parent_id,
 		'body': comment.body,
@@ -54,14 +54,7 @@ exports.handleThread = (submission) => {
 	submission = submission.toJSON();
 	return {
 		'kind': 'submission',
-		'id': submission.name,
+		'_id': submission.name,
 		'permalink': 'https://reddit.com' + submission.permalink
 	}
-}
-
-exports.sendHistory = (req, res, history) => {
-	helpers.sendSuccess(res, { 
-		'kind': 'history',
-		'obj': history
-	});
 }
