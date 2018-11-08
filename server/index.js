@@ -25,8 +25,7 @@ var threads = [];
 MongoClient.connect(uri, (err, db) => {
     let coll = db.collection('threads');
     coll.find({'kind': 'submission'})
-        .toArray()
-        .then(arr => {
+        .toArray( (err, arr) => {
             threads = arr.map(d => d._id);
         });
     db.close();
@@ -86,7 +85,6 @@ threadStream.on("submission", thread => {
 commentStream.on("comment", comment => {
     if (threads.includes(comment.link_id)) {
         let obj = helpers.handleComment(comment); 
-        console.log(obj.body);
         MongoClient.connect(uri, (err, db) => {
             db.collection('comments').insertOne(obj);
             db.close();
@@ -113,6 +111,18 @@ app.get("/", (req, res) => {
     res.end();
 });
 app.get("/:pageName", page.generate);
-app.get("/history.json", (req, res) => {
-    
+app.get("/v1/history.json", (req, res) => {
+    MongoClient.connect(uri, (err, db) => {
+        db.collection('comments')
+            .find({})
+            .sort({_id: -1})
+            .limit(200)
+            .toArray( (err, arr) => {
+                if (err) {
+                    console.log(err);
+                }
+                helpers.sendSuccess(res, arr);
+            });
+        db.close();
+    });
 });
