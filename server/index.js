@@ -114,9 +114,11 @@ app.get("/:pageName", page.generate);
 app.get("/v1/history.json", (req, res) => {
     MongoClient.connect(uri, (err, db) => {
         db.collection('comments')
-            .find({})
-            .sort({id: -1})
-            .limit(200)
+            .aggregate([
+                {"$sort": {"id": -1}},
+                {"$limit": 25},
+                {"$sort": {"id": 1}}
+            ])
             .toArray( (err, arr) => {
                 if (err) {
                     console.log(err);
