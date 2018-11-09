@@ -32,7 +32,8 @@ exports.handleComment = (comment) => {
 	return {
 		'kind': 'comment',
 		'author': comment.author,
-		'_id': comment.name,
+		'_id': comment.name,	// prefixed id, t3_asdf, used for indexing
+		'id': comment.id,		// not prefixed id, asdf, used for sorting
 		'permalink': 'https://reddit.com' + comment.permalink + '?context=10',
 		'parentID': comment.parent_id,
 		'body': comment.body,

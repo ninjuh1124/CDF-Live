@@ -115,14 +115,15 @@ app.get("/v1/history.json", (req, res) => {
     MongoClient.connect(uri, (err, db) => {
         db.collection('comments')
             .find({})
-            .sort({_id: -1})
+            .sort({id: -1})
             .limit(200)
             .toArray( (err, arr) => {
                 if (err) {
                     console.log(err);
                 }
                 helpers.sendSuccess(res, arr);
+
+                db.close();
             });
-        db.close();
     });
 });

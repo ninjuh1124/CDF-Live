@@ -1,7 +1,6 @@
 $(function() {
 	var socket = io();
 	var tmpl;
-	var history = [];
 	const parentComments = $('#parent-comments');
 
 	$.get('/html/comment-template.html', d => {
@@ -33,7 +32,7 @@ $(function() {
 	});
 
 	socket.on('thread', obj => {
-		if (obj.kind == 'thread') {		// insurance purposes
+		if (obj.kind == 'submission') {	// insurance purposes
 			parentComments.prepend(ttmpl
 				.replace(/{{THREAD_LINK}}/g, obj.permalink)
 				.replace(/{{THREAD_ID}}/g, obj.id)

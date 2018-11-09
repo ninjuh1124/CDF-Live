@@ -1,6 +1,6 @@
 $(function() {
 	var page, tmpl,
-		data;
+		data = {};
 		
 	// initialize page
 	var initPage = function() {
@@ -8,6 +8,10 @@ $(function() {
 
 		$.get("/html/home.html", (d) => {
 			page = d;
+		});
+
+		$.get("/v1/history.json", (d) => {
+			$.extend(data, d.data);
 		});
 
 		$(document).ajaxStop(() => {
