@@ -37,6 +37,7 @@ $(function() {
 				.replace(/{{THREAD_LINK}}/g, obj.permalink)
 				.replace(/{{THREAD_ID}}/g, obj.id)
 			);
+			$("#latest").attr("href", obj.permalink);
 		}
 	});
 })

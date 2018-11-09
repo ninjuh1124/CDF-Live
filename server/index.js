@@ -18,7 +18,7 @@ var feed = require('socket.io').listen(server);
  */
 
 dotenv.load();
-const uri = "mongodb://localhost/CDF-Live";
+const uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
 
 // get thread history
 var threads = [];
@@ -128,4 +128,20 @@ app.get("/v1/history.json", (req, res) => {
                 db.close();
             });
     });
+});
+app.get("/v1/thread.json", (req, res) => {
+	MongoClient.connect(uri, (err, db) => {
+		db.collection('threads')
+			.find({})
+			.sort({"_id": -1})
+			.limit(1)
+			.toArray( (err, arr) => {
+				if (err) {
+					console.log(err);
+				}
+				helpers.sendSuccess(res, arr);
+
+				db.close();
+			});
+	});
 });

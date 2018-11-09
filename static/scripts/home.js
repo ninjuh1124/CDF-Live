@@ -1,5 +1,6 @@
 $(function() {
 	var page, tmpl,
+		latest = {},
 		data = {};
 		
 	// initialize page
@@ -12,6 +13,9 @@ $(function() {
 
 		$.get("/v1/history.json", (d) => {
 			$.extend(data, d.data);
+		});
+		$.get("/v1/thread.json", (d) => {
+			$.extend(latest, d.data);
 		});
 		$.get("/html/comment-template.html", (d) => {
 			tmpl = d;
@@ -29,6 +33,7 @@ $(function() {
 
 		$(document).ajaxStop(() => {
 			$("body").html(page);
+			$("#latest").attr("href", latest[0].permalink);
 			const parentComments = $('#parent-comments');
 			$.each(data, (i, obj) => {
 				if ($('#'+obj.parentID).length == 0) {

@@ -11,6 +11,24 @@
 	text-decoration: underline;
 }
 
+#about {
+	color: Gray;
+	text-decoration: none;
+}
+#about:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+
+#latest {
+	color: LightGray;
+	text-decoration: none;
+}
+#latest:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+
 .md {
 	text-align: justify;
 }
