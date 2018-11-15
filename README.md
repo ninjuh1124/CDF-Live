@@ -21,4 +21,4 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 * ~~Restructure files~~
 * ~~Move helpers to dedicated scripts~~
 * Write more helpful comments
-* Handle spoilers/comment faces
+* Handle ~~spoilers/~~comment faces
