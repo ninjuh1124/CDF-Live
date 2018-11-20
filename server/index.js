@@ -5,8 +5,8 @@ const dotenv = require('dotenv'),
     express = require('express'),
     app = express();
     fs = require('fs'),
-    helpers = require('./helpers.js'),
     MongoClient = require('mongodb').MongoClient,
+    helpers = require('./helpers.js'),
     page = require('./page.js');
 var server = app.listen(8080);
 var feed = require('socket.io').listen(server);
@@ -68,10 +68,7 @@ var threadStream = client.SubmissionStream({
 threadStream.on("submission", thread => {
     if (helpers.isNewCDF(thread)) {
         let obj = (helpers.handleThread(thread));
-        MongoClient.connect(uri, (err, db) => {
-            db.collection('threads').insertOne(obj)
-            db.close();
-        });
+		helpers.store(obj);
         threads.push(obj._id);
         console.log("NEW THREAD HYPE: " + obj.permalink);
         feed.emit('thread', obj);
@@ -85,10 +82,7 @@ threadStream.on("submission", thread => {
 commentStream.on("comment", comment => {
     if (threads.includes(comment.link_id)) {
         let obj = helpers.handleComment(comment); 
-        MongoClient.connect(uri, (err, db) => {
-            db.collection('comments').insertOne(obj);
-            db.close();
-        });
+        helpers.store(obj);
 		feed.emit('comment', obj)
     }
 });
@@ -112,36 +106,14 @@ app.get("/", (req, res) => {
 });
 app.get("/:pageName", page.generate);
 app.get("/v1/history.json", (req, res) => {
-    MongoClient.connect(uri, (err, db) => {
-        db.collection('comments')
-            .aggregate([
-                {"$sort": {"id": -1}},
-                {"$limit": 25},
-                {"$sort": {"id": 1}}
-            ])
-            .toArray( (err, arr) => {
-                if (err) {
-                    console.log(err);
-                }
-                helpers.sendSuccess(res, arr);
-
-                db.close();
-            });
-    });
+    helpers.getHistory( (err, arr) => {
+        if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, arr);
+    })
 });
 app.get("/v1/thread.json", (req, res) => {
-	MongoClient.connect(uri, (err, db) => {
-		db.collection('threads')
-			.find({})
-			.sort({"_id": -1})
-			.limit(1)
-			.toArray( (err, arr) => {
-				if (err) {
-					console.log(err);
-				}
-				helpers.sendSuccess(res, arr);
-
-				db.close();
-			});
+	helpers.getLatestThread( (err, arr) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, arr);
 	});
 });
