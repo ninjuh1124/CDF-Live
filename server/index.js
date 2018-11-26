@@ -5,6 +5,7 @@ const dotenv = require('dotenv'),
     express = require('express'),
     app = express();
     fs = require('fs'),
+    markdown = require('markdown').markdown,
     MongoClient = require('mongodb').MongoClient,
     helpers = require('./helpers.js'),
     page = require('./page.js');
@@ -18,17 +19,15 @@ var feed = require('socket.io').listen(server);
  */
 
 dotenv.load();
-const uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
 
 // get thread history
 var threads = [];
-MongoClient.connect(uri, (err, db) => {
-    let coll = db.collection('threads');
-    coll.find({'kind': 'submission'})
-        .toArray( (err, arr) => {
-            threads = arr.map(d => d._id);
-        });
-    db.close();
+helpers.loadThreadList( (err, arr) => {
+    if (err) {
+		console.log(err);
+        process.exit(1);
+    }
+	threads = arr.map(d => d._id);
 });
 
 // load reddit and subreddit instances
@@ -116,4 +115,14 @@ app.get("/v1/thread.json", (req, res) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, arr);
 	});
+});
+app.get("/v1/:comment_id.json", (req, res) => {
+    helpers.getComment(req.params.comment_id, (err, comment) => {
+        if (err) helpers.sendFailure(res, 500, err);
+        helpers.sendSuccess(res, comment);
+    });
+});
+app.get("*", (req, res) => {
+    res.writeHead(404, {"Content-Type" : "application/json" });
+	res.end(JSON.stringify(helpers.invalid_resource()) + '\n');
 });

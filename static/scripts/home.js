@@ -1,11 +1,15 @@
 $(function() {
-	var page, tmpl,
+	var page, tmpl, facecodes,
 		latest = {},
 		data = {};
 		
 	// initialize page
 	var initPage = function() {
 		$("title").html("Casual Discussion Friday");
+
+		$.get("/v1/facecodes.json", (d) => {
+			facecodes = d.data;
+		});
 
 		$.get("/html/home.html", (d) => {
 			page = d;
@@ -21,25 +25,15 @@ $(function() {
 			tmpl = d;
 		});
 
-		function attachComment(obj, target) {
-			target.prepend(tmpl
-				.replace(/{{COMMENT_ID}}/g, obj._id)
-				.replace(/{{COMMENT_LINK}}/g, obj.permalink)
-				.replace(/{{COMMENT_AUTHOR}}/g, obj.author)
-				.replace(/{{PARENT}}/g, obj.parentID)
-				.replace(/{{COMMENT_BODY}}/g, obj.body_html)
-			);
-		}   
-
 		$(document).ajaxStop(() => {
 			$("body").html(page);
 			$("#latest").attr("href", latest[0].permalink);
 			const parentComments = $('#parent-comments');
 			$.each(data, (i, obj) => {
 				if ($('#'+obj.parentID).length == 0) {
-					attachComment(obj, parentComments);
+					attachComment(tmpl, obj, parentComments);
 				} else {
-					attachComment(obj, $('#'+obj.parentID+'-replies'));
+					attachComment(tmpl, obj, $('#'+obj.parentID+'-replies'));
 				}
 			});
 		});
