@@ -29,7 +29,10 @@ exports.invalid_resource = () => {
 exports.loadThreadList = (callback) => {
 	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
-		if (error) console.log(error);
+		if (err) {
+			console.log("Could not load thread list\n");
+			process.exit(1);
+		}
 		db.collection('threads')
 			.find({'kind': 'submission'})
 			.toArray( (err, arr) => {

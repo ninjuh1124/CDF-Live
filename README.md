@@ -22,4 +22,4 @@ Polls /r/anime comment feed for new comments in the weekly Casual Discussion Fri
 * ~~Move helpers to dedicated scripts~~
 * Write more helpful comments
 * Handle ~~spoilers/~~comment faces
-* Properly connect to Mongo Cloud
+* ~~Properly connect to Mongo Cloud~~
