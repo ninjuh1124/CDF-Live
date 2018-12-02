@@ -4,12 +4,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "dotenv": "^6.0.0",
-    "express": "",
-    "mongodb": "^2.2.33",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "mongodb": "^2.2.36",
     "showdown": "^1.9.0",
-    "snoostorm": "",
-    "snoowrap": "",
-    "socket.io": ""
+    "snoostorm": "0.0.5",
+    "snoowrap": "^1.15.2",
+    "socket.io": "^2.2.0"
   }
 }

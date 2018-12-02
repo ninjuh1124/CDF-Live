@@ -117,6 +117,12 @@ app.get("/v1/:comment_id.json", (req, res) => {
 		helpers.sendSuccess(res, comment);
 	});
 });
+app.get("/v1/facecodes.json", (req, res) => {
+	helpers.getFaces( (err, json) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, json);
+	});
+})
 app.get("*", (req, res) => {
 	res.writeHead(404, {"Content-Type" : "application/json" });
 	res.end(JSON.stringify(helpers.invalid_resource()) + '\n');

@@ -20,7 +20,7 @@ function convertToCommentFace(anchor) {
 				value: facecodes[anchor.attributes[0].value] || '/faces/notfound.jpg'
 			}
 		]
-	}
+	});
 	// hovertext
 	if (anchor.attributes[1].key == 'title') {
 		container.children[0].attributes.push({
@@ -84,7 +84,7 @@ function parseTags(json) {
 				continue;
 			}
 		} else {
-			if (json[i].children.length > 0) {
+			if (json[i].children) {
 				parseTags(json[i].children);
 			}
 			continue;

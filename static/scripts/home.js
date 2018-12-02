@@ -1,5 +1,6 @@
 $(function() {
-	var page, tmpl, facecodes,
+	var page, tmpl, 
+		facecodes = {},
 		latest = {},
 		data = {};
 		

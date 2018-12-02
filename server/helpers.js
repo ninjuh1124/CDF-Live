@@ -29,8 +29,9 @@ exports.invalid_resource = () => {
 exports.loadThreadList = (callback) => {
 	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
-		if (err) {
+		if (error) {
 			console.log("Could not load thread list\n");
+			console.log(err);
 			process.exit(1);
 		}
 		db.collection('threads')
@@ -151,4 +152,10 @@ exports.getComment = (id, callback) => {
 //	}).catch( (err) => {
 //		callback(err);
 	});
+}
+exports.getFaces = (callback) => {
+	json = {
+		//TODO: list faces
+	}
+	callback(null, json);
 }
