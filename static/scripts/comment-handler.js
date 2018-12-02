@@ -1,37 +1,106 @@
-function handleFace(a) {
-	let face = document.createElement('div');
-	face.className = "container";
-
-	let img = document.createElement('img');
-	img.src = "/faces/" + facecodes[a.href];
-	img.title = a.title;
-	face.appendChild(img);
-
-	let toptext = document.createElement('div');
-	toptext.className = "top";
-	toptext.innerText = a.innerText;
-	face.appendChild(toptext);
-
-	if (a.children.length > 0){
-		let bottomtext = document.createElement('div');
-		bottomtext.className = "bottom";
-		bottomtext.innerText = a.children[0].innerText;
-		face.appendChild(bottomText);
+function convertToCommentFace(anchor) {
+	let container = {
+		type: "element",
+		tagName: "div",
+		attributes: [
+			{
+				key: "class",
+				value: "container"
+			}
+		],
+		children: []
 	}
-
-	return face;
-}
-
-function parse(body) {
-	let html = new DOMParser().parseFromString(body, 'text/html').body
-	let anchors = html.getElementsByTagName('a');
-	for (let i=0; i<anchors.length; i++) {
-		if (anchors[i].href.charAt(0) == '#') {
-			html.replaceChild(handleFace(anchors[i]), anchors[i]);;
+	// img
+	container.children.push({
+		type: "element",
+		tagName: "img",
+		attributes: [
+			{
+				key: "src",
+				value: facecodes[anchor.attributes[0].value] || '/faces/notfound.jpg'
+			}
+		]
+	}
+	// hovertext
+	if (anchor.attributes[1].key == 'title') {
+		container.children[0].attributes.push({
+			key: "title",
+			value: anchor.attributes[1].value
+		});
+	}
+	// overlay text
+	if (anchor.children.length > 0) {
+		for (let i=0; i<anchor.children.length; i++) {
+			// top text
+			if (anchor.children[i].type == 'text') {
+				container.children.push({
+					type: 'element',
+					tagName: 'div',
+					attributes: [
+						{
+							key: 'class',
+							value: 'top'
+						}
+					],
+					chilrden: [
+						{
+							type: 'text',
+							content: anchor.children[i].content
+						}
+					]
+				});
+			}
+			// bottom text
+			if (anchor.children[i].type == 'element' && anchor.children[i].tagName == 'strong') {
+				container.children.push({
+					type: 'element',
+					tagName: 'div',
+					attributes: [
+						{
+							key: 'class',
+							value: 'bottom'
+						}
+					],
+					children: [
+						{
+							type: 'text',
+							content: anchor.children[i].children[0].content
+						}
+					]
+				});
+			}
 		}
 	}
 
-	return html.innerHTML;
+	return container;
+}
+
+function parseTags(json) {
+	for (let i=0; i<json.length; i++) {
+		if (json[i].type == 'a') {
+			if (json[i].tagName == 'a' && /#\S+/.test(json[i].attributes[0].value)) {	// winner of the "Worst Line of Code in this Project" award
+				json[i] = convertToCommentFace(json[i]);
+			} else {
+				continue;
+			}
+		} else {
+			if (json[i].children.length > 0) {
+				parseTags(json[i].children);
+			}
+			continue;
+		}
+	}
+	return json;
+}
+
+function parse(body) {
+	let converter = new showdown.Converter({noHeaderId: true}),
+		html = converter.makeHtml(body)
+		json = window.himalaya.parse(html);
+
+	json = parseTags(json);
+
+	return html;
 }
 
 function handleFace(body) {
@@ -45,7 +114,7 @@ function attachComment(tmpl, obj, target) {
 		.replace(/{{COMMENT_LINK}}/g, obj.permalink)
 		.replace(/{{COMMENT_AUTHOR}}/g, obj.author)
 		.replace(/{{PARENT}}/g, obj.parentID)
-		.replace(/{{COMMENT_BODY}}/g, parse(obj.body_html))
+		.replace(/{{COMMENT_BODY}}/g, parse(obj.body))
 	);
 }
 

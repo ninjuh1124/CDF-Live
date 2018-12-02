@@ -56,7 +56,7 @@ exports.handleComment = (comment) => {
 		'permalink': 'https://reddit.com' + comment.permalink + '?context=10',
 		'parentID': comment.parent_id,
 		'body': comment.body,
-		'body_html': markdown.toHTML(comment.body)
+		'body_html': converter.makeHtml(comment.body)
 	}
 }
 
