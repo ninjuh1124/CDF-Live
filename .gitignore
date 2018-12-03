@@ -82,3 +82,7 @@ $RECYCLE.BIN/
 
 # Node package-lock
 package-lock.json
+
+*.swp
+/static/faces/*
+/server/test.js

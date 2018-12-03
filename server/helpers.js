@@ -154,8 +154,8 @@ exports.getComment = (id, callback) => {
 	});
 }
 exports.getFaces = (callback) => {
-	json = {
-		//TODO: list faces
-	}
-	callback(null, json);
+	fs.readFile('commentfaces.json', 'utf8', (err, contents) => {
+		if (err) callback(err);
+		callback(null, JSON.parse(contents));
+	});
 }
