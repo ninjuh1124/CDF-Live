@@ -77,8 +77,9 @@ function convertToCommentFace(anchor) {
 
 function parseTags(json) {
 	for (let i=0; i<json.length; i++) {
-		if (json[i].type == 'a') {
-			if (json[i].tagName == 'a' && /#\S+/.test(json[i].attributes[0].value)) {	// winner of the "Worst Line of Code in this Project" award
+		if (json[i].tagName == 'a' && /#\S+/.test(json[i].attributes[0].value)) {
+			if (json[i].tagName == 'a') {
+				console.log("Face found");
 				json[i] = convertToCommentFace(json[i]);
 			} else {
 				continue;
@@ -99,13 +100,8 @@ function parse(body) {
 		json = window.himalaya.parse(html);
 
 	json = parseTags(json);
-
+	html = window.himalaya.stringify(json);
 	return html;
-}
-
-function handleFace(body) {
-	console.log('face found: ' + body);
-	return null;
 }
 
 function attachComment(tmpl, obj, target) {

@@ -1,13 +1,25 @@
 $(function() {
 	var socket = io();
-	var ctmpl, ttmpl;
+	var ctmpl, ttmpl, facecodes = {};
 	const parentComments = $('#parent-comments');
 
+	$.get('/v1/facecodes.json', d => {
+		facecodes = d.data;
+	});
 	$.get('/html/comment-template.html', d => {
 		ctmpl = d;
 	});
 	$.get('/html/thread-template.html', d => {
 		ttmpl = d;
+	});
+	$.get('/v1/history.json', d => {
+		$.each(d.data, (i, obj) => {
+			if ($('#'+obj.parentID).length == 0) {
+				attachComment(ctmpl, obj, parentComments);
+			} else {
+				attachComment(tmpl, obj, $('#'+obj.parentID+'-replies'));
+			}
+		});
 	});
 
 	socket.on('comment', obj => {
