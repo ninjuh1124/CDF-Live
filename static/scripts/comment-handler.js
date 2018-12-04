@@ -1,3 +1,4 @@
+// holy fuck this was annoying to write
 function convertToCommentFace(anchor) {
 	let container = {
 		type: "element",
@@ -75,11 +76,11 @@ function convertToCommentFace(anchor) {
 	return container;
 }
 
+// searches recursively through markdown generated tags
 function parseTags(json) {
 	for (let i=0; i<json.length; i++) {
 		if (json[i].tagName == 'a' && /#\S+/.test(json[i].attributes[0].value)) {
 			if (json[i].tagName == 'a') {
-				console.log("Face found");
 				json[i] = convertToCommentFace(json[i]);
 			} else {
 				continue;
@@ -94,6 +95,7 @@ function parseTags(json) {
 	return json;
 }
 
+// converts comment markdown to html
 function parse(body) {
 	let converter = new showdown.Converter({noHeaderId: true}),
 		html = converter.makeHtml(body)
@@ -104,6 +106,9 @@ function parse(body) {
 	return html;
 }
 
+// TODO: combine these functions into one
+
+// attaches comment to feed
 function attachComment(tmpl, obj, target) {
 	target.prepend(tmpl
 		.replace(/{{COMMENT_ID}}/g, obj._id)
@@ -114,6 +119,7 @@ function attachComment(tmpl, obj, target) {
 	);
 }
 
+// attaches thread announcement to feed
 function attachThread(tmpl, obj, target) {
 	target.prepend(tmpl
 		.replace(/{{THREAD_LINK}}/g, obj.permalink)

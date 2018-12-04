@@ -68,7 +68,6 @@ threadStream.on("submission", thread => {
 		let obj = (helpers.handleThread(thread));
 		helpers.store(obj);
 		threads.push(obj._id);
-		console.log("NEW THREAD HYPE: " + obj.permalink);
 		feed.emit('thread', obj);
 	}
 });
@@ -93,11 +92,13 @@ app.use((req, res, next) => {
 	next();
 });
 app.use(express.static(__dirname + "/../static"));
-
 app.get("/", (req, res) => {
 	res.redirect("/home");
 	res.end();
 });
+app.get("/v1/facecodes.json", (req, res) => {
+	res.json('commentfaces.json');
+})
 app.get("/:pageName", page.generate);
 app.get("/v1/history.json", (req, res) => {
 	helpers.getHistory( (err, arr) => {
@@ -111,18 +112,12 @@ app.get("/v1/thread.json", (req, res) => {
 		helpers.sendSuccess(res, arr);
 	});
 });
-app.get("/v1/:comment_id.json", (req, res) => {
+app.get("/v1/comments/:comment_id.json", (req, res) => {
 	helpers.getComment(req.params.comment_id, (err, comment) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, comment);
 	});
 });
-app.get("/v1/facecodes.json", (req, res) => {
-	helpers.getFaces( (err, json) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		helpers.sendSuccess(res, json);
-	});
-})
 app.get("*", (req, res) => {
 	res.writeHead(404, {"Content-Type" : "application/json" });
 	res.end(JSON.stringify(helpers.invalid_resource()) + '\n');

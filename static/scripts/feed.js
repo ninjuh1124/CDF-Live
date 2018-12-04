@@ -5,6 +5,7 @@ $(function() {
 
 	$.get('/v1/facecodes.json', d => {
 		facecodes = d.data;
+		console.log(typeof facecodes);
 	});
 	$.get('/html/comment-template.html', d => {
 		ctmpl = d;
@@ -34,7 +35,6 @@ $(function() {
 
 	socket.on('thread', obj => {
 		if (obj.kind == 'submission') {	// insurance purposes
-			console.log("NEW THREAD HYPE");
 			attachThread(ttmpl, obj, parentComments);
 			$("#latest").attr("href", obj.permalink);
 		}
