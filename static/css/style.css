@@ -75,7 +75,8 @@ a[href="/s"]:active,a[href*="/s?"]:active{
     color: white;
 	position: absolute;
 	top: 0px;
-	left: 25%;
+	left: 50%;
+	transform: translate(-50%);
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
 
@@ -85,7 +86,8 @@ a[href="/s"]:active,a[href*="/s?"]:active{
     color: white;
 	position: absolute;
 	bottom: 0px;
-	left: 25%;
+	left: 50%;
+	transform: translate(-50%);
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
 
