@@ -97,7 +97,10 @@ app.get("/", (req, res) => {
 	res.end();
 });
 app.get("/v1/facecodes.json", (req, res) => {
-	res.json('commentfaces.json');
+	helpers.getFaces( (err, json) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		res.json(json);
+	});
 })
 app.get("/:pageName", page.generate);
 app.get("/v1/history.json", (req, res) => {
@@ -112,7 +115,7 @@ app.get("/v1/thread.json", (req, res) => {
 		helpers.sendSuccess(res, arr);
 	});
 });
-app.get("/v1/comments/:comment_id.json", (req, res) => {
+app.get("/v1/comment/:comment_id.json", (req, res) => {
 	helpers.getComment(req.params.comment_id, (err, comment) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, comment);

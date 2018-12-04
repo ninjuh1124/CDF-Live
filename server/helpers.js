@@ -157,7 +157,6 @@ exports.getComment = (id, callback) => {
 exports.getFaces = (callback) => {
 	fs.readFile('commentfaces.json', 'utf8', (err, contents) => {
 		if (err) callback(err);
-		console.log(contents);
 		callback(null, JSON.parse(contents));
 	});
 }

@@ -29,10 +29,6 @@
 	text-decoration: underline;
 }
 
-.md {
-	text-align: justify;
-}
-
 blockquote {
 	font-size: 100%;
 }
@@ -63,4 +59,37 @@ a[href="/s"]:hover::after,a[href="/s"]:active::after,a[href*="/s?"]:hover::after
 a[href="/s"]:active,a[href*="/s?"]:active{
 	pointer-events:none;
 	text-decoration: none;
+}
+
+.comment-face {
+	position: relative;
+	max-width: 178px;
+	height: auto;
+	text-align: center;
+}
+
+.top {
+    font-family: arial,sans-serif;
+	font-size: 18px;
+	text-align: center;
+    color: white;
+	position: absolute;
+	top: 0px;
+	left: 25%;
+    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+}
+
+.bottom {
+    font-family: arial,sans-serif;
+	font-size: 18px;
+    color: white;
+	position: absolute;
+	bottom: 0px;
+	left: 25%;
+    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+}
+
+img {
+	max-width: 178px;
+	height: auto;
 }

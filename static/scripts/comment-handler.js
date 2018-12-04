@@ -1,3 +1,10 @@
+var facecodes = {};	// there's probably a way around using a global
+					// i'm not looking for it
+$(function () {
+	$.get("/v1/facecodes.json", d => {
+		$.extend(facecodes, d);
+	});
+})
 // holy fuck this was annoying to write
 function convertToCommentFace(anchor) {
 	let container = {
@@ -6,7 +13,7 @@ function convertToCommentFace(anchor) {
 		attributes: [
 			{
 				key: "class",
-				value: "container"
+				value: "comment-face"
 			}
 		],
 		children: []
@@ -23,12 +30,13 @@ function convertToCommentFace(anchor) {
 		]
 	});
 	// hovertext
-	if (anchor.attributes[1].key == 'title') {
+	if (anchor.attributes[1]) {
 		container.children[0].attributes.push({
 			key: "title",
 			value: anchor.attributes[1].value
 		});
 	}
+
 	// overlay text
 	if (anchor.children.length > 0) {
 		for (let i=0; i<anchor.children.length; i++) {
@@ -43,16 +51,15 @@ function convertToCommentFace(anchor) {
 							value: 'top'
 						}
 					],
-					chilrden: [
+					children: [
 						{
 							type: 'text',
 							content: anchor.children[i].content
 						}
 					]
 				});
-			}
 			// bottom text
-			if (anchor.children[i].type == 'element' && anchor.children[i].tagName == 'strong') {
+			} else if (anchor.children[i].type == 'element' && anchor.children[i].tagName == 'strong') {
 				container.children.push({
 					type: 'element',
 					tagName: 'div',
@@ -73,6 +80,7 @@ function convertToCommentFace(anchor) {
 		}
 	}
 
+console.log(container);
 	return container;
 }
 

@@ -1,12 +1,8 @@
 $(function() {
 	var socket = io();
-	var ctmpl, ttmpl, facecodes = {};
+	var ctmpl, ttmpl;
 	const parentComments = $('#parent-comments');
 
-	$.get('/v1/facecodes.json', d => {
-		facecodes = d.data;
-		console.log(typeof facecodes);
-	});
 	$.get('/html/comment-template.html', d => {
 		ctmpl = d;
 	});
