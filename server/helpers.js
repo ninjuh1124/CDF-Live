@@ -27,7 +27,7 @@ exports.invalid_resource = () => {
 }
 
 exports.loadThreadList = (callback) => {
-	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		if (error) {
 			console.log("Could not load thread list\n");
@@ -63,7 +63,7 @@ exports.handleComment = (comment) => {
 
 // stores json objects to database
 exports.store = (obj) => {
-	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	if (obj.kind == 'comment') {
 		MongoClient.connect(uri, (err, db) => {
 			db.collection('comments').insertOne(obj);
@@ -83,7 +83,7 @@ exports.store = (obj) => {
 
 // collects newest comments to array for callback function
 exports.getHistory = (callback) => {
-	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		db.collection("comments")
 			.aggregate([
@@ -118,7 +118,7 @@ exports.handleThread = (submission) => {
 
 // gets newest thread from database for callback
 exports.getLatestThread = (callback) => {
-	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('threads')
 			.find({})
@@ -138,7 +138,7 @@ exports.getLatestThread = (callback) => {
 
 // gets one comment by _id
 exports.getComment = (id, callback) => {
-	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('comments')
 			.find({'_id': id})

@@ -10,7 +10,7 @@ const dotenv = require('dotenv'),
 	MongoClient = require('mongodb').MongoClient,
 	helpers = require('./helpers.js'),
 	page = require('./page.js');
-var server = app.listen(8080);
+var server = app.listen(process.env.SERVER_PORT ? process.env.SERVER_PORT : 8080);
 var feed = require('socket.io').listen(server);
 
 /**
