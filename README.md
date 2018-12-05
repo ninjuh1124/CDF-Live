@@ -1,25 +1,18 @@
 # Casual Discussion Friday Live Feed
 
-Polls /r/anime comment feed for new comments in the weekly Casual Discussion Friday
+Casual Discussion Friday is a weekly thread on Reddit's [/r/anime](https://reddit.com/r/anime). Most of us stay there all week, even after the thread is unstickied, and at some point I got fed up with both refreshing the page to get new comments, and somehow ending up with 15 tabs of CDF threads open. So knowing absolutely nothing of web development, and only a little bit of javascript, I wrote this horrible-looking site. One tab, automatically updates with new comments as they come in, clean UI, and ~~excellent~~ ~~competently written~~ good enough backend support.
+
+[Homepage](https://www.friday.moe/home) *(Not yet live)*
 
 ***
 
-##Todo:
+##Known issues:
 
-*Backend*
-* ~~Fix filter~~
-* ~~Fetch Thread IDs~~
-* ~~Handle new comments~~
-* ~~Implement websocket~~
+* Some comment faces are missing
+* Comment overlay text is handled by adjusting margins, causing text to spillover/overlap if there's a lot of it
 
-*Frontend*
-* ~~Build HTML templates~~
-* ~~JQuery with incoming comments~~
-* ~~CSS *good enough*~~ Add dark theme
+##"Future" Plans:
 
-*Cleaning up*
-* ~~Restructure files~~
-* ~~Move helpers to dedicated scripts~~
-* Write more helpful comments
-* ~~Handle spoilers/comment faces~~
-* ~~Properly connect to Mongo Cloud~~
+* Night mode
+* Infinite scrolling
+* Better backend support
