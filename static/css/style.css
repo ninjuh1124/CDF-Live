@@ -95,3 +95,21 @@ img {
 	max-width: 178px;
 	height: auto;
 }
+
+.spoiler {
+	background: black;
+	color: white;
+	padding: 1px 5px 1px 5px;
+	border-radius: 3px;
+}
+.spoiler:hover {
+	color: red;
+}
+
+.spoiler-inner {
+	color: black!important;
+	padding-left: 12px;
+}
+.spoiler:hover .spoiler-inner {
+	color: white!important;
+}

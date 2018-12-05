@@ -84,12 +84,49 @@ console.log(container);
 	return container;
 }
 
+function convertToSpoiler(anchor) {
+	return {
+		type: "element",
+		tagName: "span",
+		attributes: [
+			{
+				key: "class",
+				value: "spoiler"
+			}
+		],
+		children: [
+			{
+				type: "text",
+				content: anchor.children[0].content
+			},
+			{
+				type: "element",
+				tagName: "span",
+				attributes: [
+					{
+						key: "class",
+						value: "spoiler-inner"
+					}
+				],
+				children: [
+					{
+						type: "text",
+						content: anchor.attributes[1].value
+					}
+				]
+			}
+		]
+	}
+}
+
 // searches recursively through markdown generated tags
 function parseTags(json) {
 	for (let i=0; i<json.length; i++) {
-		if (json[i].tagName == 'a' && /#\S+/.test(json[i].attributes[0].value)) {
-			if (json[i].tagName == 'a') {
+		if (json[i].tagName == 'a') {
+			if (/#\S+/.test(json[i].attributes[0].value)) {
 				json[i] = convertToCommentFace(json[i]);
+			} else if (json[i].attributes[0].value == "/s") {
+				json[i] = convertToSpoiler(json[i]);
 			} else {
 				continue;
 			}
