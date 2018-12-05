@@ -138,7 +138,6 @@ exports.getLatestThread = (callback) => {
 
 // gets one comment by _id
 exports.getComment = (id, callback) => {
-	console.log("Request for " + id);
 	let uri = process.env.MONGO_URI || "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('comments')
