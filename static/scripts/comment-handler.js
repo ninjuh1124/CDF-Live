@@ -80,7 +80,6 @@ function convertToCommentFace(anchor) {
 		}
 	}
 
-console.log(container);
 	return container;
 }
 
