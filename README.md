@@ -16,3 +16,4 @@ Casual Discussion Friday is a weekly thread on Reddit's [/r/anime](https://reddi
 * Night mode
 * Infinite scrolling
 * Better backend support
+* Better error handling
