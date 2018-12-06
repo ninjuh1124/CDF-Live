@@ -104,7 +104,7 @@ app.get("/v1/facecodes.json", (req, res) => {
 })
 app.get("/:pageName", page.generate);
 app.get("/v1/history.json", (req, res) => {
-	helpers.getHistory( (err, arr) => {
+	helpers.getHistory( req, (err, arr) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, arr);
 	})
