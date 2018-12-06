@@ -3,7 +3,8 @@ const dotenv = require('dotenv'),
 	snoowrap = require('snoowrap'),
 	snoostorm = require('snoostorm'),
 	express = require('express'),
-	app = express();
+	helmet = require('helmet'),
+	app = express(),
 	fs = require('fs'),
 	showdown = require('showdown'),
 	converter = new showdown.Converter({noHeaderId: true}),
@@ -87,6 +88,7 @@ commentStream.on("comment", comment => {
 /**
  * RESTful stuff
 **/
+app.use(helmet());
 app.use((req, res, next) => {
 	res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
 	next();
