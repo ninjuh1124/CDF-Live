@@ -10,10 +10,12 @@ Casual Discussion Friday is a weekly thread on Reddit's [/r/anime](https://reddi
 
 * Some comment faces are missing
 * Comment overlay text is handled by adjusting margins, causing text to spillover/overlap if there's a lot of it
+* Does not support mobile browsers
 
 ##"Future" Plans:
 
 * Night mode
 * Infinite scrolling
+* Workaround for mobile devices
 * Better backend support
 * Better error handling
