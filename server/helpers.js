@@ -56,8 +56,7 @@ exports.handleComment = (comment) => {
 		'id': comment.id,		// not prefixed id, asdf, used for sorting
 		'permalink': 'https://reddit.com' + comment.permalink + '?context=10',
 		'parentID': comment.parent_id,
-		'body': comment.body,
-		'body_html': converter.makeHtml(comment.body)
+		'body': comment.body
 	}
 }
 
