@@ -84,7 +84,7 @@ function convertToCommentFace(anchor) {
 }
 
 function convertToSpoiler(anchor) {
-	return {
+	let span = {
 		type: "element",
 		tagName: "span",
 		attributes: [
@@ -94,10 +94,17 @@ function convertToSpoiler(anchor) {
 			}
 		],
 		children: [
-			{
+		]
+	}
+
+	if (anchor.children.length > 0) {
+		span.children.push({
 				type: "text",
 				content: anchor.children[0].content
-			},
+		});
+	}
+	if (anchor.attributes.length > 1) {
+		span.children.push(
 			{
 				type: "element",
 				tagName: "span",
@@ -114,8 +121,10 @@ function convertToSpoiler(anchor) {
 					}
 				]
 			}
-		]
+		);
 	}
+
+	return span;
 }
 
 // searches recursively through markdown generated tags
