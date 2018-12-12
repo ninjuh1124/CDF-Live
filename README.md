@@ -9,6 +9,7 @@ Casual Discussion Friday is a weekly thread on Reddit's [/r/anime](https://reddi
 * Some comment faces are missing
 * Comment overlay text is handled by adjusting margins, causing text to spillover/overlap if there's a lot of it
 * Does not support mobile browsers
+* No formal 404 page. I'll get around to it *eventually*.
 
 ##"Future" Plans:
 
