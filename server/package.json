@@ -3,6 +3,9 @@
   "description": "Live feed of Casual Discussion Friday",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
