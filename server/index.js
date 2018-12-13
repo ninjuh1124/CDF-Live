@@ -66,7 +66,7 @@ threadStream.on("submission", thread => {
 	if (helpers.isNewCDF(thread)) {
 		let obj = (helpers.handleThread(thread));
 		helpers.store(obj);
-		threads.push(obj._id);
+		threads.push(obj._id).slice(-3);
 		feed.emit('thread', obj);
 	}
 });
