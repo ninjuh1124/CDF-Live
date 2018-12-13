@@ -20,8 +20,8 @@ $(function() {
 	});
 
 	socket.on('comment', obj => {
-		if (obj.kind == 'comment') {	// just to make sure
-			if ($('#'+obj.parentID).length == 0) {	// parent is not on page
+		if (obj.kind == 'comment' && $('#'+obj._id).length == 0) {
+ 			if ($('#'+obj.parentID).length == 0) {	// parent is not on page
 				attachComment(ctmpl, obj, parentComments);
 			} else {
 				attachComment(ctmpl, obj, $('#'+obj.parentID+'-replies'));
