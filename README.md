@@ -4,12 +4,13 @@ Casual Discussion Friday is a weekly thread on Reddit's [/r/anime](https://reddi
 
 ***
 
-##Known issues:
+## Known issues:
 
-* Some comment faces are missing
-* Comment overlay text is handled by adjusting margins, causing text to spillover/overlap if there's a lot of it
+* ~~Some~~ A lot of comment faces are missing
 * Does not support mobile browsers
 * No formal 404 page. I'll get around to it *eventually*.
+* Specific markdown syntax is not parsed: strikethrough, superscript
+* No easy way of listening for comment edits
 
 ##"Future" Plans:
 
