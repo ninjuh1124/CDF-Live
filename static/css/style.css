@@ -2,7 +2,9 @@
 	max-width: 1200px;
 }
 
+/* parent link formatting */
 .parent-link {
+	visibility: hidden;
 	color: LightGray;
 	text-decoration: none;
 }
@@ -20,6 +22,7 @@
 	text-decoration: underline;
 }
 
+/* latest thread link formatting */
 #latest {
 	color: LightGray;
 	text-decoration: none;
@@ -33,41 +36,13 @@ blockquote {
 	font-size: 100%;
 }
 
-a[href="/s"],a[href*="/s?"]{
-	color:#fff!important;
-	background:#000;
-	padding:1px 0 1px 3px;
-	cursor:text;
-	border-radius:2px;
-	text-decoration: none;
-}
-a[href="/s"]:hover,a[href*="/s?"]:hover{
-	color:#f44!important;
-	text-decoration: none;
-}
-a[href="/s"]::after,a[href*="/s?"]::after{
-	content:attr(title);
-	background:inherit;
-	color:#000;
-	padding:0 10px;
-	text-decoration: none;
-}
-a[href="/s"]:hover::after,a[href="/s"]:active::after,a[href*="/s?"]:hover::after,a[href*="/s?"]:active::after{
-	color:#FFF;
-	text-decoration: none;
-}
-a[href="/s"]:active,a[href*="/s?"]:active{
-	pointer-events:none;
-	text-decoration: none;
-}
-
+/* comment face formatting */
 .comment-face {
 	position: relative;
 	max-width: 178px;
 	height: auto;
 	text-align: center;
 }
-
 .top {
     font-family: arial,sans-serif;
 	font-size: 18px;
@@ -75,27 +50,24 @@ a[href="/s"]:active,a[href*="/s?"]:active{
     color: white;
 	position: absolute;
 	top: 0px;
-	left: 50%;
-	transform: translate(-50%);
+	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
-
 .bottom {
     font-family: arial,sans-serif;
 	font-size: 18px;
     color: white;
 	position: absolute;
 	bottom: 0px;
-	left: 50%;
-	transform: translate(-50%);
+	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
-
 img {
 	max-width: 178px;
 	height: auto;
 }
 
+/* spoiler tag formatting */
 .spoiler {
 	background: black;
 	color: white;
@@ -105,11 +77,24 @@ img {
 .spoiler:hover {
 	color: red;
 }
-
 .spoiler-inner {
 	color: black!important;
 	padding-left: 12px;
 }
 .spoiler:hover .spoiler-inner {
 	color: white!important;
+}
+
+/* vertical whitespace control */
+.arrow-link {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	transform: translateY(-.6em);
+}
+.comment-replies {
+	margin-bottom: 0px;
+}
+.comment {
+	padding-bottom: 5px;
+	padding-top: 5px;
 }
