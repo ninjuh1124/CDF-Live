@@ -12,6 +12,9 @@
 	color: Gray;
 	text-decoration: underline;
 }
+.comment:hover .parent-link {
+	visibility: visible;
+}
 
 #about {
 	color: Gray;
