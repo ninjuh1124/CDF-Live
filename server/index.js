@@ -12,7 +12,6 @@ const dotenv = require('dotenv'),
 
 let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
 var server = app.listen(apiPort);
-var feed = require('socket.io').listen(server);
 
 /**
  * BACKEND STUFF
@@ -69,7 +68,6 @@ threadStream.on("submission", thread => {
 		let obj = (helpers.handleThread(thread));
 		helpers.store(obj);
 		threads.push(obj._id).slice(-3);
-		feed.emit('thread', obj);
 	}
 });
 
@@ -81,7 +79,6 @@ commentStream.on("comment", comment => {
 	if (threads.includes(comment.link_id)) {
 		let obj = helpers.handleComment(comment); 
 		helpers.store(obj);
-		feed.emit('comment', obj)
 	}
 });
 
@@ -107,10 +104,22 @@ app.get("/v1/facecodes.json", (req, res) => {
 })
 app.get("/:pageName", page.generate);
 app.get("/v1/history.json", (req, res) => {
-	helpers.getHistory( req, (err, arr) => {
+	helpers.getHistory(req, (err, arr) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, arr);
 	})
+});
+app.get("/v1/parenthistory.json", (req, res) => {
+	helpers.getParents(req, (err, arr) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, arr);
+	});
+});
+app.get("/v/children.json", (req, res) => {
+	helpers.getChildren(req, (err, arr) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, arr);
+	});
 });
 app.get("/v1/thread.json", (req, res) => {
 	helpers.getLatestThread( (err, arr) => {

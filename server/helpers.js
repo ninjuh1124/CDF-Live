@@ -126,6 +126,29 @@ exports.getParents = (req, callback) => {
 	});
 }
 
+// gets children of a specific comment by id
+exports.getChildren = (req, callback) => {
+	let nt = req.query.newerthan ? req.query.newerthan : '0';
+	let id = req.query.id ? req.query.id : null;
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
+
+	if (id === null) callback(invalid_resource());
+
+	MongoClient.connect(uri, (err, db) => {
+		db.collection('comments')
+			.aggregate([
+				{ $match: { $and: [
+					{ parentID: id },
+					{ _id: { $gt: nt }}
+				]}},
+				{ $sort: { _id: -1 }}
+			])
+			.toArray( (err, arr) => {
+				callback(null, arr);
+				db.close();
+			});
+	});
+
 exports.isNewCDF = (submission) => {
 	submission = submission.toJSON();
 	return (submission.author_fullname == 't2_6l4z3' && submission.title.includes("Casual Discussion Friday"));
