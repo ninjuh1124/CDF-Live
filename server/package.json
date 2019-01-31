@@ -12,7 +12,9 @@
     "helmet": "^3.15.0",
     "mongodb": "^2.2.36",
     "snoostorm": "0.0.5",
-    "snoowrap": "^1.15.2",
-    "socket.io": "^2.2.0"
+    "snoowrap": "^1.15.2"
+  },
+  "devDependencies": {
+    "helmet": "^3.15.0"
   }
 }

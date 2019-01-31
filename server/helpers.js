@@ -103,6 +103,29 @@ exports.getHistory = ( req, callback) => {
 	});
 }
 
+// gets top level parents. really should've just stored the 'depth,' but I should've done a lot of things.
+exports.getParents = (req, callback) => {
+	let count = req.query.count ? req.query.count : 75;
+	let nt = req.query.newerthan ? req.query.newerthan : '0';
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
+
+	MongoClient.connect(uri, (error, db) => {
+		db.collection('comments')
+			.aggregate([
+				{ $match: { $and: [
+					{ parentID: { $gt: 't3_000000' }},
+					{ _id: { $gt: nt }}
+				]}},
+				{ $sort: { _id: -1 }},
+				{ $limit: count }
+			])
+			.toArray( (err, arr) => {
+				callback(null, arr);
+				db.close();
+			});
+	});
+}
+
 exports.isNewCDF = (submission) => {
 	submission = submission.toJSON();
 	return (submission.author_fullname == 't2_6l4z3' && submission.title.includes("Casual Discussion Friday"));

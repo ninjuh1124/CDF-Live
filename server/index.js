@@ -9,7 +9,9 @@ const dotenv = require('dotenv'),
 	MongoClient = require('mongodb').MongoClient,
 	helpers = require('./helpers.js'),
 	page = require('./page.js');
-var server = app.listen(process.env.SERVER_PORT ? process.env.SERVER_PORT : 8080);
+
+let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
+var server = app.listen(apiPort);
 var feed = require('socket.io').listen(server);
 
 /**
@@ -85,6 +87,7 @@ commentStream.on("comment", comment => {
 
 /**
  * RESTful stuff
+ * ROUTING WILL LIKELY BE DEPRACATED
 **/
 app.use(helmet());
 app.use((req, res, next) => {
