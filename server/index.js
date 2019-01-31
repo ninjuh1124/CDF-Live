@@ -115,7 +115,7 @@ app.get("/v1/parenthistory.json", (req, res) => {
 		helpers.sendSuccess(res, arr);
 	});
 });
-app.get("/v/children.json", (req, res) => {
+app.get("/v1/children.json", (req, res) => {
 	helpers.getChildren(req, (err, arr) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, arr);

@@ -31,7 +31,7 @@ exports.loadThreadList = (callback) => {
 	MongoClient.connect(uri, (error, db) => {
 		if (error) {
 			console.log("Could not load thread list\n");
-			console.log(err);
+			console.log(error);
 			process.exit(1);
 		}
 		db.collection('threads')
@@ -134,7 +134,7 @@ exports.getChildren = (req, callback) => {
 
 	if (id === null) callback(invalid_resource());
 
-	MongoClient.connect(uri, (err, db) => {
+	MongoClient.connect(uri, (error, db) => {
 		db.collection('comments')
 			.aggregate([
 				{ $match: { $and: [
@@ -148,6 +148,7 @@ exports.getChildren = (req, callback) => {
 				db.close();
 			});
 	});
+}
 
 exports.isNewCDF = (submission) => {
 	submission = submission.toJSON();
