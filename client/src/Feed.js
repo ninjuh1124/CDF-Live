@@ -9,8 +9,10 @@ class Feed extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://localhost:8080/v1/parenthistory.json')
-			.then(res => this.setState({ history: res.data }));
+		axios.get('http://localhost:8080/v1/parenthistory.json', {crossdomain: true})
+			.then(res => {
+				this.setState({ history: res.data.data })
+			});
 	}
 
 	render() {
@@ -18,6 +20,7 @@ class Feed extends React.Component {
 			return(
 				<Comment
 					id={comment._id}
+					key={comment.id}
 					author={comment.author}
 					permalink={comment.permalink}
 					body={comment.body}
@@ -26,9 +29,17 @@ class Feed extends React.Component {
 		});
 
 		return (
-			<div id="feed">
-				{comments}
-			</div>
+			<ul className="list-group" id="feed">
+				{
+					this.state.history.length > 0 ? 
+					comments :
+					<li
+						style={{'text-align': 'center'}} 
+						className="list-group-item">
+							Loading...
+					</li>
+				}
+			</ul>
 		);
 	}
 }

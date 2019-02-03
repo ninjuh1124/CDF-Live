@@ -1,0 +1,104 @@
+#root {
+	max-width: 1200px;
+	margin: auto;
+}
+
+/* parent link formatting */
+.parent-link {
+	visibility: hidden;
+	color: LightGray;
+	text-decoration: none;
+}
+.parent-link:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+.comment:hover .parent-link {
+	visibility: visible;
+}
+
+#about {
+	color: Gray;
+	text-decoration: none;
+}
+#about:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+
+/* latest thread link formatting */
+#latest {
+	color: LightGray;
+	text-decoration: none;
+}
+#latest:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+
+blockquote {
+	font-size: 100%;
+}
+
+/* comment face formatting */
+.comment-face {
+	position: relative;
+	max-width: 178px;
+	height: auto;
+	text-align: center;
+}
+.top {
+    font-family: arial,sans-serif;
+	font-size: 18px;
+	text-align: center;
+    color: white;
+	position: absolute;
+	top: 0px;
+	min-width: 170px;
+    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+}
+.bottom {
+    font-family: arial,sans-serif;
+	font-size: 18px;
+    color: white;
+	position: absolute;
+	bottom: 0px;
+	min-width: 170px;
+    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+}
+img {
+	max-width: 178px;
+	height: auto;
+}
+
+/* spoiler tag formatting */
+.spoiler {
+	background: black;
+	color: white;
+	padding: 1px 5px 1px 5px;
+	border-radius: 3px;
+}
+.spoiler:hover {
+	color: red;
+}
+.spoiler-inner {
+	color: black!important;
+	padding-left: 12px;
+}
+.spoiler:hover .spoiler-inner {
+	color: white!important;
+}
+
+/* vertical whitespace control */
+.arrow-link {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	transform: translateY(-.6em);
+}
+.comment-replies {
+	margin-bottom: 0px;
+}
+.comment {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}

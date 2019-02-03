@@ -1,4 +1,5 @@
 import React from 'react';
+import CommentAuthor from './CommentAuthor';
 import CommentBody from './CommentBody';
 import axios from 'axios';
 
@@ -8,15 +9,27 @@ class Comment extends React.Component {
 		this.state= {
 			replies: []
 		}
+		this.getReplies = this.getReplies.bind(this);
+	}
+
+	getReplies(t) {
+		let time;
+		
+		axios.get('http://localhost:8080/children.json?id='+this.props.id, {crossdomain: true})
+			.then(res => {
+				if (res.data.data && res.data.data.length > 0) {
+					this.setState({ replies: res.data.data });
+					time = 5000;
+				} else {
+					time = (t>120000 ? 120000 : t + 5000);
+				}
+
+				setTimeout(this.getReplies(time), t);
+			});
 	}
 
 	componentDidMount() {
-		setInterval(async () => {
-			const r = await axios.get('http://localhost:8080/children.json?id='+props.id);
-			if (r.data.length > 0) {
-				this.setState({ replies: r.data });
-			}
-		}, 30000);
+		this.getReplies(5000);
 	}
 
 	render() {
@@ -31,26 +44,26 @@ class Comment extends React.Component {
 		);
 	});
 	return (
-			<div className="comment" id={props.id}>
+			<li className="comment list-group-item" id={this.props.id}>
 				<CommentAuthor
-					author={props.author} 
-					permalink={props.permalink}
+					author={this.props.author} 
+					permalink={this.props.permalink}
 				/>
-				<CommentBody id={props.id} body={props.body} />
-				<div className="-replies" id={props.id+'-replies'}>
+				<CommentBody 
+					id={this.props.id} 
+					body={this.props.body} 
+					permalink={this.props.permalink}
+				/>
+
+				<ul 
+					className="replies list-group" 
+					id={this.props.id+'-replies'}
+				>
 					{replies}
-				</div>
-			</div>
+				</ul>
+			</li>
 		);
 	}
 };
-
-const CommentAuthor = (props) => {
-	return (
-		<div id={props.author+"-author"}>
-			<a href={props.permalink} target="_blank">{props.author}</a>
-		</div>
-	);
-}
 
 export default Comment;
