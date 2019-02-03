@@ -91,6 +91,11 @@ app.use((req, res, next) => {
 	res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
 	next();
 });
+app.use( (req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-type, Accept');
+	next();
+});
 app.use(express.static(__dirname + "/../static"));
 app.get("/", (req, res) => {
 	res.redirect("/home");
