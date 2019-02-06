@@ -31,7 +31,7 @@ routes.get('/v1/thread.json', (req, res) => {
 });
 
 routes.get('/v1/comment', (req, res) => {
-	helpers.getComment(req.query.id, (err, comment) => {
+	helpers.getComment(req, (err, comment) => {
 		if (err) helpers.sendFailure(res, 500, err);
 		helpers.sendSuccess(res, comment);
 	});

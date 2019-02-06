@@ -85,6 +85,7 @@ exports.getHistory = ( req, callback) => {
 	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	let olderThan = req.query.olderthan ? req.query.olderthan : "zzzzzzz";
 	let count = req.query.count ? req.query.count : 75;
+	
 	MongoClient.connect(uri, (error, db) => {
 		db.collection("comments")
 			.aggregate([
@@ -168,6 +169,7 @@ exports.handleThread = (submission) => {
 // gets newest thread from database for callback
 exports.getLatestThread = (callback) => {
 	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
+	
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('threads')
 			.find({})
@@ -186,7 +188,11 @@ exports.getLatestThread = (callback) => {
 }
 
 // gets one comment by _id
-exports.getComment = (id, callback) => {
+exports.getComment = (req, callback) => {
+	let id = req.query.id ? req.query.id : null;
+
+	if (id === null) callback(invalid_resource());
+	
 	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('comments')
