@@ -7,8 +7,8 @@ const dotenv = require('dotenv'),
 	app = express();
 	fs = require('fs'),
 	MongoClient = require('mongodb').MongoClient,
-	helpers = require('./helpers.js'),
-	page = require('./page.js');
+	routes = require('./routes'),
+	helpers = require('./helpers');
 
 let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
 var server = app.listen(apiPort);
@@ -96,49 +96,4 @@ app.use( (req, res, next) => {
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-type, Accept');
 	next();
 });
-app.use(express.static(__dirname + "/../static"));
-app.get("/", (req, res) => {
-	res.redirect("/home");
-	res.end();
-});
-app.get("/v1/facecodes.json", (req, res) => {
-	helpers.getFaces( (err, json) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		res.json(json);
-	});
-})
-app.get("/:pageName", page.generate);
-app.get("/v1/history.json", (req, res) => {
-	helpers.getHistory(req, (err, arr) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		helpers.sendSuccess(res, arr);
-	})
-});
-app.get("/v1/parenthistory.json", (req, res) => {
-	helpers.getParents(req, (err, arr) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		helpers.sendSuccess(res, arr);
-	});
-});
-app.get("/v1/children.json", (req, res) => {
-	helpers.getChildren(req, (err, arr) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		helpers.sendSuccess(res, arr);
-	});
-});
-app.get("/v1/thread.json", (req, res) => {
-	helpers.getLatestThread( (err, arr) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		helpers.sendSuccess(res, arr);
-	});
-});
-app.get("/v1/comment/:comment_id.json", (req, res) => {
-	helpers.getComment(req.params.comment_id, (err, comment) => {
-		if (err) helpers.sendFailure(res, 500, err);
-		helpers.sendSuccess(res, comment);
-	});
-});
-app.get("*", (req, res) => {
-	res.writeHead(404, {"Content-Type" : "application/json" });
-	res.end(JSON.stringify(helpers.invalid_resource()) + '\n');
-});
+app.use('/', routes);
