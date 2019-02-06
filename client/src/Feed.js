@@ -12,6 +12,9 @@ class Feed extends React.Component {
 		axios.get('http://localhost:8080/v1/parenthistory.json', {crossdomain: true})
 			.then(res => {
 				this.setState({ history: res.data.data })
+			})
+			.catch(res => {
+				// handle rejection
 			});
 	}
 
@@ -34,7 +37,7 @@ class Feed extends React.Component {
 					this.state.history.length > 0 ? 
 					comments :
 					<li
-						style={{'text-align': 'center'}} 
+						style={{'textAlign': 'center'}} 
 						className="list-group-item">
 							Loading...
 					</li>

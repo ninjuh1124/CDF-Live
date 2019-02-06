@@ -12,24 +12,17 @@ class Comment extends React.Component {
 		this.getReplies = this.getReplies.bind(this);
 	}
 
-	getReplies(t) {
-		let time;
-		
-		axios.get('http://localhost:8080/children.json?id='+this.props.id, {crossdomain: true})
+	getReplies() {
+		axios.get('http://localhost:8080/v1/children.json?id='+this.props.id, {crossdomain: true})
 			.then(res => {
 				if (res.data.data && res.data.data.length > 0) {
 					this.setState({ replies: res.data.data });
-					time = 5000;
-				} else {
-					time = (t>120000 ? 120000 : t + 5000);
 				}
-
-				setTimeout(this.getReplies(time), t);
 			});
 	}
 
 	componentDidMount() {
-		this.getReplies(5000);
+		this.getReplies();
 	}
 
 	render() {
@@ -37,6 +30,7 @@ class Comment extends React.Component {
 		return (
 			<Comment
 				id={r._id}
+				key={r.id}
 				author={r.author}
 				permalink={r.permalink}
 				body={r.body}
