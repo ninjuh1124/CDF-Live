@@ -10,14 +10,9 @@ const dotenv = require('dotenv'),
 	routes = require('./routes'),
 	helpers = require('./helpers');
 
+dotenv.load();
 let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
 var server = app.listen(apiPort);
-
-/**
- * BACKEND STUFF
-**/
-
-dotenv.load();
 
 // get thread history
 var threads = [];
@@ -60,8 +55,10 @@ var threadStream = client.SubmissionStream({
 });
 
 /**
+ *
  * checks /r/anime thread stream every minute for a new CDF thread
  * and updates the active thread list accordingly
+ *
 **/
 threadStream.on("submission", thread => {
 	if (helpers.isNewCDF(thread)) {
@@ -72,8 +69,10 @@ threadStream.on("submission", thread => {
 });
 
 /**
+ *
  * checks /r/anime every minute
  * handles comments posted to active CDF threads
+ *
 **/
 commentStream.on("comment", comment => {
 	if (threads.includes(comment.link_id)) {
@@ -83,8 +82,9 @@ commentStream.on("comment", comment => {
 });
 
 /**
- * RESTful stuff
- * ROUTING WILL LIKELY BE DEPRACATED
+ *
+ * load routes
+ *
 **/
 app.use(helmet());
 app.use((req, res, next) => {

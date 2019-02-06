@@ -1,19 +1,12 @@
-// maybe I should organize these better
 const dotenv = require('dotenv'),
 	express = require('express'),
 	helmet = require('helmet'),
 	app = express();
-	fs = require('fs'),
-	MongoClient = require('mongodb').MongoClient,
 	routes = require('./routes'),
 	helpers = require('./helpers.js');
 
 let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
 var server = app.listen(apiPort);
-
-/**
- * BACKEND STUFF
-**/
 
 dotenv.load();
 
@@ -27,6 +20,7 @@ helpers.loadThreadList( (err, arr) => {
 	threads = arr.map(d => d._id);
 });
 
+// load headers and routes
 app.use(helmet());
 app.use((req, res, next) => {
 	res.set('X-Clacks-Overhead', 'GNU Terry Pratchet');

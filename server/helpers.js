@@ -1,3 +1,6 @@
+const MongoClient = require('mongodb').MongoClient,
+	fs = require('fs');
+
 exports.makeError = (err, msg) => {
 	var e = new Error(msg);
 	e.code = err;
