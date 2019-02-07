@@ -9,17 +9,17 @@ import facecodes from './facecodes';
 // be done this way, but goddammit I'm not writing my own Markdown parser
 export const parseBody = (md) => {
 	let jsx = <ReactMarkdown source={md} />
-	let raw = ReactDOMServer.renderToStaticMarkup(jsx);
+	let raw = ReactDOMServer.renderToString(jsx);
 	return parseTags(parse(raw));
 };
 
 // parses tags of html string
 const parseTags = (json) => {
 	for (let i=0; i<json.length; i++) {
-		if (json[i].tagName === 'a') {
-			if (/^#\S+/.test(json[i].attributes[0].value)) {
+		if (json[i].type === "element" && json[i].tagName === 'a') {
+			if (isCommentFace(json[i])) {
 				json[i] = convertToCommentFace(json[i]);
-			} else if (json[i].attributes[0].value === "/s") {
+			} else if (isSpoiler(json[i])) {
 				json[i] = convertToSpoiler(json[i]);
 			} else {
 				continue;
@@ -34,8 +34,39 @@ const parseTags = (json) => {
 	return stringify(json);
 };
 
+// checks if element is a spoiler
+const isSpoiler = (json) => {
+	if (json.type === "element" && json.tagName === 'a') {
+		for (let i=0; i<json.attributes.length; i++) {
+			if (json.attributes[i].key !== "href") continue;
+			else if (json.attributes[i].value === "/s") return true;
+		}
+	}
+	return false;
+}
+
+// checks if element is a comment face
+const isCommentFace = (json) => {
+	if (json.type === "element" && json.tagName === 'a') {
+		for (let i=0; i<json.attributes.length; i++) {
+			if (json.attributes[i].key !== "href") continue;
+			else if (/^#\S+/.test(json.attributes[i].value)) return true;
+		}
+	}
+	return false
+}
+
 // converts anchor ast object and converts to div ast object with child nodes
 const convertToCommentFace = (anchor) => {
+	console.log(anchor);
+	// get attributes
+	let href = null;
+	let title = null;
+	anchor.attributes.map(attr => {
+		if (attr.key === "href") href = attr.value;
+		else if (attr.key === "title") title = attr.value;
+	});
+
 	let container = {
 		type: "element",
 		tagName: "div",
@@ -54,7 +85,7 @@ const convertToCommentFace = (anchor) => {
 		attributes: [
 			{
 				key: "src",
-				value: facecodes[anchor.attributes[0].value] || '/faces/notfound.jpg'
+				value: facecodes[href] || '/faces/notfound.jpg'
 			}
 		]
 	});
@@ -62,7 +93,7 @@ const convertToCommentFace = (anchor) => {
 	if (anchor.attributes[1]) {
 		container.children[0].attributes.push({
 			key: "title",
-			value: anchor.attributes[1].value
+			value: title
 		});
 	}
 
@@ -114,6 +145,13 @@ const convertToCommentFace = (anchor) => {
 
 // takes anchor ast object and converts to span ast object
 const convertToSpoiler = (anchor) => {
+	console.log(anchor);
+	// get attributes
+	let title;
+	anchor.attributes.map(attr => {
+		if (attr.key === "title") title = attr.value;
+	});
+
 	let span = {
 		type: "element",
 		tagName: "span",
@@ -147,7 +185,7 @@ const convertToSpoiler = (anchor) => {
 				children: [
 					{
 						type: "text",
-						content: anchor.attributes[1].value
+						content: title
 					}
 				]
 			}
