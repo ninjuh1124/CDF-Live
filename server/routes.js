@@ -23,6 +23,13 @@ routes.get('/v1/children.json', (req, res) => {
 	});
 });
 
+routes.get('/v1/commenttree.json', (req, res) => {
+	helpers.getTree(req, (err, arr) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, arr);
+	});
+});
+
 routes.get('/v1/thread.json', (req, res) => {
 	helpers.getLatestThread( (err, arr) => {
 		if (err) helpers.sendFailure(res, 500, err);
