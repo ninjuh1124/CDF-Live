@@ -1,7 +1,5 @@
 const MongoClient = require('mongodb').MongoClient,
-	fs = require('fs'),
-	uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
-
+	fs = require('fs');
 
 const makeError = exports.makeError = (err, msg) => {
 	var e = new Error(msg);
@@ -32,6 +30,7 @@ const invalid_resource = exports.invalid_resource = () => {
 }
 
 const loadThreadList = exports.loadThreadList = (callback) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		if (error) {
 			console.log("Could not load thread list\n");
@@ -51,6 +50,7 @@ const loadThreadList = exports.loadThreadList = (callback) => {
 
 // takes a snoowrap comment object and coverts to a more usable json
 const handleComment = exports.handleComment = (comment) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	comment = comment.toJSON();
 
 	return {
@@ -66,6 +66,7 @@ const handleComment = exports.handleComment = (comment) => {
 
 // stores json objects to database
 const store = exports.store = (obj) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	if (obj.kind == 'comment') {
 		MongoClient.connect(uri, (err, db) => {
 			db.collection('comments').insertOne(obj);
@@ -85,8 +86,9 @@ const store = exports.store = (obj) => {
 
 // collects newest comments to array for callback function
 const getHistory = exports.getHistory = ( req, callback) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	let olderThan = req.query.olderthan ? req.query.olderthan : "zzzzzzz";
-	let count = req.query.count ? req.query.count : 50;
+	let count = req.query.count ? req.query.count : 25;
 	
 	MongoClient.connect(uri, (error, db) => {
 		db.collection("comments")
@@ -108,7 +110,8 @@ const getHistory = exports.getHistory = ( req, callback) => {
 
 // gets top level parents. really should've just stored the 'depth,' but I should've done a lot of things.
 const getParents = exports.getParents = (req, callback) => {
-	let count = req.query.count ? req.query.count : 75;
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
+	let count = req.query.count ? req.query.count : 25;
 	let nt = req.query.newerthan ? req.query.newerthan : '0';
 
 	MongoClient.connect(uri, (error, db) => {
@@ -130,6 +133,7 @@ const getParents = exports.getParents = (req, callback) => {
 
 // gets children of a specific comment by id
 const getChildren = exports.getChildren = (id, callback) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	if (id === null) callback(invalid_resource());
 
 	MongoClient.connect(uri, (error, db) => {
@@ -148,6 +152,7 @@ const getChildren = exports.getChildren = (id, callback) => {
 // builds comment tree to flattened array
 // sorted by depth ascending, then by _id descending
 const getTree = exports.getTree = (req, callback) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	let arrToReturn = [];
 	getParents(req, (err, arr) => {
 		if (err) callback(err);
@@ -192,6 +197,7 @@ const handleThread = exports.handleThread = (submission) => {
 
 // gets newest thread from database for callback
 const getLatestThread = exports.getLatestThread = (callback) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('threads')
 			.find({})
@@ -211,6 +217,7 @@ const getLatestThread = exports.getLatestThread = (callback) => {
 
 // gets one comment by _id
 const getComment = exports.getComment = (req, callback) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
 	let id = req.query.id ? req.query.id : null;
 
 	if (id === null) callback(invalid_resource());
