@@ -9,17 +9,19 @@ class Feed extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://localhost:8080/v1/parenthistory.json', {crossdomain: true})
+		axios.get('http://localhost:8080/v1/commenttree.json', {crossdomain: true})
 			.then(res => {
 				this.setState({ history: res.data.data })
 			})
 			.catch(res => {
-				// handle rejection
+				console.log(res);
 			});
 	}
 
 	render() {
-		let comments = this.state.history.map(comment => {
+		let comments = this.state.history
+			.filter(comment => comment.parentID > 't3_000000')
+			.map(comment => {
 			return(
 				<Comment
 					id={comment._id}
@@ -27,6 +29,7 @@ class Feed extends React.Component {
 					author={comment.author}
 					permalink={comment.permalink}
 					body={comment.body}
+					history={this.state.history}
 				/>
 			);
 		});
