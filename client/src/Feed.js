@@ -1,21 +1,48 @@
 import React from 'react';
 import Comment from './Comment';
+import BSort from './BSort';
 import axios from 'axios';
 
 class Feed extends React.Component {
 	constructor() {
 		super();
 		this.state = { history: [] };
+		this.getHistory = this.getHistory.bind(this);
+	}
+
+	getHistory() {
+		axios.get(
+			'http://192.168.0.167:8080/v1/history.json?newerthan='+this.state.history[0]._id,
+			{ crossdomain: true }
+		).then(res => {
+			if (res.data.err) console.log(res.data.err);
+			if (res.data.data &&
+				Array.isArray(res.data.data) &&
+				res.data.data.length > 0) {
+					this.setState(state => {
+						return {
+							history: [...res.data.data, ...state.history]
+						};
+					});
+				}
+		}).catch(res => {
+			console.log(res);
+		})
 	}
 
 	componentDidMount() {
-		axios.get('http://localhost:8080/v1/commenttree.json', {crossdomain: true})
-			.then(res => {
-				this.setState({ history: res.data.data })
-			})
-			.catch(res => {
-				console.log(res);
-			});
+		axios.get(
+			'http://192.168.0.167:8080/v1/commenttree.json', 
+			{crossdomain: true}
+		).then(res => {
+			if (res.data.err) console.log(res.data.err);
+			this.setState({ history: BSort(res.data.data, 'id') });
+			console.log(this.state.history[0]);
+
+			setInterval(this.getHistory, 10000);
+		}).catch(res => {
+			console.log(res);
+		});
 	}
 
 	render() {

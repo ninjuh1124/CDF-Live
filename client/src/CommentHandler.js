@@ -8,7 +8,7 @@ import facecodes from './facecodes';
 // this is a completely stupid way of doing, and most definitely shouldn't
 // be done this way, but goddammit I'm not writing my own Markdown parser
 export const parseBody = (md) => {
-	let jsx = <ReactMarkdown source={md} />
+	let jsx = <ReactMarkdown source={md.replace(/^#{1,}/gm, '$& ')} />
 	let raw = ReactDOMServer.renderToString(jsx);
 	return parseTags(parse(raw));
 };
@@ -58,7 +58,6 @@ const isCommentFace = (json) => {
 
 // converts anchor ast object and converts to div ast object with child nodes
 const convertToCommentFace = (anchor) => {
-	console.log(anchor);
 	// get attributes
 	let href = null;
 	let title = null;
@@ -145,7 +144,6 @@ const convertToCommentFace = (anchor) => {
 
 // takes anchor ast object and converts to span ast object
 const convertToSpoiler = (anchor) => {
-	console.log(anchor);
 	// get attributes
 	let title;
 	anchor.attributes.map(attr => {

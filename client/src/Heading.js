@@ -7,6 +7,7 @@ var Heading = (props) => {
 			<a
 				id="latest"
 				href={props.thread.permalink}
+				rel="noreferrer noopener"
 				target="_blank"
 			><h5 className="text-center">Latest Thread</h5></a>
 			<hr />

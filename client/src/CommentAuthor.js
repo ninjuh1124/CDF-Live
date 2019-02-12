@@ -7,7 +7,9 @@ const CommentAuthor = (props) => {
 				<h5 className="author-link">
 					<a 
 						href={props.permalink} 
-						target="_blank">{props.author}</a>
+						rel="noreferrer noopener"
+						target="_blank"
+					>{props.author}</a>
 				</h5>
 			</div>
 		</div>

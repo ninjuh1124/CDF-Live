@@ -13,7 +13,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://localhost:8080/v1/thread.json', {crossdomain: true})
+		axios.get('http://192.168.0.167:8080/v1/thread.json', {crossdomain: true})
 			.then(res => {
 				this.setState({ latestThread: res.data.data[0] });
 			});

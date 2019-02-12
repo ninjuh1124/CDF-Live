@@ -14,7 +14,8 @@ const CommentBody = (props) => {
 			<div className="arrow-col col-xs-1">
 				<a
 					href={props.permalink}
-					target="_blank"><h2
+					rel="noopener noreferrer"><h2
+					target="_blank"
 					className="arrow-link text-center"><i
 					className="fa fa-angle-right"></i></h2></a>
 			</div>
