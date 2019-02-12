@@ -85,19 +85,24 @@ const store = exports.store = (obj) => {
 }
 
 // collects newest comments to array for callback function
-const getHistory = exports.getHistory = ( req, callback) => {
+const getHistory = exports.getHistory = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/CDF-Live";
-	let olderThan = req.query.olderthan ? req.query.olderthan : "zzzzzzz";
-	let count = req.query.count ? req.query.count : 25;
-	
+	let aggregation = [{ $sort: { id: -1 }}];
+
+	if (req.query.olderthan) {
+		aggregation.push({ $match: { _id: { $lt: req.query.olderthan }}});
+	}
+	if (req.query.newerthan) {
+		aggregation.push({ $match: { _id: { $gt: req.query.newerthan }}});
+	}
+
+	let count = req.query.count ? req.query.count : 50;
+	aggregation.push({ $limit: count });
+	aggregation.push({ $sort: { id: 1 }});
+
 	MongoClient.connect(uri, (error, db) => {
 		db.collection("comments")
-			.aggregate([
-				{"$sort": {'id': -1}},
-				{"$match": {'id': {'$lt': olderThan}}},
-				{"$limit": count},
-				{"$sort": {'id': 1}}
-			])
+			.aggregate(aggregation)
 			.toArray( (err, arr) => {
 				if (err) {
 					callback(err);
