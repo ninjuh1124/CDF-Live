@@ -1,29 +1,18 @@
 import React, { Component } from 'react';
-import Heading from './Heading';
-import Feed from './Feed';
+import Feed from './components/Feed';
 import axios from 'axios';
+import {
+	BrowserRouter as Router,
+	Route,
+	Link
+	} from 'react-router-dom';
 import './style.css';
 
 class App extends Component {
-	constructor() {
-		super();
-		this.state = {
-			latestThread: ""
-		}
-	}
-
-	componentDidMount() {
-		axios.get('http://192.168.0.167:8080/v1/thread.json', {crossdomain: true})
-			.then(res => {
-				this.setState({ latestThread: res.data.data[0] });
-			});
-	}
-
 	render() {
 		return (
 			<div className="content">
-				<Heading thread={this.state.latestThread}/>
-				<Feed />
+				<Feed api="http://localhost:8080/v1/"/>
 			</div>
 		);
 	}

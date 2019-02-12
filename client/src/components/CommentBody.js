@@ -1,5 +1,5 @@
 import React from 'react';
-import { parseBody } from './CommentHandler';
+import { parseBody } from '../resources/CommentHandler';
 
 const CommentBody = (props) => {
 	let body = parseBody(props.body);
