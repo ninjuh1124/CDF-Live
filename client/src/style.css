@@ -1,4 +1,4 @@
-#root {
+#content {
 	max-width: 1200px;
 	margin: auto;
 }
@@ -17,11 +17,11 @@
 	visibility: visible;
 }
 
-#about {
+a.corner-link {
 	color: Gray;
 	text-decoration: none;
 }
-#about:hover {
+a.corner-link:hover {
 	color: Gray;
 	text-decoration: underline;
 }
@@ -41,6 +41,10 @@ blockquote {
 }
 
 /* comment face formatting */
+img {
+	max-width: 178px;
+	height: auto;
+}
 .comment-face {
 	position: relative;
 	max-width: 178px;
@@ -65,10 +69,6 @@ blockquote {
 	bottom: 0px;
 	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
-}
-img {
-	max-width: 178px;
-	height: auto;
 }
 
 /* spoiler tag formatting */

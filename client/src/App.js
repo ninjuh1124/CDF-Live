@@ -1,21 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Feed from './components/Feed';
-import axios from 'axios';
+import About from './components/About';
+import PageNotFound from './components/PageNotFound';
 import {
 	BrowserRouter as Router,
 	Route,
-	Link
-	} from 'react-router-dom';
+	Redirect,
+	Switch
+} from 'react-router-dom';
 import './style.css';
 
-class App extends Component {
-	render() {
-		return (
-			<div className="content">
-				<Feed api="http://localhost:8080/v1/"/>
-			</div>
-		);
-	}
+const App = () => {
+	let api = 'http://localhost:8080/v1/';
+	return (
+		<Router><div id="content">
+			<Switch>
+				<Redirect exact from='/' to='/feed' />
+				<Route
+					exact path='/feed'
+					render={ () => {
+						return <Feed api={api} />
+					}}
+				/>
+				<Route
+					exact path='/about'
+					render={ () => {
+						return <About api={api} />
+					}}
+				/>
+				<Route component={PageNotFound} />
+			</Switch>
+		</div></Router>
+	);
 }
 
 export default App;

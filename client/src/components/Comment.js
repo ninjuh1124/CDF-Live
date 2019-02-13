@@ -1,7 +1,6 @@
 import React from 'react';
 import CommentAuthor from './CommentAuthor';
 import CommentBody from './CommentBody';
-import axios from 'axios';
 
 class Comment extends React.Component {
 	render() {
