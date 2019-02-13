@@ -242,3 +242,10 @@ const getComment = exports.getComment = (req, callback) => {
 //		callback(err);
 	});
 }
+
+const getAbout = exports.getAbout = (callback) => {
+	fs.readFile('about.md', (err, contents) => {
+		if (err) callback(err);
+		callback(null, contents.toString('utf8'));
+	});
+}

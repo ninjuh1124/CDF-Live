@@ -44,4 +44,11 @@ routes.get('/v1/comment', (req, res) => {
 	});
 });
 
+routes.get('/v1/about.md', (req, res) => {
+	helpers.getAbout( (err, content) => {
+		if (err) helpers.sendFailure(res, 500, err);
+		helpers.sendSuccess(res, content);
+	});
+});
+
 module.exports = routes;
