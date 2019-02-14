@@ -13,7 +13,7 @@ class Feed extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div style={{padding: '3px'}}>
 				<h6
 					className="text-right"
 				><small>

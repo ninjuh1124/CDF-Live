@@ -85,6 +85,14 @@ const convertToCommentFace = (anchor) => {
 			{
 				key: "src",
 				value: facecodes[href] || '/faces/notfound.jpg'
+			},
+			{
+				key: "alt",
+				value: href
+			},
+			{
+				key: "class",
+				value: "face"
 			}
 		]
 	});

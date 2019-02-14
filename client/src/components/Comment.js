@@ -8,14 +8,16 @@ class Comment extends React.Component {
 		.filter(comment => comment.parentID === this.props.id)
 		.map(comment => {
 			return (
-				<Comment
-					id={comment._id}
-					key={comment.id}
-					author={comment.author}
-					permalink={comment.permalink}
-					body={comment.body}
-					history={this.props.history}
-				/>
+				<div key={comment.id}>
+					<Comment
+						id={comment._id}
+						key={comment.id}
+						author={comment.author}
+						permalink={comment.permalink}
+						body={comment.body}
+						history={this.props.history}
+					/>
+				</div>
 			);
 		});
 	return (

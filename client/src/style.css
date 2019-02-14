@@ -41,13 +41,14 @@ blockquote {
 }
 
 /* comment face formatting */
-img {
+.face {
 	max-width: 178px;
 	height: auto;
 }
 .comment-face {
 	position: relative;
 	max-width: 178px;
+	width: auto;
 	height: auto;
 	text-align: center;
 }
@@ -60,6 +61,7 @@ img {
 	top: 0px;
 	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+	text-align: center;
 }
 .bottom {
     font-family: arial,sans-serif;
@@ -69,6 +71,7 @@ img {
 	bottom: 0px;
 	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+	text-align: center;
 }
 
 /* spoiler tag formatting */

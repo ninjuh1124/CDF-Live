@@ -46,14 +46,16 @@ class CommentContainer extends React.Component {
 			.filter(comment => comment.parentID > 't3_000000')
 			.map(comment => {
 				return (
-					<Comment
-						id={comment._id}
-						key={comment.id}
-						author={comment.author}
-						body={comment.body}
-						permalink={comment.permalink}
-						history={this.state.history}
-					/>
+					<div style={{ marginTop: '5px'}} key={comment.id}>
+						<Comment
+							id={comment._id}
+							key={comment.id}
+							author={comment.author}
+							body={comment.body}
+							permalink={comment.permalink}
+							history={this.state.history}
+						/>
+					</div>
 				);
 			});
 
