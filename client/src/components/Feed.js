@@ -7,7 +7,8 @@ class Feed extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			history: []
+			history: [],
+			isLoading: false
 		};
 		this.getHistory = this.getHistory.bind(this);
 	}
@@ -31,13 +32,21 @@ class Feed extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get(
-			this.props.api+'commenttree.json',
-			{ crossdomain: true }
-		).then(res => {
-			if (res.data.err) console.log(res.data.err);
-			this.setState({ history: BSort(res.data.data, 'id') });
-			setInterval(this.getHistory(), 5000);
+		this.setState({ isLoading: true }, () => {
+			axios.get(
+				this.props.api+'commenttree.json',
+				{ crossdomain: true }
+			).then(res => {
+				if (res.data.err) console.log(res.data.err);
+				this.setState({ 
+					history: BSort(res.data.data, 'id'),
+					isLoading: false
+				});
+				setInterval(this.getHistory(), 5000);
+			}).catch(err => {
+				this.setState({ isLoading: false });
+				console.log(err);
+			});
 		});
 	}
 
@@ -64,13 +73,20 @@ class Feed extends React.Component {
 			return (
 				<ul className="list-group" id="feed">
 					{
-						this.state.history.length > 0 ?
-						comments :
-						<li
+						this.state.isLoading > 0
+						? <li
 							style={{textAlign: 'center'}}
 							className="list-group-item">
 								Loading...
-						</li>
+						  </li>
+						: (this.state.history.length > 0
+						  ? comments
+						  : <li
+						  		style={{textAlign: 'center'}}
+								className="list-group-item"
+							>
+								"Error loading comments"
+							</li>)
 					}
 				</ul>
 			);
