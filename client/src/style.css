@@ -104,4 +104,18 @@ blockquote {
 .comment {
 	padding-bottom: 5px;
 	padding-top: 5px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+}
+.reply {
+	border-right: 0px;
+	border-bottom: 0px;
+}
+.time-ago {
+	color: LightGray;
+	text-decoration: none;
+}
+.time-ago:hover {
+	color: Gray;
+	text-decoration: underline;
 }

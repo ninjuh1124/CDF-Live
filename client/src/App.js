@@ -1,5 +1,5 @@
 import React from 'react';
-import Feed from './components/Feed';
+import FeedContainer from './components/FeedContainer';
 import About from './components/About';
 import PageNotFound from './components/PageNotFound';
 import {
@@ -19,7 +19,7 @@ const App = () => {
 				<Route
 					exact path='/feed'
 					render={ () => {
-						return <Feed api={api} />
+						return <FeedContainer api={api} />
 					}}
 				/>
 				<Route

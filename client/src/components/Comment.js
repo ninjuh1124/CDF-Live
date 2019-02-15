@@ -16,15 +16,21 @@ class Comment extends React.Component {
 						permalink={comment.permalink}
 						body={comment.body}
 						history={this.props.history}
+						created={this.props.created}
+						className="reply"
 					/>
 				</div>
 			);
 		});
 	return (
-			<li className="comment list-group-item" id={this.props.id}>
+			<li 
+				className={this.props.className + " comment list-group-item"}
+				id={this.props.id}
+			>
 				<CommentAuthor
 					author={this.props.author} 
 					permalink={this.props.permalink}
+					created={this.props.created}
 				/>
 				<CommentBody 
 					id={this.props.id} 
