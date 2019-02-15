@@ -188,7 +188,9 @@ const getTree = exports.getTree = (req, callback) => {
 
 const isNewCDF = exports.isNewCDF = (submission) => {
 	submission = submission.toJSON();
-	return (submission.author_fullname == 't2_6l4z3' && submission.title.includes("Casual Discussion Friday"));
+	return (
+		['t2_6l4z3', 't2_6wrl6'].includes(submission.author_fullname)
+		&& submission.title.includes("Casual Discussion Friday"));
 }
 
 // converts snoowrap submission object to json
