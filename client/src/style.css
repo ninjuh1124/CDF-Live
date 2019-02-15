@@ -1,6 +1,29 @@
+a {
+	color: #81a2be;
+}
+
+code {
+	color: #cc6666;
+	background: #1d1f21;
+}
+
+hr {
+	border-color: Gray;
+}
+
+#root {
+	background: #1d1f21;
+}
+
+#title {
+	color: #c5c8c6;
+}
+
 #content {
 	max-width: 1200px;
 	margin: auto;
+	background: #1d1f21;
+	color: #c5c8c6;
 }
 
 /* parent link formatting */
@@ -26,18 +49,27 @@ a.corner-link:hover {
 	text-decoration: underline;
 }
 
-/* latest thread link formatting */
 #latest {
-	color: LightGray;
+	color: #969896;
 	text-decoration: none;
 }
 #latest:hover {
 	color: Gray;
 	text-decoration: underline;
 }
+#about {
+	color: #969896;
+	text-decoration: none;
+}
+#about:hover {
+	color: Gray;
+	text-decoration: underline;
+}
 
 blockquote {
 	font-size: 100%;
+	border-left: 1px solid #969896;
+	padding-left: 15px;
 }
 
 /* comment face formatting */
@@ -77,19 +109,19 @@ blockquote {
 /* spoiler tag formatting */
 .spoiler {
 	background: black;
-	color: white;
+	color: #c5c8c6;
 	padding: 1px 5px 1px 5px;
 	border-radius: 3px;
 }
 .spoiler:hover {
-	color: red;
+	color: #c66;
 }
 .spoiler-inner {
 	color: black!important;
 	padding-left: 12px;
 }
 .spoiler:hover .spoiler-inner {
-	color: white!important;
+	color: #c5c8c6!important;
 }
 
 /* vertical whitespace control */
@@ -102,17 +134,20 @@ blockquote {
 	margin-bottom: 0px;
 }
 .comment {
+	background: #1d1f21;
+	color: #c5c8c6;
 	padding-bottom: 5px;
 	padding-top: 5px;
 	padding-right: 0px;
 	padding-bottom: 0px;
+	border-color: #969896;
 }
 .reply {
 	border-right: 0px;
 	border-bottom: 0px;
 }
 .time-ago {
-	color: LightGray;
+	color: #969896;
 	text-decoration: none;
 }
 .time-ago:hover {
