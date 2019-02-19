@@ -7,15 +7,10 @@ Casual Discussion Friday is a weekly thread on Reddit's [/r/anime](https://reddi
 ## Known issues:
 
 * ~~Some~~ A lot of comment faces are missing
-* Does not support mobile browsers
-* No formal 404 page. I'll get around to it *eventually*.
-* Specific markdown syntax is not parsed: strikethrough, superscript
+* Specific markdown syntax is not parsed: superscript
 * No easy way of listening for comment edits
 
 ##"Future" Plans:
 
-* Night mode
-* Infinite scrolling
-* Workaround for mobile devices
 * Better backend support
 * Better error handling
