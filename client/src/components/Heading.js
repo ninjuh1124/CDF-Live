@@ -11,10 +11,10 @@ class Heading extends React.Component {
 
 	componentDidMount() {
 		axios.get(
-			this.props.api+'thread.json',
+			this.props.api+'v1/thread.json',
 			{ crossdomain: true }
 		).then(res => {
-			this.setState({ thread: res.data.data[0] });
+			this.setState({ thread: res.data.message[0] });
 		});	
 	}
 

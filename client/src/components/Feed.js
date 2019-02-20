@@ -15,16 +15,16 @@ class Feed extends React.Component {
 
 	getHistory() {
 		axios.get(
-			this.props.api+'history.json?newerthan='+this.state.history[0]._id,
+			this.props.api+'v1/history.json?newerthan='+this.state.history[0]._id,
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.err) console.log(res.data.err);
-			if (res.data.data
-				&& Array.isArray(res.data.data)
-				&& res.data.data.length > 0) {
+			if (res.data.message
+				&& Array.isArray(res.data.message)
+				&& res.data.message.length > 0) {
 					this.setState(state => {
 						return {
-							history: [...res.data.data, ...state.history]
+							history: [...res.data.message, ...state.history]
 						};
 					});
 				}
@@ -34,12 +34,12 @@ class Feed extends React.Component {
 	componentDidMount() {
 		this.setState({ isLoading: true }, () => {
 			axios.get(
-				this.props.api+'commenttree.json',
+				this.props.api+'v1/commenttree.json',
 				{ crossdomain: true }
 			).then(res => {
 				if (res.data.err) console.log(res.data.err);
 				this.setState({ 
-					history: BSort(res.data.data, 'id'),
+					history: BSort(res.data.message, 'id'),
 					isLoading: false
 				});
 				setInterval(this.getHistory(), 5000);
@@ -76,14 +76,14 @@ class Feed extends React.Component {
 						this.state.isLoading > 0
 						? <li
 							style={{textAlign: 'center'}}
-							className="list-group-item">
+							className="comment list-group-item">
 								Loading...
 						  </li>
 						: (this.state.history.length > 0
 						  ? comments
 						  : <li
 						  		style={{textAlign: 'center'}}
-								className="list-group-item"
+								className="comment list-group-item"
 							>
 								"Error loading comments"
 							</li>)

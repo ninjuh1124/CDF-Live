@@ -11,7 +11,7 @@ import {
 import './style.css';
 
 const App = () => {
-	let api = 'http://localhost:8080/v1/';
+	let api = 'http://192.168.0.167:8080/';
 	return (
 		<Router><div id="content">
 			<Switch>

@@ -11,10 +11,10 @@ class About extends React.Component {
 
 	componentDidMount() {
 		axios.get(
-			this.props.api+"about.md",
+			this.props.api+"content/about.md",
 			{ crossorigin: true }
 		).then(res => {
-			this.setState({ md: res.data.data });
+			this.setState({ md: res.data.message });
 		});
 	}
 

@@ -1,3 +1,7 @@
+body {
+	background-color: #1d1f21!important;
+}
+
 a {
 	color: #81a2be;
 }
@@ -145,6 +149,8 @@ blockquote {
 .reply {
 	border-right: 0px;
 	border-bottom: 0px;
+	border-top-right-radius: 0px!important;
+	border-bottom-left-radius: 0px!important;
 }
 .time-ago {
 	color: #969896;
