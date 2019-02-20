@@ -3,8 +3,8 @@ const helpers = require('./helpers'),
 
 module.exports = {
 	about: (req, res) => {
-		fs.readFile('../content/about.md', (err, contents) => {
-			helpers.send(res, err, contents.toString('utf8'));
+		fs.readFile('content/about.md', (err, body) => {
+			helpers.send(res, err, body.toString('utf8'));
 		});
 	}
 }
