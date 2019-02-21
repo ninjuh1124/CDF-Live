@@ -8,5 +8,5 @@ exports.send = (res, err, d) => {
 		data = d;
 	}
 
-	res.status(200).json({ message: data });
+	res.status(code).json({ message: data });
 }
