@@ -1,5 +1,33 @@
+body {
+	background-color: #1d1f21!important;
+}
+
+a {
+	color: #81a2be;
+}
+
+code {
+	color: #cc6666;
+	background: #1d1f21;
+}
+
+hr {
+	border-color: Gray;
+}
+
+#root {
+	background: #1d1f21;
+}
+
+#title {
+	color: #c5c8c6;
+}
+
 #content {
 	max-width: 1200px;
+	margin: auto;
+	background: #1d1f21;
+	color: #c5c8c6;
 }
 
 /* parent link formatting */
@@ -16,8 +44,25 @@
 	visibility: visible;
 }
 
-#about {
+a.corner-link {
 	color: Gray;
+	text-decoration: none;
+}
+a.corner-link:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+
+#latest {
+	color: #969896;
+	text-decoration: none;
+}
+#latest:hover {
+	color: Gray;
+	text-decoration: underline;
+}
+#about {
+	color: #969896;
 	text-decoration: none;
 }
 #about:hover {
@@ -25,24 +70,21 @@
 	text-decoration: underline;
 }
 
-/* latest thread link formatting */
-#latest {
-	color: LightGray;
-	text-decoration: none;
-}
-#latest:hover {
-	color: Gray;
-	text-decoration: underline;
-}
-
 blockquote {
 	font-size: 100%;
+	border-left: 1px solid #969896;
+	padding-left: 15px;
 }
 
 /* comment face formatting */
+.face {
+	max-width: 178px;
+	height: auto;
+}
 .comment-face {
 	position: relative;
 	max-width: 178px;
+	width: auto;
 	height: auto;
 	text-align: center;
 }
@@ -55,6 +97,7 @@ blockquote {
 	top: 0px;
 	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+	text-align: center;
 }
 .bottom {
     font-family: arial,sans-serif;
@@ -64,28 +107,25 @@ blockquote {
 	bottom: 0px;
 	min-width: 170px;
     text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
-}
-img {
-	max-width: 178px;
-	height: auto;
+	text-align: center;
 }
 
 /* spoiler tag formatting */
 .spoiler {
 	background: black;
-	color: white;
+	color: #c5c8c6;
 	padding: 1px 5px 1px 5px;
 	border-radius: 3px;
 }
 .spoiler:hover {
-	color: red;
+	color: #c66;
 }
 .spoiler-inner {
 	color: black!important;
 	padding-left: 12px;
 }
 .spoiler:hover .spoiler-inner {
-	color: white!important;
+	color: #c5c8c6!important;
 }
 
 /* vertical whitespace control */
@@ -98,6 +138,25 @@ img {
 	margin-bottom: 0px;
 }
 .comment {
+	background: #1d1f21;
+	color: #c5c8c6;
 	padding-bottom: 5px;
 	padding-top: 5px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	border-color: #969896;
+}
+.reply {
+	border-right: 0px;
+	border-bottom: 0px;
+	border-top-right-radius: 0px!important;
+	border-bottom-left-radius: 0px!important;
+}
+.time-ago {
+	color: #969896;
+	text-decoration: none;
+}
+.time-ago:hover {
+	color: Gray;
+	text-decoration: underline;
 }

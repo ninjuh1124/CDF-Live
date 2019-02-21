@@ -1,18 +1,31 @@
 {
-  "name": "CDF-Feed",
+  "name": "fridaydotmoe-api",
   "description": "Live feed of Casual Discussion Friday",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js",
+	"build": "node index.js"
   },
   "dependencies": {
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "helmet": "^3.15.0",
     "mongodb": "^2.2.36",
+    "nodemon": "^1.18.10",
     "snoostorm": "0.0.5",
-    "snoowrap": "^1.15.2",
-    "socket.io": "^2.2.0"
-  }
+    "snoowrap": "^1.15.2"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninjuh1124/fridaydotmoe.git"
+  },
+  "author": "ninjuh1124",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ninjuh1124/fridaydotmoe/issues"
+  },
+  "homepage": "https://github.com/ninjuh1124/fridaydotmoe#readme"
 }

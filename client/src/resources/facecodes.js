@@ -1,4 +1,4 @@
-{
+const facecodes = {
 	"#example-face-code": "/faces/example-path.jpg",
 
 	"#breakingnews": "/faces/newspapersmack.gif",
@@ -358,4 +358,6 @@
 	"#yuishrug": "/faces/yuishrug.png",
 	"#yunosunglasses": "/faces/yunosunglasses.png",
 	"#zetsuboushta": "/faces/zetsuboushta.png"
-}
+};
+
+export default facecodes;

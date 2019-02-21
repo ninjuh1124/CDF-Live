@@ -86,3 +86,4 @@ package-lock.json
 *.swp
 /static/faces/*
 /server/test.js
+/client/public/faces/*
