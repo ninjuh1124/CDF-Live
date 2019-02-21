@@ -18,13 +18,18 @@ class Feed extends React.Component {
 			this.props.api+'v1/history.json?newerthan='+this.state.history[0]._id,
 			{ crossdomain: true }
 		).then(res => {
-			if (res.data.err) console.log(res.data.err);
 			if (res.data.message
 				&& Array.isArray(res.data.message)
 				&& res.data.message.length > 0) {
+					let arr = res.data.message.filter(comment => {
+						return !(this.state.history
+									.map(comment => comment._id)
+									.includes(comment._id)
+						);
+					});
 					this.setState(state => {
 						return {
-							history: [...res.data.message, ...state.history]
+							history: BSort([...arr, ...state.history], 'id')
 						};
 					});
 				}
@@ -42,7 +47,7 @@ class Feed extends React.Component {
 					history: BSort(res.data.message, 'id'),
 					isLoading: false
 				});
-				setInterval(this.getHistory(), 5000);
+				setInterval(this.getHistory, 7000);
 			}).catch(err => {
 				this.setState({ isLoading: false });
 				console.log(err);
