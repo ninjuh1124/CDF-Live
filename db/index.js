@@ -14,8 +14,17 @@ const cred = {
 	password: process.env.REDDIT_PASSWORD
 };
 
+var threads = [];
+
+helpers.loadThreads( (err, arr) => {
+	if (err) {
+		console.log(err);
+		process.exit(1);
+	}
+	threads = arr.map(d => d._id);
+});
+
 const reddit = new snoowrap(cred);
-const anime = reddit.getSubreddit('anime');
 const listener = new snoostorm(cred);
 
 reddit.config({
@@ -23,17 +32,25 @@ reddit.config({
 	debug: true
 });
 
-const threadStream = listener.SubmissionStream({
-	subreddit: 'anime',
-	results: 100,
-	polltime: 60000
-});
-
 const commentStream = listener.CommentStream({
 	subreddit: 'anime',
 	results: 100,
-	polltime: 5000
+	polltime: 10000
 });
 
-commentStream.on('comment', comment => helpers.manageComment);
-threadStream.on('submission', thread => helpers.manageThread);
+const submissionStream = listener.SubmissionStream({
+	subreddit: 'anime',
+	results: 50,
+	polltime: 30000
+});
+
+commentStream.on('comment', comment => {
+	if (threads.includes(comment.link_id)) {
+		helpers.store(helpers.handleComment(comment));
+	}
+});
+submissionStream.on('submission', thread => {
+	if (helpers.isNewCDF(thread)) {
+		helpers.store(handleThread(thread));
+	}
+});

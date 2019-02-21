@@ -1,40 +1,23 @@
 const MongoClient = require('mongodb').MongoClient;
 
-// comment handler
-exports.maangeComment = (comment) => {
-	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
+exports.loadThreads = (callback) => {
+	let uri = process.env.MONGO_URI ? process.env.MONGO_URI : 'mongodb://localhost/fridaydotmoe';
 	MongoClient.connect(uri)
 		.then(db => {
 			db.collection('threads')
-				.find()
+				.find({ kind: 'submission' })
 				.toArray( (err, arr) => {
-					if (arr.includes(comment.parent_id)) {
-						store(handleComment(comment));
-					}
+					callback(null, arr);
+					db.close();
 				});
-				db.close();
 		})
-		.catch(error => {
-			console.log(error);
+		.catch(err => {
+			callback(err);
 		});
-};
-
-// thread handler
-exports.manageThread = (thread) => {
-	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	if (isNewCDF(thread)) {
-		MongoClient.connect(uri)
-			.then(db => {
-				db.insertOne(handleThread(thread));
-			})
-			.catch(error => {
-				console.log(error);
-			})
-	}
-};
+}
 
 // checks for new sticky
-const isNewCDF = (obj) => {
+exports.isNewCDF = (obj) => {
 	obj = obj.toJSON();
 	return (
 		['t2_6l4z3', 't2_6wrl6'].includes(obj.author_fullname)
@@ -43,8 +26,9 @@ const isNewCDF = (obj) => {
 }
 
 // removes unnecessary object fields
-const handleThread = (obj) => {
+exports.handleThread = (obj) => {
 	obj = obj.toJSON();
+	console.log(obj.id);
 	return {
 		kind:		'submission',
 		_id:		obj.name,
@@ -53,7 +37,7 @@ const handleThread = (obj) => {
 	};
 }
 
-const handleComment = (obj) => {
+exports.handleComment = (obj) => {
 	obj = obj.toJSON();
 	return {
 		kind: 		'comment',
@@ -68,9 +52,8 @@ const handleComment = (obj) => {
 }
 
 // stores obj to appropraite collection
-const store = (obj) => {
+exports.store = (obj) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	obj = obj.toJSON();
 	let collection;
 	if (obj.kind === 'comment') collection = 'comments';
 	else if (obj.kind === 'submission') collection = 'threads';
