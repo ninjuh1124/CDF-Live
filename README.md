@@ -4,6 +4,8 @@ This is a bit of a pet project of mine that I've mostly been using to teach myse
 
 Please report any issues not already on the list here or you can [send me a message](https://reddit.com/message/compose?to=thisismyanimealt).
 
+Current working branch: [React](https://github.com/ninjuh1124/fridaydotmoe/tree/React)
+
 ***
 
 ## Known issues:
