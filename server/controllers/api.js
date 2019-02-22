@@ -69,7 +69,7 @@ const getHistory = (req, callback) => {
 
 const getParents = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	let count = req.query.count ? req.query.count : 25;
+	let count = req.query.count ? req.query.count : 50;
 	let nt = req.query.newerthan ? req.query.newerthan : '0';
 
 	MongoClient.connect(uri, (error, db) => {
