@@ -68,7 +68,7 @@ const convertToCommentFace = (anchor) => {
 
 	let container = {
 		type: "element",
-		tagName: "div",
+		tagName: "span",
 		attributes: [
 			{
 				key: "class",
@@ -111,7 +111,7 @@ const convertToCommentFace = (anchor) => {
 			if (anchor.children[i].type === 'text') {
 				container.children.push({
 					type: 'element',
-					tagName: 'div',
+					tagName: 'span',
 					attributes: [
 						{
 							key: 'class',
@@ -129,7 +129,7 @@ const convertToCommentFace = (anchor) => {
 			} else if (anchor.children[i].type === 'element' && anchor.children[i].tagName === 'strong') {
 				container.children.push({
 					type: 'element',
-					tagName: 'div',
+					tagName: 'span',
 					attributes: [
 						{
 							key: 'class',

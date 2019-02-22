@@ -80,9 +80,13 @@ blockquote {
 .face {
 	max-width: 178px;
 	height: auto;
+	vertical-align: middle;
 }
 .comment-face {
 	position: relative;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 	max-width: 178px;
 	width: auto;
 	height: auto;
@@ -91,23 +95,29 @@ blockquote {
 .top {
     font-family: arial,sans-serif;
 	font-size: 18px;
-	text-align: center;
     color: white;
 	position: absolute;
+	display: block;
 	top: 0px;
-	min-width: 170px;
-    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+	margin: auto;
+	vertical-align: middle;
 	text-align: center;
+	padding-left: 4px;
+	padding-right: 4px;
+    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
 .bottom {
     font-family: arial,sans-serif;
 	font-size: 18px;
     color: white;
 	position: absolute;
+	display: block;
 	bottom: 0px;
-	min-width: 170px;
-    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+	vertical-align: middle;
 	text-align: center;
+	padding-left: 4px;
+	padding-right: 4px;
+    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
 
 /* spoiler tag formatting */

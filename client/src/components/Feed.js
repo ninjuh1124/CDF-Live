@@ -8,31 +8,51 @@ class Feed extends React.Component {
 		super(props);
 		this.state = {
 			history: [],
-			isLoading: false
+			isLoading: false,
+			emptyCalls: 0
 		};
 		this.getHistory = this.getHistory.bind(this);
 	}
 
+	// do things functionally they said
+	// your code will look cleaner they said
 	getHistory() {
 		axios.get(
 			this.props.api+'v1/history.json?newerthan='+this.state.history[0]._id,
 			{ crossdomain: true }
 		).then(res => {
+			// check history
 			if (res.data.message
 				&& Array.isArray(res.data.message)
 				&& res.data.message.length > 0) {
-					let arr = res.data.message.filter(comment => {
-						return !(this.state.history
-									.map(comment => comment._id)
-									.includes(comment._id)
-						);
-					});
+					// update history
 					this.setState(state => {
 						return {
-							history: BSort([...arr, ...state.history], 'id')
+							history: BSort([
+								...res.data.message.filter(comment => {
+									return !(this.state.history
+										.map(comment => comment._id)
+										.includes(comment._id)
+									);
+								}),
+								...state.history
+							], 'id'),
+							emptyCalls: 1
 						};
 					});
+				} else {
+					this.setState(state => {
+						return { emptyCalls: state.emptyCalls + 1 }
+					});
 				}
+			
+			// call get history again
+			setTimeout( () => this.getHistory(), 
+				(this.state.emptyCalls < 24
+					? this.state.emptyCalls*5000
+					: 24*5000
+				)
+			);
 		});
 	}
 
@@ -47,7 +67,7 @@ class Feed extends React.Component {
 					history: BSort(res.data.message, 'id'),
 					isLoading: false
 				});
-				setInterval(this.getHistory, 7000);
+				setTimeout( () => this.getHistory(), 5000);
 			}).catch(err => {
 				this.setState({ isLoading: false });
 				console.log(err);
