@@ -14,7 +14,7 @@ class About extends React.Component {
 			this.props.api+"content/about.md",
 			{ crossorigin: true }
 		).then(res => {
-			this.setState({ md: res.data.message });
+			this.setState({ md: res.data });
 		});
 	}
 
