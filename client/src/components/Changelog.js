@@ -11,7 +11,7 @@ class About extends React.Component {
 
 	componentDidMount() {
 		axios.get(
-			this.props.api+"content/about.md",
+			this.props.api+"content/changelog.md",
 			{ crossorigin: true }
 		).then(res => {
 			this.setState({ md: res.data });
@@ -30,12 +30,12 @@ class About extends React.Component {
 				<h6
 					className="text-right"
 				><small>
-					<Link to='/changelog' className="corner-link">Changelog</Link>
+					<Link to='/about' className="corner-link">About</Link>
 				</small></h6>
-
+				
 				<h2
 					className="text-center"
-					id="title">About</h2>
+					id="title">Changelog</h2>
 				<hr />
 				<ReactMarkdown source={this.state.md} />
 			</div>
