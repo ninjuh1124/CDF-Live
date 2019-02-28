@@ -1,7 +1,6 @@
 const express = require('express'),
-	content = require('../controllers/content'),
 	routes = express();
 
-routes.get('/about.md', content.about);
+routes.use('/', express.static('content'));
 
 module.exports = routes;
