@@ -50,7 +50,7 @@ const getHistory = (req, callback) => {
 		aggregation.push({ $match: { _id: { $gt: req.query.newerthan }}});
 	}
 
-	let count = req.query.count ? req.query.count : 50;
+	let count = req.query.count ? parseInt(req.query.count) : 50;
 	aggregation.push({ $limit: count });
 	aggregation.push({ $sort: { id: 1 }});
 
@@ -69,19 +69,27 @@ const getHistory = (req, callback) => {
 
 const getParents = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	let count = req.query.count ? req.query.count : 50;
-	let nt = req.query.newerthan ? req.query.newerthan : '0';
+	let aggr = [];
+	let match = {
+		$match: {
+			$and: []
+		}
+	}
+
+	match.$match.$and.push({ parentID: { $gt: 't3_000000' }});
+	req.query.newerthan
+	? match.$match.$and.push({ _id: { $gt: req.query.newerthan }})
+	: null;
+
+	aggr.push(match);
+	aggr.push({ $sort: { _id: -1 }})
+	req.query.count
+	? aggr.push({ $limit: parseInt(req.query.count) })
+	: aggr.push({ $limit: 75 });
 
 	MongoClient.connect(uri, (error, db) => {
 		db.collection('comments')
-			.aggregate([
-				{ $match: { $and: [
-					{ parentID: { $gt: 't3_000000' }},
-					{ _id: { $gt: nt }}
-				]}},
-				{ $sort: { _id: -1 }},
-				{ $limit: count }
-			])
+			.aggregate(aggr)
 			.toArray( (err, arr) => {
 				callback(null, arr);
 				db.close();
@@ -110,6 +118,7 @@ const getTree = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
 	let arrToReturn = [];
 	getParents(req, (err, arr) => {
+		console.log(arr);
 		if (err) callback(err);
 		arrToReturn = [...arr];
 		
