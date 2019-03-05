@@ -118,7 +118,6 @@ const getTree = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
 	let arrToReturn = [];
 	getParents(req, (err, arr) => {
-		console.log(arr);
 		if (err) callback(err);
 		arrToReturn = [...arr];
 		
