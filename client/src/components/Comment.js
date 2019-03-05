@@ -16,7 +16,7 @@ class Comment extends React.Component {
 						permalink={comment.permalink}
 						body={comment.body}
 						history={this.props.history}
-						created={this.props.created}
+						created={comment.created}
 						className="reply"
 					/>
 				</div>
