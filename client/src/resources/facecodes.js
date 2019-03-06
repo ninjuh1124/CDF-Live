@@ -260,7 +260,7 @@ const facecodes = {
 	"#mindblank": "/faces/mindblank.PNG",
 	"#minoridenied": "/faces/minoridenied.png",
 	"#mitsukishock": "/faces/mitsukishock.png",
-	"#miyamoriunimpress": "/faces/miyamoriunimpressed.png",
+	"#miyamoriunimpressed": "/faces/miyamoriunimpressed.png",
 	"#morethanonewaifu": "/faces/morethanonewaifu.PNG",
 	"#mug4": "/faces/mug4.png",
 	"#mug5": "/faces/mug5.png",
