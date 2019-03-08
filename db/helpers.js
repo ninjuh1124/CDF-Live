@@ -21,7 +21,7 @@ exports.isNewCDF = (obj) => {
 	obj = obj.toJSON();
 	return (
 		['t2_6l4z3', 't2_6wrl6'].includes(obj.author_fullname)
-		&& submission.title.includes("Casual Discussion Friday")
+		&& obj.title.includes("Casual Discussion Friday")
 	);
 }
 
