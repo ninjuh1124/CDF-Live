@@ -52,5 +52,7 @@ commentStream.on('comment', comment => {
 submissionStream.on('submission', thread => {
 	if (helpers.isNewCDF(thread)) {
 		helpers.store(handleThread(thread));
+		threads.unshift(thread.name);
+		threads.pop();
 	}
 });

@@ -20,15 +20,14 @@ exports.loadThreads = (callback) => {
 exports.isNewCDF = (obj) => {
 	obj = obj.toJSON();
 	return (
-		['t2_6l4z3', 't2_6wrl6'].includes(obj.author_fullname)
+		obj.author_fullname == 't2_6wrl6'
 		&& obj.title.includes("Casual Discussion Friday")
 	);
 }
 
 // removes unnecessary object fields
-exports.handleThread = (obj) => {
-	obj = obj.toJSON();
-	console.log(obj.id);
+exports.handleThread = (thread) => {
+	obj = thread.toJSON();
 	return {
 		kind:		'submission',
 		_id:		obj.name,
