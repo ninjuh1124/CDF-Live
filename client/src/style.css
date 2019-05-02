@@ -6,6 +6,10 @@ a {
 	color: #81a2be;
 }
 
+p {
+	word-break: break-all;
+}
+
 code {
 	color: #cc6666;
 	background: #1d1f21;
