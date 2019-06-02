@@ -357,7 +357,8 @@ const facecodes = {
 	"#wideeyed": "/faces/wideeyed.png",
 	"#yuishrug": "/faces/yuishrug.png",
 	"#yunosunglasses": "/faces/yunosunglasses.png",
-	"#zetsuboushta": "/faces/zetsuboushta.png"
+	"#zetsuboushta": "/faces/zetsuboushta.png",
+	"#modsalute": "/faces/modsalute.png"
 };
 
 export default facecodes;

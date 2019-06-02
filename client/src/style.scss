@@ -100,33 +100,25 @@ blockquote {
 	width: auto;
 	height: auto;
 	text-align: center;
-}
-.top {
-    font-family: arial,sans-serif;
-	font-size: 18px;
-    color: white;
-	position: absolute;
-	display: block;
-	top: 0px;
-	margin: auto;
-	vertical-align: middle;
-	text-align: center;
-	padding-left: 4px;
-	padding-right: 4px;
-    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
-}
-.bottom {
-    font-family: arial,sans-serif;
-	font-size: 18px;
-    color: white;
-	position: absolute;
-	display: block;
-	bottom: 0px;
-	vertical-align: middle;
-	text-align: center;
-	padding-left: 4px;
-	padding-right: 4px;
-    text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+	.face-text {
+		font-family: arial,sans-serif;
+		font-size: 18px;
+		color: white;
+		position: absolute;
+		display: block;
+		top: 0px;
+		margin: auto;
+		vertical-align: middle;
+		text-align: center;
+		padding-left: 4px;
+		padding-right: 4px;
+		text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+		strong {
+			font-weight: normal;
+			bottom: 0px;
+			top: unset;
+		}
+	}
 }
 
 /* spoiler tag formatting */

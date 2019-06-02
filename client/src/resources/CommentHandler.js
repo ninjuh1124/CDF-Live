@@ -3,10 +3,51 @@ import ReactDOMServer from 'react-dom/server';
 import {parse, stringify} from 'himalaya';
 import ReactMarkdown from 'react-markdown';
 import facecodes from './facecodes';
+import htmlParser from 'react-markdown/plugins/html-parser';
 
 // returns raw html string from markdown
 // this is a completely stupid way of doing, and most definitely shouldn't
 // be done this way, but goddammit I'm not writing my own Markdown parser
+
+const parser = htmlParser({
+	isValidNode: node => node.type !== 'script',
+	processingInstructions: [
+		// comment faces
+		{
+			shouldProcessNode: (node) => {
+				return isCommentFace(node);
+			},
+			processNode: (node, children) => {
+				
+			}
+		},
+
+		// old spoiler tags
+		{
+			shouldProcessNode: (node) => {
+			},
+			processNode: (node, children) => {
+			}
+		},
+
+		// new spoiler tags
+		{
+			shouldProcessNode: (node) => {
+			},
+			processNode: (node, children) => {
+			}
+		},
+
+		// user/subreddit links
+		{
+			shouldProcessNode: (node) => {
+			},
+			processNode: (node, children) => {
+			}
+		}
+	]
+});
+
 export const parseBody = (md) => {
 	let jsx = <ReactMarkdown source={md.replace(/^#{1,}/gm, '$& ')} />
 	let raw = ReactDOMServer.renderToString(jsx);

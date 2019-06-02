@@ -5,17 +5,12 @@ const CommentFace = (props) => {
 	return(
 		<span className="comment-face">
 			<img
-				src={facecodes[props.facecode]}
-				alt={props.facecode}
+				src={facecodes[props.code]}
+				alt={props.code}
 				title={props.title}
 				className="face"
 			/>
-			{props.topText
-			? <span className="top">{props.topText}</span>
-			: null}
-			{props.bottomText
-			? <span className = "bottom">{props.bottomText}</span>
-			: null}
+			<span className="face-text">{props.children}</span>
 		</span>
 	)
 }

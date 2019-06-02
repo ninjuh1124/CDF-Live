@@ -9,10 +9,10 @@ import {
 	Redirect,
 	Switch
 } from 'react-router-dom';
-import './style.css';
+import './style.scss';
 
 const App = () => {
-	let api = 'https://api.friday.moe/';
+	let api = 'http://localhost:8080/';
 	return (
 		<Router><div id="content">
 			<Switch>
