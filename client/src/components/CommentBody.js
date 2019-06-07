@@ -2,7 +2,6 @@ import React from 'react';
 import CommentHandler from './CommentHandler';
 
 const CommentBody = (props) => {
-	let body = parseBody(props.body);
 	return (
 		<div className="body-row row">
 			<div className="body-col col-xs-11">

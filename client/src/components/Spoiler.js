@@ -10,3 +10,5 @@ const Spoiler = (props) => {
 		</span>
 	)
 }
+
+export default Spoiler;

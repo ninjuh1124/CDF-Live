@@ -5,7 +5,9 @@ const CommentFace = (props) => {
 	return(
 		<span className="comment-face">
 			<img
-				src={facecodes[props.code]}
+				src={facecodes[props.code]
+					? facecodes[props.code]
+					: '/faces/notfound.jpg'}
 				alt={props.code}
 				title={props.title}
 				className="face"

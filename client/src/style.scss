@@ -21,7 +21,8 @@ hr {
 
 table, th, td {
 	border-collapse: collapse!important;
-	border: 1px; solid #969896;
+	border: 1px; 
+	solid: #969896;
 }
 
 #root {
@@ -86,12 +87,8 @@ blockquote {
 }
 
 /* comment face formatting */
-.face {
-	max-width: 178px;
-	height: auto;
-	vertical-align: middle;
-}
 .comment-face {
+	// positioning
 	position: relative;
 	display: inline-flex;
 	justify-content: center;
@@ -100,25 +97,38 @@ blockquote {
 	width: auto;
 	height: auto;
 	text-align: center;
+
+	// aligning bottom text
 	.face-text {
-		font-family: arial,sans-serif;
-		font-size: 18px;
-		color: white;
-		position: absolute;
-		display: block;
-		top: 0px;
-		margin: auto;
-		vertical-align: middle;
-		text-align: center;
-		padding-left: 4px;
-		padding-right: 4px;
-		text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 		strong {
 			font-weight: normal;
-			bottom: 0px;
-			top: unset;
+			position: absolute;
+			margin: auto;
+			width: 100%;
+			left: 0;
+			bottom: 0;
 		}
 	}
+
+	// resizing img
+	.face {
+		max-width: 178px;
+		height: auto;
+		vertical-align: middle;
+	}
+}
+// formatting text
+.face-text{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	color: white;
+	font-size: 18px;
+	font-family: arial,sans-serif;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
 }
 
 /* spoiler tag formatting */

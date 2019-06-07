@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import facecodes from '../resources/facecodes';
+import CommentFace from './CommentFace';
+import Spoiler from './Spoiler';
 
 const CommentHandler = (props) => {
 	return <ReactMarkdown
