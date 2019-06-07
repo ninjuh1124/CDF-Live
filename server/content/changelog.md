@@ -1,3 +1,8 @@
+# v2.0.1 - 7/6/19
+
+* Stopped doing things dangerously
+* Fixed bug with database not updating properly
+
 # v2.0.0 - 28/2/19
 
 * Added Changelog
