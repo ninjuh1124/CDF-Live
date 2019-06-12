@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient,
+	fetch = require('node-fetch'),
 	helpers = require('./helpers');
 
 module.exports = {
@@ -22,6 +23,12 @@ module.exports = {
 
 	comment: (req, res) => {
 		getComment(req, (err, data) => {
+			helpers.send(res, err, data);
+		});
+	},
+	
+	token: (req, res) => {
+		getToken(req, (err, data) => {
 			helpers.send(res, err, data);
 		});
 	}
@@ -122,3 +129,49 @@ const getComment = (req, callback) => {
 	});
 }
 
+const getToken = (req, callback) => {
+	let refreshToken = req.query.refresh_token ? req.query.refresh_token : null;
+	let code = req.query.code ? req.query.code : null;
+	let auth = process.env.REDDIT_AUTHORIZATION;
+	let redirect = encodeURI(process.env.REDDIT_REDIRECT);
+	let url = "https://www.reddit.com/api/v1/access_token";
+
+	if (auth == null) {
+		let error = {
+			code: 500,
+			message: "Could not authorize request"
+		}
+
+		callback(error);
+	}
+
+	let headers = {
+		Authorization: "Basic " + auth,
+		'Content-Type': "application/x-www-form-urlencoded"
+	};
+
+	let body = "grant_type=";
+
+	if (code) {
+		body = body + "code&code=" + code + "&redirect_uri=" + redirect;
+	} else if (refreshToken) {
+		body = body + "refresh_token&refresh_token=" + refreshToken;
+	} else {
+		let error = {
+			code: 400,
+			message: "Insufficient parameters"
+		};
+	}
+
+	let request = {
+		method: "POST",
+		mode: "cors",
+		headers: headers,
+		body: body
+	};
+
+	fetch(url, request)
+	.then(res => res.json())
+	.then(res => callback(null, res))
+	.catch(err => callback(err));
+}

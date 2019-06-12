@@ -16,7 +16,9 @@
     "snoowrap": "^1.15.2"
   },
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ninjuh1124/fridaydotmoe.git"
