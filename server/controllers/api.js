@@ -133,7 +133,7 @@ const getToken = (req, callback) => {
 	let refreshToken = req.query.refresh_token ? req.query.refresh_token : null;
 	let code = req.query.code ? req.query.code : null;
 	let auth = process.env.REDDIT_AUTHORIZATION;
-	let redirect = encodeURI(process.env.REDDIT_REDIRECT);
+	let redirect = encodeURIComponent(process.env.REDDIT_REDIRECT);
 	let url = "https://www.reddit.com/api/v1/access_token";
 
 	if (auth == null) {
@@ -153,7 +153,7 @@ const getToken = (req, callback) => {
 	let body = "grant_type=";
 
 	if (code) {
-		body = body + "code&code=" + code + "&redirect_uri=" + redirect;
+		body = body + "authorization_code&code=" + code + "&redirect_uri=" + redirect;
 	} else if (refreshToken) {
 		body = body + "refresh_token&refresh_token=" + refreshToken;
 	} else {
@@ -169,6 +169,8 @@ const getToken = (req, callback) => {
 		headers: headers,
 		body: body
 	};
+
+	console.log(request);
 
 	fetch(url, request)
 	.then(res => res.json())
