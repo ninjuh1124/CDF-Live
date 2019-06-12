@@ -152,25 +152,24 @@ const getToken = (req, callback) => {
 
 	let body = "grant_type=";
 
-	if (code) {
+	if (code !== null) {
 		body = body + "authorization_code&code=" + code + "&redirect_uri=" + redirect;
-	} else if (refreshToken) {
+	} else if (refreshToken !== null) {
 		body = body + "refresh_token&refresh_token=" + refreshToken;
 	} else {
 		let error = {
 			code: 400,
 			message: "Insufficient parameters"
 		};
+
+		callback(error);
 	}
 
 	let request = {
 		method: "POST",
-		mode: "cors",
 		headers: headers,
 		body: body
 	};
-
-	console.log(request);
 
 	fetch(url, request)
 	.then(res => res.json())
