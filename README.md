@@ -13,7 +13,7 @@ Current working branch: [React](https://github.com/ninjuh1124/fridaydotmoe/tree/
 * ~~Some~~ A lot of comment faces are missing
 * Specific markdown syntax is not parsed: superscript
 * No easy way of listening for comment edits
-* Still no mobile support (looking into React Native)
+* Server error when accessing from mobile network
 
 ## "Future" Plans:
 
