@@ -24,8 +24,9 @@ class Heading extends React.Component {
 				<h2
 					className="text-center"
 					id="title">Casual Discussion Friday</h2>
-				<a
+				<h5 className="text-center"><a
 					id="latest"
+					className="link-primary"
 					href={
 						this.state.thread.permalink ? 
 						this.state.thread.permalink :
@@ -33,7 +34,7 @@ class Heading extends React.Component {
 					}
 					rel="noreferrer noopener"
 					target="_blank"
-				><h5 className="text-center">Latest Thread</h5></a>
+				>Latest Thread</a></h5>
 				<hr />
 			</div>
 		);

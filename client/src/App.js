@@ -35,6 +35,9 @@ const App = () => {
 						return <Changelog api={api} />
 					}}
 				/>
+				<Route
+					exact path='/login'
+				/>
 				<Route component={PageNotFound} />
 			</Switch>
 		</div></Router>

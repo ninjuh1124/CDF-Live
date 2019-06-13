@@ -8,6 +8,7 @@ class FeedContainer extends React.Component {
 		super(props);
 		this.state = {
 			thread: {},
+			loggedIn: false
 		};
 	}
 
@@ -17,7 +18,7 @@ class FeedContainer extends React.Component {
 				<h6
 					className="text-right"
 				><small>
-					<Link to="/about" className="corner-link">About</Link>
+					<Link to="/about" className="corner-link link-primary">About</Link>
 				</small></h6>
 				<Heading api={this.props.api} />
 				<Feed api={this.props.api} />

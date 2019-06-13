@@ -13,8 +13,8 @@ const CommentAuthor = (props) => {
 					>{props.author}</a>
 				</h5>
 			</div>
-			<div className="col-xs-9">
-				<h5 className="time-ago text-right">
+			<div className="col-xs-7" /><div className="col-xs-2">
+				<h5 className="time-ago text-right link-primary">
 					<TimeAgo 
 						date={props.created * 1000} 
 						title={null}
