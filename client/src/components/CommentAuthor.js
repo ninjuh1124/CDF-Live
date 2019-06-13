@@ -3,25 +3,24 @@ import TimeAgo from 'react-timeago';
 
 const CommentAuthor = (props) => {
 	return (
-		<div className="author-row row">
-			<div className="author-col col-xs-2">
-				<h5 className="author-link">
-					<a 
-						href={props.permalink} 
-						rel="noreferrer noopener"
-						target="_blank"
-					>{props.author}</a>
-				</h5>
-			</div>
-			<div className="col-xs-7" /><div className="col-xs-2">
-				<h5 className="time-ago text-right link-primary">
-					<TimeAgo 
-						date={props.created * 1000} 
-						title={null}
-					/>
-				</h5>
-			</div>
-		</div>
+		<div className="author-row row"><div className="col-xs-11"><h5>
+			<a 
+				href={props.permalink} 
+				rel="noreferrer noopener"
+				target="_blank"
+			>{props.author}</a>
+
+			<span 
+				className="link-primary" 
+				style={{float: 'right'}}
+				title={new Date(props.created*1000)}
+			>
+				<TimeAgo 
+					date={props.created * 1000} 
+					title={null}
+				/>
+			</span>
+		</h5></div></div>
 	);
 }
 

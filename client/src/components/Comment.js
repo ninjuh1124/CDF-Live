@@ -2,7 +2,7 @@ import React from 'react';
 import CommentAuthor from './CommentAuthor';
 import CommentBody from './CommentBody';
 
-class Comment extends React.Component {
+class Comment extends React.PureComponent {
 	render() {
 	let replies = this.props.history
 		.filter(comment => comment.parentID === this.props.id)

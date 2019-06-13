@@ -1,0 +1,39 @@
+.comment-face {
+	position: relative;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	max-width: 178px;
+	width: auto;
+	height: auto;
+	text-align: center;
+
+	.face-text {
+		strong {
+			font-weight: normal;
+			position: absolute;
+			margin: auto;
+			width: 100%;
+			left: 0;
+			bottom: 0;
+		}
+	}
+
+	.face {
+		max-width: 178px;
+		height: auto;
+		vertical-align: middle;
+	}
+}
+
+.face-text {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	color: white;
+	font-size: 18px;
+	font-family: arial, sans-serif;
+	padding-left: 4px;
+	text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+}

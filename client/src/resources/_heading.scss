@@ -1,0 +1,13 @@
+#title {
+	color: $text-primary
+}
+
+.link-primary {
+	color: $link-primary;
+	text-decoration: none;
+
+	&:hover {
+		color: $link-primary-hover;
+		text-decoration: underline;
+	}
+}

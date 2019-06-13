@@ -1,0 +1,60 @@
+@import 'spoiler';
+@import 'comment-face';
+
+.arrow-link {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	transform: translateY(-.6em);
+}
+
+.comment-replies {
+	margin-bottom: 0px;
+}
+
+.comment {
+	background: $background-primary;
+	color: $text-primary;
+	padding-bottom: 0px;
+	padding-top: 5px;
+	padding-right: 0px;
+	padding-left: 15px;
+	border-color: $border-primary;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 1em;
+
+	.author-row h5 {
+		font-size: x-small;
+	}
+
+	a {
+		color: $link-secondary;
+		&:hover {
+			color: $link-secondary;
+		}
+	}
+
+	blockquote {
+		font-size: 100%;
+		border-left: 3px solid $border-primary;
+		padding-left: 15px;
+		margin-bottom: 5px;
+		padding-left: 10px;
+	}
+
+	code {
+		color: $text-emphasis;
+	}
+
+	table, th, td {
+		border-collapse: collapse!important;
+		border: 1px;
+		solid: $border-primary;
+	}
+}
+
+.reply {
+	border-right: 0px;
+	border-bottom: 0px;
+	border-top-right-radius: 0px!important;
+	border-bottom-left-radius: 0px!important;
+}

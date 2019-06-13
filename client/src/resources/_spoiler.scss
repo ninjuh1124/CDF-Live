@@ -1,0 +1,31 @@
+.spoiler {
+	background: black;
+	color: $text-primary;
+	padding: 1px 5px 1px 5px;
+	border-radius: 3px;
+
+	.spoiler-inner {
+		color: black!important;
+		padding-left: 12px;
+	}
+
+	&:hover {
+		color: $text-emphasis;
+		.spoiler-inner {
+			color: $text-primary!important;
+		}
+	}
+}
+
+.spoiler-revealed {
+	background: black;
+	color: $text-emphasis;
+	padding: 1px 5px 1px 5px;
+	border-radius: 3px;
+
+	.spoiler-inner {
+		color: black!important;
+		padding-left: 12px;
+		color: $text-primary!important;
+	}
+}

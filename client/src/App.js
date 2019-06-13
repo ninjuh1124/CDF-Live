@@ -12,7 +12,7 @@ import {
 import './style.scss';
 
 const App = () => {
-	let api = 'http://localhost:8080/';
+	let api = 'https://api.friday.moe/';
 	return (
 		<Router><div id="content">
 			<Switch>
