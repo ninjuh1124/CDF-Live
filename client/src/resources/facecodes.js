@@ -116,7 +116,7 @@ const facecodes = {
 	"#cup1": "/faces/cup1.jpg",
 	"#cup2": "/faces/cup2.jpg",
 	"#disbelief": "/faces/disbelief.jpg",
-	"#dontdometh": "/faces/dontdometh",
+	"#dontdometh": "/faces/dontdometh.jpg",
 	"#duckhue": "/faces/duckhue.jpg",
 	"#elsieqq": "/faces/elsieqq.jpg",
 	"#etotamadunno": "/faces/etotamaface.jpg",

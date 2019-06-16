@@ -47,8 +47,11 @@
 
 	table, th, td {
 		border-collapse: collapse!important;
+		border-style: solid!important;
 		border: 1px;
-		solid: $border-primary;
+		padding: 4px 9px 4px 9px;
+		margin-bottom: 10px;
+		border-color: $border-primary;
 	}
 }
 

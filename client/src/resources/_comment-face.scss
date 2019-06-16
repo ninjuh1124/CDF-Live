@@ -15,6 +15,7 @@
 			margin: auto;
 			width: 100%;
 			left: 0;
+			word-break: break-word;
 			bottom: 0;
 		}
 	}
@@ -31,6 +32,7 @@
 	width: 100%;
 	position: absolute;
 	top: 0;
+	word-break: break-word;
 	color: white;
 	font-size: 18px;
 	font-family: arial, sans-serif;
