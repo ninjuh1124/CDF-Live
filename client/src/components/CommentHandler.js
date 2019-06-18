@@ -20,6 +20,13 @@ const CommentHandler = (props) => {
 						outerText={props.children}
 						innerText={props.title}
 					/>
+				} else if (/\/?[ur]\/\S+/.test(props.href)) { // reddit link
+					return <a
+						href={"https://reddit.com/"+props.href}
+						title={props.title}
+						target="_blank"
+						rel="noreferrer noopener"
+					>{props.children}</a>
 				} else {
 					return <a 
 						href={props.href} 

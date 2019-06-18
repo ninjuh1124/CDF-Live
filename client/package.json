@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "himalaya": "^1.1.0",
+    "node-sass": "^4.12.0",
+    "query-string": "^6.7.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-markdown": "^4.0.6",
