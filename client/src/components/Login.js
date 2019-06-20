@@ -54,6 +54,7 @@ class Login extends React.Component {
 					if (res.data.message.refresh_token) {
 						console.log(res.data.message.refresh_token);
 						this.props.handleLogin(res.data.message.refresh_token, res.data.message.access_token);
+						this.setState({ gotToken: true });
 					} else {
 						this.setState({ error: 'Error retrieving token' });
 					}
@@ -64,18 +65,15 @@ class Login extends React.Component {
 	}
 	
 	render() {
-		return (
-			<ErrorBoundary>
-				{
-					this.state.gotToken
-					? <Redirect to='/feed' />
-					: <div>
-						Authorizing...
-					</div>
-
-				}
-			</ErrorBoundary>
-		)
+		if (this.state.gotToken) {
+			return <Redirect to='/feed' />
+		} else {
+			return (
+				<ErrorBoundary>
+					Authorizing
+				</ErrorBoundary>
+			);
+		}
 	}
 }
 
