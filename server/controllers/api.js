@@ -49,8 +49,7 @@ const generateHistory = (req, callback) => {
 				db.collection("comments")
 					.aggregate([
 						{ $sort: { id: -1 }},
-						{ $match: { _id: { $gte: arr[0]._id }}},
-						{ $sort: { id: 1 }}
+						{ $match: { _id: { $gte: arr[0]._id }}}
 					])
 					.toArray( (e, arr) => {
 						if (e) callback(e);
@@ -74,7 +73,6 @@ const refreshHistory = (req, callback) => {
 
 	let count = req.query.count ? parseInt(req.query.count) : 50;
 	aggregation.push({ $limit: count });
-	aggregation.push({ $sort: { id: 1 }});
 
 	MongoClient.connect(uri, (error, db) => {
 		db.collection("comments")
