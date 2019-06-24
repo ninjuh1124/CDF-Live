@@ -32,6 +32,7 @@ const CommentHandler = (props) => {
 						href={props.href} 
 						title={props.title}
 						target="_blank"
+						className="md-link"
 						rel="noreferrer noopener"
 					>{props.children}</a>
 				}
