@@ -35,7 +35,7 @@ class CommentFrame extends React.Component {
 			>
 				<CommentAuthorRow {...this.props} />
 				<CommentBodyRow {...this.props} />
-				<CommentButtonsRow />
+				<CommentButtonsRow {...this.props}/>
 
 				<ul 
 					className="comment-replies list-group" 

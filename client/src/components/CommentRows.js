@@ -17,6 +17,7 @@ const CommentAuthorRow = (props) => {
 					>
 						<TimeAgo
 							date={props.created*1000}
+							title={null}
 						/>
 					</span>
 				</h5>
@@ -77,8 +78,18 @@ class CommentButtonsRow extends React.Component {
 					className='link-primary'
 					onClick={ () => this.toggleEditor('reply')}
 				>
-					reply
+					reply 
 				</a>
+				&nbsp;
+				{this.props.author === sessionStorage.getItem('name')
+				? <a
+					href='javascript:void(0)'
+					className='link-primary'
+					onClick={ () => this.toggleEditor('edit')}
+				>
+					edit
+				</a>
+				: null}
 
 				{
 					this.state.editorMode != 'hidden'

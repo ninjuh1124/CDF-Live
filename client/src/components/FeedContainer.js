@@ -9,8 +9,11 @@ class FeedContainer extends React.Component {
 		super(props);
 		this.state = {
 			history: [],
+			thread: {},
 			emptyCalls: 0,
-			isLoading: true,
+			isLoading: false,
+			loadingMe: false,
+			loggedInAs: sessionStorage.getItem('name'),
 			device: localStorage.getItem('device')
 		};
 		this.refreshToken = this.refreshToken.bind(this);
@@ -60,14 +63,39 @@ class FeedContainer extends React.Component {
 			this.props.api + 
 			'v1/token.json?refresh_token=' + 
 			localStorage.getItem('refreshToken'),
-
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.message.access_token) {
 				sessionStorage.setItem(
 					'accessToken',
-					res.data.message.accessToken
+					res.data.message.access_token
 				);
+
+				// get identity
+				if (sessionStorage.getItem('name') === null) {
+					this.setState({ loadingMe: true }, () => {
+						axios({
+							method: 'get',
+							url: 'https://oauth.reddit.com/api/v1/me',
+							headers: {
+								Authorization: 'bearer ' + 
+									res.data.message.access_token
+								}
+						}).then(res => {
+							this.setState({
+								loadingMe: false,
+								loggedInAs: res.data.name
+							});
+							if (res.data.name) {
+								sessionStorage.setItem(
+									'name', 
+									res.data.name
+								);
+							}
+						}).catch(err => console.log);
+					});
+				}
+
 				setTimeout(
 					() => this.refreshToken(),
 					3300000
@@ -77,6 +105,16 @@ class FeedContainer extends React.Component {
 	}
 
 	componentDidMount() {
+		// get thread id
+		axios.get(
+			this.props.api + 'v1/thread.json',
+			{ crossdomain: true }
+		).then(res => {
+			this.setState({ thread: res.data.message[0] }, () => {
+				sessionStorage.setItem('thread', res.data.message[0]._id);
+			});
+		});
+
 		// load initial comments
 		this.setState({ isLoading: true }, () => {
 			axios.get(
@@ -105,7 +143,7 @@ class FeedContainer extends React.Component {
 	render() {
 		let uriBase = "https://www.reddit.com/api/v1/authorize?";
 		let redirect = encodeURIComponent("http://localhost:3000/reddit_oauth_login");
-		let scope = ["edit", "read", "save", "submit", "vote"]
+		let scope = ["edit", "read", "save", "submit", "vote", "identity"]
 		let params = [
 			"client_id=WfSifmea8-anYA",
 			"response_type=code",
@@ -117,18 +155,11 @@ class FeedContainer extends React.Component {
 
 		return (
 			<div style={{padding: '3px'}}>
-				<h6
-					className="text-right"
-				><small>
-					<Link to="/about" className="corner-link link-primary">About</Link>
-				</small></h6>
-				<Heading api={this.props.api} />
-				{localStorage.getItem('refreshToken') != null
-				? null
-				: <a
-					id="reddit-login-button"
-					href={uriBase+params}
-				><i className="fab fa-reddit" />Login</a>}
+				<Heading 
+					thread={this.state.thread}
+					loggedInAs={this.state.loggedInAs}
+				/>
+
 				{
 					(!this.state.isLoading 
 						? <Feed 

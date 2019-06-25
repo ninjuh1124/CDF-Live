@@ -6,6 +6,7 @@ class Editor extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isSending: false,
 			text: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -24,18 +25,36 @@ class Editor extends React.Component {
 		else if (this.props.editorMode === 'edit')
 			uri = "https://oauth.reddit.com/api/editusertext";
 
-		axios.post(uri,
-			{
-				text: this.state.text,
-				thing_id: this.props._id
-			}
-		);
+		this.setState({ isSending: true}, () => {
+			axios({
+				method: 'post',
+				headers: { 
+					Authorization: 'bearer ' + 
+						sessionStorage.getItem('accessToken'),
+					'Content-Type': 'application/x-wwww-form-urlencoded'
+				},
+				url: uri,
+				data: encodeURI(this.state.text)
+			}).then(res => {
+				this.setState({isSending: false}, () => {
+					this.props.toggleEditor(this.props.editorMode);
+				});
+			}).catch(err => {
+				console.log(err);
+			});
+		});
 		e.preventDefault();
 	}
 
 	cancel(e) {
 		this.props.toggleEditor(this.props.editorMode);
 		e.preventDefault();
+	}
+
+	componentDidMount() {
+		if (this.props.editorMode === 'edit') {
+			this.setState({ text: this.props.body });
+		}
 	}
 
 	render() {
