@@ -15,6 +15,7 @@ class CommentFrame extends React.Component {
 				return (
 					<div key={comment.id}>
 						<CommentFrame
+							loggedIn={this.props.loggedIn}
 							id={comment._id}
 							key={comment.id}
 							author={comment.author}
@@ -35,7 +36,7 @@ class CommentFrame extends React.Component {
 			>
 				<CommentAuthorRow {...this.props} />
 				<CommentBodyRow {...this.props} />
-				<CommentButtonsRow {...this.props}/>
+				{this.props.loggedIn ? <CommentButtonsRow {...this.props}/> : null}
 
 				<ul 
 					className="comment-replies list-group" 

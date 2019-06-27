@@ -8,6 +8,7 @@ const Feed = (props) => {
 			return (
 				<div style={{ marginTop: '5px'}} key={comment.id}>
 					<CommentFrame
+						loggedIn={props.loggedIn}
 						id={comment._id}
 						key={comment.id}
 						author={comment.author}

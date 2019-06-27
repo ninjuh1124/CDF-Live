@@ -3,10 +3,10 @@ import {Link} from 'react-router-dom';
 
 const Heading = (props) => {
 	let uriBase = "https://reddit.com/api/v1/authorize?",
-		redirect = encodeURIComponent("http://localhost:3000/reddit_oauth_login"),
+		redirect = encodeURIComponent(process.env.REACT_APP_REDIRECT),
 		scope = ["edit", "read", "save", "submit", "vote", "identity"],
 		params = [
-			"client_id=WfSifmea8-anYA",
+			"client_id=" + process.env.REACT_APP_CLIENT_ID,
 			"response_type=code",
 			"state=" + localStorage.getItem('device'),
 			"redirect_uri=" + redirect,
@@ -36,16 +36,16 @@ const Heading = (props) => {
 				target="_blank"
 			>Latest Thread</a></h5>
 
-			<span className="text-right link-primary">
+			<h6 id='logged-in-as' className='text-right'><small>
 				{localStorage.getItem('refreshToken') === null
 				? null
 				:	props.loggedInAs
 					? "Logged in as " + props.loggedInAs
 					: "Loading user info..."
 				}
-			</span>
+			</small></h6>
 
-			<hr />
+			<hr id='topbar' />
 
 			{localStorage.getItem('refreshToken') !== null
 			? null

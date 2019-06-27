@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import querystring from 'querystring';
 import CommentHandler from './CommentHandler';
 
 class Editor extends React.Component {
@@ -25,20 +26,20 @@ class Editor extends React.Component {
 		else if (this.props.editorMode === 'edit')
 			uri = "https://oauth.reddit.com/api/editusertext";
 
-		this.setState({ isSending: true}, () => {
+		this.setState({ isSending: true }, () => {
 			axios({
 				method: 'post',
 				headers: { 
-					Authorization: 'bearer ' + 
+					Authorization: 'Bearer ' + 
 						sessionStorage.getItem('accessToken'),
-					'Content-Type': 'application/x-wwww-form-urlencoded'
+					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				url: uri,
-				data: encodeURI(this.state.text)
-			}).then(res => {
-				this.setState({isSending: false}, () => {
-					this.props.toggleEditor(this.props.editorMode);
-				});
+				data: querystring.encode({
+					text: this.state.text,
+					api_type: 'json',
+					thing_id: this.props.id
+				})
 			}).catch(err => {
 				console.log(err);
 			});
@@ -54,6 +55,14 @@ class Editor extends React.Component {
 	componentDidMount() {
 		if (this.props.editorMode === 'edit') {
 			this.setState({ text: this.props.body });
+		} else if (this.props.editorMode === 'reply') {
+			if (window.getSelection) {
+				this.setState({ text: window.getSelection()
+					.toString()
+					.replace(/^.*/gm, t => '>'+t)
+					.replace(/^>$/gm, t => '')
+				});
+			}
 		}
 	}
 
@@ -71,7 +80,7 @@ class Editor extends React.Component {
 					</div>
 				}
 
-				<form>
+				<form onSubmit={this.submit}>
 					<textarea 
 						className='editor-box'
 						rows='6'

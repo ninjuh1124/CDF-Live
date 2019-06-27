@@ -141,18 +141,6 @@ class FeedContainer extends React.Component {
 	}
 
 	render() {
-		let uriBase = "https://www.reddit.com/api/v1/authorize?";
-		let redirect = encodeURIComponent("http://localhost:3000/reddit_oauth_login");
-		let scope = ["edit", "read", "save", "submit", "vote", "identity"]
-		let params = [
-			"client_id=WfSifmea8-anYA",
-			"response_type=code",
-			"state=" + localStorage.getItem('device'),
-			"redirect_uri=" + redirect,
-			"duration=permanent",
-			"scope=" + scope.join('+')
-		].join('&');
-
 		return (
 			<div style={{padding: '3px'}}>
 				<Heading 
@@ -163,6 +151,7 @@ class FeedContainer extends React.Component {
 				{
 					(!this.state.isLoading 
 						? <Feed 
+							loggedIn={this.state.loggedInAs != null}
 							history={this.state.history}
 						/>
 						: <p>Loading...</p>

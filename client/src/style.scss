@@ -10,6 +10,14 @@ hr {
 	border-color: $border-primary;
 }
 
+#topbar {
+	margin-top: 10px;
+}
+
+#logged-in-as:hover {
+	color: $link-primary;	
+}
+
 #root {
 	background: $background-primary;
 }

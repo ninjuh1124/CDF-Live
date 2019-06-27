@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
+import querystring from 'querystring';
 import Editor from './Editor';
 import CommentHandler from './CommentHandler';
 import Author from './Author';
@@ -58,6 +60,54 @@ class CommentButtonsRow extends React.Component {
 			editorMode: 'hidden'
 		};
 		this.toggleEditor = this.toggleEditor.bind(this);
+		this.deletePost = this.deletePost.bind(this);
+		this.save = this.save.bind(this);
+		this.hide = this.hide.bind(this);
+	}
+
+	deletePost() {
+		axios({
+			method: 'post',
+			url: 'https://oauth.reddit.com/api/del',
+			headers: {
+				Authorization: 'Bearer ' +
+					sessionStorage.getItem('accessToken'),
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			data: querystring.encode({
+				id: this.props.id
+			})
+		});
+	}
+
+	save() {
+		axios({
+			method: 'post',
+			url: 'https://oauth.reddit.com/api/save',
+			headers: {
+				Authorization: 'Bearer ' +
+					sessionStorage.getItem('accessToken'),
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			data: querystring.encode({
+				id: this.props.id
+			})
+		});
+	}
+
+	hide() {
+		axios({
+			method: 'post',
+			url: 'https://oauth.reddit.com/api/hide',
+			headers: {
+				Authorization: 'Bearer ' +
+					sessionStorage.getItem('accessToken'),
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			data: querystring.encode({
+				id: this.props.id
+			})
+		});
 	}
 
 	toggleEditor(mode) {
@@ -75,21 +125,47 @@ class CommentButtonsRow extends React.Component {
 			<div>
 				<a
 					href='javascript:void(0)'
-					className='link-primary'
+					className='link-primary reddit-button'
 					onClick={ () => this.toggleEditor('reply')}
 				>
 					reply 
 				</a>
-				&nbsp;
+				
 				{this.props.author === sessionStorage.getItem('name')
 				? <a
 					href='javascript:void(0)'
-					className='link-primary'
+					className='link-primary reddit-button'
 					onClick={ () => this.toggleEditor('edit')}
 				>
 					edit
 				</a>
 				: null}
+
+				{this.props.author === sessionStorage.getItem('name')
+				? <a
+					href='javascript:void(0)'
+					className='link-primary reddit-button'
+					onClick={ () => this.deletePost()}
+				>
+					delete
+				</a>
+				: null}
+
+				<a
+					href='javascript:void(0)'
+					className='link-primary reddit-button'
+					onClick={ () => this.save()}
+				>
+					save
+				</a>
+				
+				<a
+					href='javascript:void(0)'
+					className='link-primary reddit-button'
+					onClick={ () => this.hide()}
+				>
+					hide
+				</a>
 
 				{
 					this.state.editorMode != 'hidden'
