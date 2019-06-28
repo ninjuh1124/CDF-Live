@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient,
 	fetch = require('node-fetch'),
+	querystring = require('querystring'),
 	helpers = require('./helpers');
 
 module.exports = {
@@ -130,8 +131,11 @@ const getComment = (req, callback) => {
 const getToken = (req, callback) => {
 	let refreshToken = req.query.refresh_token ? req.query.refresh_token : null;
 	let code = req.query.code ? req.query.code : null;
-	let auth = process.env.REDDIT_AUTHORIZATION;
-	let redirect = encodeURIComponent(process.env.REDDIT_REDIRECT);
+	let auth = "Basic " + 
+				Buffer.from(process.env.REDDIT_CLIENT_ID + 
+				':' + 
+				process.env.REDDIT_CLIENT_SECRET)
+				.toString('base64');
 	let url = "https://www.reddit.com/api/v1/access_token";
 
 	if (auth == null) {
@@ -144,16 +148,23 @@ const getToken = (req, callback) => {
 	}
 
 	let headers = {
-		Authorization: "Basic " + auth,
-		'Content-Type': "application/x-www-form-urlencoded"
+		Authorization: auth,
+		'Content-Type': 'application/x-www-form-urlencoded'
 	};
 
-	let body = "grant_type=";
+	let body;
 
 	if (code !== null) {
-		body = body + "authorization_code&code=" + code + "&redirect_uri=" + redirect;
+		body = querystring.stringify({
+			grant_type: 'authorization_code',
+			code: code,
+			redirect_uri: process.env.REDDIT_REDIRECT
+		});
 	} else if (refreshToken !== null) {
-		body = body + "refresh_token&refresh_token=" + refreshToken;
+		body = querystring.stringify({
+			grant_type: 'refresh_token',
+			refresh_token: refreshToken
+		});
 	} else {
 		let error = {
 			code: 400,
