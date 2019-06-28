@@ -5,13 +5,7 @@ const MongoClient = require('mongodb').MongoClient,
 
 module.exports = {
 	history: (req, res) => {
-		refreshHistory(req, (err, arr) => {
-			helpers.send(res, err, arr);
-		});
-	},
-	
-	commenttree: (req, res) => {
-		generateHistory(req, (err, arr) => {
+		history(req, (err, arr) => {
 			helpers.send(res, err, arr);
 		});
 	},
@@ -35,56 +29,58 @@ module.exports = {
 	}
 }
 
-const generateHistory = (req, callback) => {
+const history = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	let count = req.query.count ? parseInt(req.query.count) : 50;
+	let count = req.query.count ? parseInt(req.query.count) : 75;
 
+	// someday i'll switch to a database schema that allows subqueries
 	MongoClient.connect(uri, (error, db) => {
-		db.collection("comments")
-			.find({ parentID: { $gt: 't3_000000' }})
-			.sort({ id: -1 })
-			.skip(count)
-			.limit(1)
-			.toArray( (err, arr) => {
-				if (err) callback(err);
-				db.collection("comments")
-					.aggregate([
-						{ $sort: { id: -1 }},
-						{ $match: { _id: { $gte: arr[0]._id }}}
-					])
-					.toArray( (e, arr) => {
-						if (e) callback(e);
-						callback(null, arr);
-						db.close();
-					});
-			});
-	});
-}
+		let comments = db.collection('comments');
 
-const refreshHistory = (req, callback) => {
-	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	let aggregation = [{ $sort: { id: -1 }}];
-
-	if (req.query.olderthan) {
-		aggregation.push({ $match: { _id: { $lt: req.query.olderthan }}});
-	}
-	if (req.query.newerthan) {
-		aggregation.push({ $match: { _id: { $gt: req.query.newerthan }}});
-	}
-
-	let count = req.query.count ? parseInt(req.query.count) : 50;
-	aggregation.push({ $limit: count });
-
-	MongoClient.connect(uri, (error, db) => {
-		db.collection("comments")
-			.aggregate(aggregation)
-			.toArray( (err, arr) => {
-				if (err) {
-					callback(err);
-				}
-				callback(null, arr);
-				db.close();
-			});
+		if (req.query.newerthan) {		// refreshing client-side history
+			comments
+				.aggregate([
+					{ $sort: { _id: -1 }},
+					{ $match: { _id: { $gt: req.query.newerthan }}}
+				])
+				.toArray( (err, arr) => {
+					if (err) callback(err);
+					callback(null, arr);
+					db.close();
+				});
+		} else {						// generating first or next 'page'
+			comments
+				.aggregate([
+					{ $sort: { _id: -1 }},
+					{ $match: { _id: {
+						$lt: req.query.olderthan
+							? req.query.olderthan
+							: 't1_zzzzzzz'
+					}}},
+					{ $limit: count },
+					{ $sort: { _id: 1 }},
+					{ $limit: 1 }
+				])
+				.toArray( (err, arr) => {
+					if (err) callback(err);
+					comments
+						.aggregate([
+							{ $sort: { _id: -1 }},
+							{ $match: { $and: [
+								{ _id: { $gte: arr[0]._id }},
+								{ _id: { $lt: req.query.olderthan
+									? req.query.olderthan
+									: 't1_zzzzzzz' }}
+							]}}
+						])
+						.toArray( (e, a) => {
+							
+							if (e) callback(e);
+							callback(null, a);
+							db.close();
+						})
+				})
+		}
 	});
 }
 
