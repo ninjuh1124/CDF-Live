@@ -4,10 +4,6 @@ import {CommentBodyRow,
 		CommentButtonsRow} from './CommentRows';
 
 class CommentFrame extends React.Component {
-	constructor(props){
-		super(props)
-	}
-
 	render() {
 		let replies = this.props.history
 			.filter(comment => comment.parentID === this.props.id)

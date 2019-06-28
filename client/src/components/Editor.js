@@ -40,6 +40,9 @@ class Editor extends React.Component {
 					api_type: 'json',
 					thing_id: this.props.id
 				})
+			}).then(res => {
+				console.log(res);
+				this.props.toggleEditor(this.props.editorMode);
 			}).catch(err => {
 				console.log(err);
 			});
@@ -87,6 +90,7 @@ class Editor extends React.Component {
 						cols='100'
 						onChange={this.handleChange}
 						value={this.state.text}
+						disabled={this.state.isSending}
 					/>
 
 					<br />
@@ -94,6 +98,7 @@ class Editor extends React.Component {
 					<button
 						className="form-button"
 						type="submit"
+						disabled={this.state.isSending}
 					>
 						{this.props.editorMode}
 					</button>
@@ -101,6 +106,7 @@ class Editor extends React.Component {
 						className="form-button"
 						onClick={this.cancel}
 						type="button"
+						disabled={this.state.isSending}
 					>
 						cancel
 					</button>

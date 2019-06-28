@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
 import Feed from './Feed';
 import Heading from './Heading';
+import Editor from './Editor';
 
 class FeedContainer extends React.Component {
 	constructor(props) {
@@ -14,9 +14,11 @@ class FeedContainer extends React.Component {
 			isLoading: false,
 			loadingMe: false,
 			loggedInAs: sessionStorage.getItem('name'),
+			editorMode: 'hidden',
 			device: localStorage.getItem('device')
 		};
 		this.refreshToken = this.refreshToken.bind(this);
+		this.toggleEditor = this.toggleEditor.bind(this);
 		this.getHistory = this.getHistory.bind(this);
 	}
 
@@ -135,9 +137,19 @@ class FeedContainer extends React.Component {
 		});
 		
 		// refresh access token if possible
-		if (localStorage.getItem('refreshToken')) {
+		if (localStorage.getItem('refreshToken') !== null) {
 			this.refreshToken();
 		}
+	}
+
+	toggleEditor(mode) {
+		this.setState(state => {
+			return { 
+				editorMode: (mode === state.editorMode
+							? 'hidden'
+							: mode)
+			};
+		});
 	}
 
 	render() {
@@ -147,6 +159,28 @@ class FeedContainer extends React.Component {
 					thread={this.state.thread}
 					loggedInAs={this.state.loggedInAs}
 				/>
+				
+				{
+					sessionStorage.getItem('name') !== null
+					? <a
+						href='javascript:void(0)'
+						className='link-primary reddit-button'
+						onClick={ () => this.toggleEditor('reply')}
+					>
+						comment on thread
+					</a>
+					: null
+				}
+
+				{
+					this.state.editorMode !== 'hidden'
+					? <Editor
+						editorMode={this.state.editorMode}
+						toggleEditor={this.toggleEditor}
+						id={sessionStorage.getItem('thread')}
+					/>
+					: null
+				}
 
 				{
 					(!this.state.isLoading 

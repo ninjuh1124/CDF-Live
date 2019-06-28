@@ -62,7 +62,6 @@ class CommentButtonsRow extends React.Component {
 		this.toggleEditor = this.toggleEditor.bind(this);
 		this.deletePost = this.deletePost.bind(this);
 		this.save = this.save.bind(this);
-		this.hide = this.hide.bind(this);
 	}
 
 	deletePost() {
@@ -95,25 +94,10 @@ class CommentButtonsRow extends React.Component {
 		});
 	}
 
-	hide() {
-		axios({
-			method: 'post',
-			url: 'https://oauth.reddit.com/api/hide',
-			headers: {
-				Authorization: 'Bearer ' +
-					sessionStorage.getItem('accessToken'),
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			data: querystring.encode({
-				id: this.props.id
-			})
-		});
-	}
-
 	toggleEditor(mode) {
 		this.setState(state => {
 			return {
-				editorMode: (mode == state.editorMode
+				editorMode: (mode === state.editorMode
 							? 'hidden'
 							: mode)
 			};
@@ -159,16 +143,8 @@ class CommentButtonsRow extends React.Component {
 					save
 				</a>
 				
-				<a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.hide()}
-				>
-					hide
-				</a>
-
 				{
-					this.state.editorMode != 'hidden'
+					this.state.editorMode !== 'hidden'
 					? <Editor 
 						editorMode={this.state.editorMode}
 						toggleEditor={this.toggleEditor}
