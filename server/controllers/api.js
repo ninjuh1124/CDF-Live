@@ -31,14 +31,14 @@ module.exports = {
 
 const history = (req, callback) => {
 	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
-	let count = req.query.count ? parseInt(req.query.count) : 75;
+	let count = req.query.count ? parseInt(req.query.count) : 50;
 
 	// someday i'll switch to a database schema that allows subqueries
 	MongoClient.connect(uri, (error, db) => {
 		let comments = db.collection('comments');
 
 		if (req.query.newerthan) {		// refreshing client-side history
-			comments
+			db.collection('comments')
 				.aggregate([
 					{ $sort: { _id: -1 }},
 					{ $match: { _id: { $gt: req.query.newerthan }}}
@@ -49,32 +49,30 @@ const history = (req, callback) => {
 					db.close();
 				});
 		} else {						// generating first or next 'page'
-			comments
+			db.collection('comments')
 				.aggregate([
-					{ $sort: { _id: -1 }},
-					{ $match: { _id: {
-						$lt: req.query.olderthan
+					{ $match: { $and: [
+						{ parentID: { $regex: /^t3_\S+$/ }},
+						{ _id: { $lt: req.query.olderthan
 							? req.query.olderthan
-							: 't1_zzzzzzz'
-					}}},
-					{ $limit: count },
-					{ $sort: { _id: 1 }},
-					{ $limit: 1 }
+							: 't1_zzzzzzz' }}
+					]}},
+					{ $sort: { _id: -1 }},
+					{ $limit: count }
 				])
 				.toArray( (err, arr) => {
 					if (err) callback(err);
-					comments
+					db.collection('comments')
 						.aggregate([
 							{ $sort: { _id: -1 }},
 							{ $match: { $and: [
-								{ _id: { $gte: arr[0]._id }},
+								{ _id: { $gte: arr[arr.length-1]._id }},
 								{ _id: { $lt: req.query.olderthan
 									? req.query.olderthan
 									: 't1_zzzzzzz' }}
 							]}}
 						])
 						.toArray( (e, a) => {
-							
 							if (e) callback(e);
 							callback(null, a);
 							db.close();
