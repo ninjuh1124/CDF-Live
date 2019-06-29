@@ -3,6 +3,7 @@ import axios from 'axios';
 import Feed from './Feed';
 import Heading from './Heading';
 import Editor from './Editor';
+import querystring from 'querystring';
 
 class FeedContainer extends React.Component {
 	constructor(props) {
@@ -20,6 +21,7 @@ class FeedContainer extends React.Component {
 		this.refreshToken = this.refreshToken.bind(this);
 		this.toggleEditor = this.toggleEditor.bind(this);
 		this.getHistory = this.getHistory.bind(this);
+		this.loadMore = this.loadMore.bind(this);
 	}
 
 	getHistory() {
@@ -121,7 +123,7 @@ class FeedContainer extends React.Component {
 		this.setState({ isLoading: true }, () => {
 			axios.get(
 				this.props.api +
-				'v1/commenttree.json',
+				'v1/history.json',
 				{ crossdomain: true }
 			).then(res => {
 				if (res.data.err) console.log(res.data.err);
@@ -149,6 +151,34 @@ class FeedContainer extends React.Component {
 							? 'hidden'
 							: mode)
 			};
+		});
+	}
+
+	loadMore() {
+		axios.get(
+			this.props.api + 'v1/history.json?olderthan=' +
+			this.state.history[this.state.history.length-1]._id,
+			{ crossdomain: true }
+		).then(res => {
+			if (res.data.message &&
+				Array.isArray(res.data.message) &&
+				res.data.message.length > 0) {
+				this.setState(state => {
+					console.log('asdf');
+					return {
+						history: [
+							...state.history,
+							...res.data.message.filter(comment => {
+								return !(state.history
+									.map(comment => comment._id)
+									.includes(comment._id)
+								);
+							})
+						],
+						emptyCalls: 1
+					};
+				});
+			}
 		});
 	}
 
@@ -187,6 +217,7 @@ class FeedContainer extends React.Component {
 						? <Feed 
 							loggedIn={this.state.loggedInAs != null}
 							history={this.state.history}
+							loadMore={this.loadMore}
 						/>
 						: <p>Loading...</p>
 					)

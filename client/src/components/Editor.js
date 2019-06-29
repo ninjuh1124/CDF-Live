@@ -41,7 +41,7 @@ class Editor extends React.Component {
 					thing_id: this.props.id
 				})
 			}).then(res => {
-				console.log(res);
+				console.log(res.config.data);
 				this.props.toggleEditor(this.props.editorMode);
 			}).catch(err => {
 				console.log(err);

@@ -23,12 +23,21 @@ const Feed = (props) => {
 		});
 
 	return (
-		<ul className="list-group" id="feed">
-			{comments.length >= 1
-			? comments
-			: <p>Something went wrong :(</p>
-			}
-		</ul>
+		<div>
+			<ul className="list-group" id="feed">
+				{comments.length >= 1
+				? comments
+				: <p>Something went wrong :(</p>
+				}
+			</ul>
+			<a 
+				className="link-primary"
+				href='javascript:void(0)'
+				onClick={props.loadMore}
+			>
+				load more comments
+			</a>
+		</div>
 	);
 }
 

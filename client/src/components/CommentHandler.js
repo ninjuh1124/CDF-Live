@@ -8,6 +8,8 @@ const CommentHandler = (props) => {
 		source={props.body.replace(/^#{1,}/gm, '$& ')}
 		disallowedTypes={['imageReference', 'linkReference']}
 		renderers={{
+			paragraph: props => <p className="md">{props.children}</p>,
+
 			link: props => {
 				if (/^#\S+/.test(props.href)) {			// check face
 					return <CommentFace
