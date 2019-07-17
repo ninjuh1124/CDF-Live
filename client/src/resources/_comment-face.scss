@@ -16,6 +16,9 @@
 			width: 100%;
 			left: 0;
 			word-break: break-word;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			overflow-wrap: break-word;
 			bottom: 0;
 		}
 	}
@@ -33,6 +36,9 @@
 	position: absolute;
 	top: 0;
 	word-break: break-word;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	overflow-wrap: break-word;
 	color: white;
 	font-size: 18px;
 	font-family: arial, sans-serif;

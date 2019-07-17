@@ -67,3 +67,24 @@ exports.store = (obj) => {
 			console.log(error);
 		});
 };
+
+exports.upsert = (obj) => {
+	const uri = process.env.MONGO_URI ? process.env.MONGO_URI : "mongodb://localhost/fridaydotmoe";
+	let collection;
+	if (obj.kind === 'comment') collection = 'comments';
+	else if (obj.kind === 'submission') collection = 'threads';
+
+	MongoClient.connect(uri)
+		.then(db => {
+			db.collection(collection)
+				.update(
+					{ _id : _obj.id },
+					obj,
+					{ upsert: true }
+				);
+			db.close();
+		})
+		.catch(error => {
+			console.log(error);
+		});
+}
