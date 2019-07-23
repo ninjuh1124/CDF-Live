@@ -6,7 +6,12 @@ import { PREPEND_TO_FEED,
 
 const initialState = {
 	history: [],
-	thread: {}
+	thread: {
+		kind: 'not_loaded',
+		_id: '',
+		id: '',
+		permalink: ''
+	}
 };
 
 export default const (state = initialState, action) => {

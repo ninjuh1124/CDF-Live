@@ -36,6 +36,17 @@ export const prependToFeed = comment => ({
 });
 
 /**
+ * updates thread object in store
+ * payload must be object retrieved from api
+ **/
+export const updateThread = thread => ({
+	type: UPDATE_THREAD,
+	payload: {
+		...thread
+	}
+});
+
+/**
  * sets new user access token
  **/
 export const setAccessToken = token => ({

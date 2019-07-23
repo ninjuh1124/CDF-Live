@@ -6,9 +6,9 @@ const initialState = {
 	refreshToken: localStorage.getItem('refreshToken')
 		? localStorage.getItem('refreshToken')
 		: null,
-	accessToken: null,
+	accessToken: '',
 	isLoggedIn: false,
-	loggedInAs: null
+	loggedInAs: ''
 }
 
 export default const (state = initialState, action) {
@@ -20,7 +20,7 @@ export default const (state = initialState, action) {
 			}
 		}
 
-		case REFRESH_TOKEN: {
+		case SET_REFRESH_TOKEN: {
 			return {
 				...state,
 				refreshToken: action.payload.refreshToken

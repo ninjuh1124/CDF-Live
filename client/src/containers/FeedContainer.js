@@ -1,5 +1,4 @@
 import React from 'react';
-import Heading from '../components/Heading';
 import Editor from '../components/Editor';
 import Feed from '../components/Feed';
 
@@ -22,15 +21,13 @@ class FeedContainer extends React.Component {
 		};
 		this.getHistory = this.getHistory.bind(this);
 		this.keepGettingHistory = this.keepGettingHistory.bind(this);
-		this.keepGettingAccessToken = this.KeepGettingAccessToken.bind(this)
-		this.getNewAccessToken = this.getNewAccessToken.bind(this);
 		this.toggleEditor = this.toggleEditor.bind(this);
 		this.loadMore = this.loadMore.bind(this);
 	}
 
 	getHistory() {
 		axios.get(
-			this.props.api+'v1/history.json?newerthan=' +
+			process.env.REACT_APP_API+'v1/history.json?newerthan=' +
 			this.props.history[0]._id,
 			{ crossdomain: true }
 		).then(res => {
@@ -56,43 +53,9 @@ class FeedContainer extends React.Component {
 		: 24*5000
 	}
 
-	getNewAccessToken() {
-		axios.get(
-			this.props.api+'v1/token.json?refresh_token='+
-			this.props.refreshToken,
-			{ crossdomain: true }
-		).then(res => {
-			if (res.data.message.access_token) {
-				accessToken = res.data.message.access_token;
-				this.props.setAccessToken(accessToken);
-
-				// get identity
-				if (this.props.loggedInAs === null) {
-					axios({
-						method: 'get',
-						url: 'https://oauth.reddit.com/api/v1/me',
-						headers: {
-							Authorization: 'bearer ' + accessToken
-						}
-					}).then(res => {
-						this.props.setUser(res.data.name)
-					});
-				}
-			}
-		});
-	}
-
-	keepGettingAccessToken() {
-		setTimeout( () => {
-				this.getNewAccessToken();
-				this.keepGettingAccessToken();
-			}, 3300000
-		);
-	}
-
 	loadMore() {
 		axios.get(
-			this.props.api+'v1/history.json?olderthan=' +
+			process.env.REACT_APP_API+'v1/history.json?olderthan=' +
 			this.props.history[this.props.history.length-1]._id,
 			{ crossdomain: true }
 		).then(res => {
@@ -113,17 +76,12 @@ class FeedContainer extends React.Component {
 
 	componentDidMount() {
 		axios.get(
-			this.props.api+'v1/history.json',
+			process.env.REACT_APP_API+'v1/history.json',
 			{ crossdomain: true }
 		).then(res => {
 			this.props.prependToFeed(res.data.message);
 			this.keepGettingHistory();
 		});
-
-		if (this.props.refreshToken !== null) {
-			this.getNewAccessToken();
-			this.keepGettingAccessToken();
-		}
 	}
 
 	render() {
@@ -162,11 +120,8 @@ FeedContainer.propTypes = {
 		id:         PropTypes.string.isRequired,
 		permalink:  PropTypes.string.isRequired
 	})
-	refreshToken:   PropTypes.string,
 	appendToFeed:   PropTypes.func.isRequired,
-	prependToFeed:  PropTypes.func.isRequired,
-	setAccessToken: PropTypes.func.isRequired,
-	setUser:        PropTypes.func.isRequired
+	prependToFeed:  PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
@@ -175,9 +130,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 	appendToFeed: arr => dispatch(appendToFeed(arr)),
-	prependToFeed: arr => dispatch(prependToFeed(arr)),
-	setAccessToken: token => dispatch(setAccessToken(token)),
-	setUser: user => dispatch(setUser(user))
+	prependToFeed: arr => dispatch(prependToFeed(arr))
 });
 
 export default connect(
