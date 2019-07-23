@@ -20,7 +20,7 @@ class Heading extends React.Component {
 				accessToken = res.data.message.accessToken;
 				this.props.setAccessToken(accessToken);
 
-				if (this.props.loggedInAs === null) {
+				if (!this.props.loggedInAs) {
 					axois({
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
@@ -43,7 +43,7 @@ class Heading extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.refreshToken !== null) {
+		if (this.props.refreshToken) {
 			this.getNewAccessToken();
 			this.keepGettingAccessToken();
 		}
@@ -86,7 +86,7 @@ class Heading extends React.Component {
 				>Latest Thread</a></h5>
 	
 				<h6 id='logged-in-as' className='text-right'><small>
-					{this.props.refreshToken === null
+					{!this.props.refreshToken
 					? null
 					: this.props.loggedInAs
 						? "Logged in as " + this.props.loggedInAs
