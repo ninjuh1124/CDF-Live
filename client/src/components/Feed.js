@@ -1,21 +1,19 @@
 import React from 'react';
-import CommentFrame from './CommentFrame';
+import CommentContainer from '../containers/CommentContainer';
 
 const Feed = (props) => {
-	let comments = props.history
+	let comments = props.comments
 		.filter(comment => comment.parentID > 't3_000000')
 		.map(comment => {
 			return (
 				<div style={{ marginTop: '5px'}} key={comment.id}>
-					<CommentFrame
-						loggedIn={props.loggedIn}
+					<CommentContainer
 						id={comment._id}
 						key={comment.id}
 						author={comment.author}
 						body={comment.body}
 						permalink={comment.permalink}
 						created={comment.created}
-						history={props.history}
 						className="parent"
 					/>
 				</div>

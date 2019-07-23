@@ -96,7 +96,9 @@ class FeedContainer extends React.Component {
 				}
 
 				<Feed 
-					history={this.props.history}
+					comments={this.props.history
+						.filter(comment => comment.parentID > 't3_000000')
+					}
 				/>
 			</div>
 		);

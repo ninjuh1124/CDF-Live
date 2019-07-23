@@ -74,7 +74,7 @@ class CommentButtonsRow extends React.Component {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: this.props.id
+				id: this.props._id
 			})
 		});
 	}
@@ -89,7 +89,7 @@ class CommentButtonsRow extends React.Component {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: this.props.id
+				id: this.props._id
 			})
 		});
 	}
