@@ -86,6 +86,9 @@ export const delete = comment => ({
 	payload: comment._id
 });
 
+/**
+ * sets username
+ **/
 export const setUser = user => ({
 	type: SET_USER,
 	payload: user
