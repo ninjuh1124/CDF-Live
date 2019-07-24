@@ -61,6 +61,7 @@ class CommentButtonsRow extends React.Component {
 		};
 		this.toggleEditor = this.toggleEditor.bind(this);
 		this.deletePost = this.deletePost.bind(this);
+		this.editPost = this.editPost.bind(this);
 		this.save = this.save.bind(this);
 	}
 
@@ -76,6 +77,29 @@ class CommentButtonsRow extends React.Component {
 			data: querystring.encode({
 				id: this.props._id
 			})
+		}).then(res => {
+			this.props.deleteFromFeed(this.props._id);
+		});
+	}
+
+	editPost(body) {
+		axios({
+			method: 'post',
+			url: 'https://oauth.reddit.com/api/editusertext'
+			headers: {
+				Authorization: 'bearer ' + this.props.accessToken,
+				'Content-type': 'application/x-www-form-urlencoded'
+			},
+			data: querystring.encode({
+				thing_id: this.props._id,
+				text: body
+			})
+		}).then(res => {
+			this.props.editFeed({
+				_id: this.props._id,
+				body: body
+			});
+			//TODO: backend path to update db
 		});
 	}
 
@@ -115,7 +139,7 @@ class CommentButtonsRow extends React.Component {
 					reply 
 				</a>
 				
-				{this.props.author === sessionStorage.getItem('name')
+				{this.props.author === this.props.loggedInAs
 				? <a
 					href='javascript:void(0)'
 					className='link-primary reddit-button'
@@ -125,7 +149,7 @@ class CommentButtonsRow extends React.Component {
 				</a>
 				: null}
 
-				{this.props.author === sessionStorage.getItem('name')
+				{this.props.author === this.props.loggedInAs
 				? <a
 					href='javascript:void(0)'
 					className='link-primary reddit-button'
