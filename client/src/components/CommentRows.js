@@ -2,9 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import querystring from 'querystring';
 import Editor from './Editor';
-import CommentHandler from './CommentHandler';
 import Author from './Author';
 import TimeAgo from 'react-timeago';
+import renderers from '../resources/renderers';
 
 const CommentAuthorRow = (props) => {
 	return (
@@ -32,7 +32,11 @@ const CommentBodyRow = (props) => {
 	return (
 		<div className="body-row row">
 			<div className="col-xs-11">
-				<CommentHandler body={props.body} />
+				<ReactMarkdown
+					source={props.body.replace(/^#{1,}/gm, '$& ')}
+					disallowedTypes={['imageReference', 'linkReference']}
+					renderers={renderers}
+				/>
 			</div>
 			<div className="col-xs-1">
 				<a

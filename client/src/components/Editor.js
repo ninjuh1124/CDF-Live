@@ -38,7 +38,7 @@ class Editor extends React.Component {
 				data: querystring.encode({
 					text: this.state.text,
 					api_type: 'json',
-					thing_id: this.props.id
+					thing_id: this.props._id
 				})
 			}).then(res => {
 				console.log(res.config.data);
