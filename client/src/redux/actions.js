@@ -17,9 +17,7 @@ import {
  **/
 export const appendToFeed = arr => ({
 	type: APPEND_TO_FEED,
-	payload: {
-		...arr
-	}
+	payload: arr
 });
 
 /**
@@ -28,11 +26,9 @@ export const appendToFeed = arr => ({
  * payload MUST be an array
  * will automatically filter out comments already in feed.
  **/
-export const prependToFeed = comment => ({
+export const prependToFeed = arr => ({
 	type: PREPEND_TO_FEED,
-	payload: {
-		...comment
-	}
+	payload: arr
 });
 
 /**
@@ -70,7 +66,7 @@ export const refreshToken = token => ({
  * edits comment in feed.
  * payload must contain '_id' field and new body text.
  **/
-export const edit = comment => ({
+export const editFeed = comment => ({
 	type: EDIT_FEED,
 	payload: {
 		...comment
@@ -81,7 +77,7 @@ export const edit = comment => ({
  * deletes comment from feed.
  * payload must be fullname string (i.e. 't1_#######')
  **/
-export const delete = comment => ({
+export const deleteFromFeed = comment => ({
 	type: DELETE_FROM_FEED,
 	payload: comment._id
 });

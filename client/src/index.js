@@ -7,12 +7,12 @@ import rootReducer from './redux/reducers';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
 	<Provider store={store}>
-		<App />, 
-	</Provider>
+		<App />
+	</Provider>,
 	document.getElementById('root')
 );
 

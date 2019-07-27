@@ -2,7 +2,7 @@ import React from 'react';
 import CommentFace from './CommentFace';
 import Spoiler from './Spoiler';
 
-export default renderers = {
+export default {
 	link: props => {
 		if (/^#\S+/.test(props.href)) {
 			return <CommentFace

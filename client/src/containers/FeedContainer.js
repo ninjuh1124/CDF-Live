@@ -1,11 +1,10 @@
 import React from 'react';
+import axios from 'axios';
 import Editor from '../components/Editor';
 import Feed from '../components/Feed';
 
 import { appendToFeed,
-	prependToFeed,
-	setAccessToken,
-	setUser } from '../redux/actions';
+	prependToFeed } from '../redux/actions';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -35,10 +34,13 @@ class FeedContainer extends React.Component {
 			if (res.data.message &&
 				Array.isArray(res.data.message) &&
 				res.data.message.length > 0) {
+				console.log(res.data.message);
 				this.props.prependToFeed(res.data.message);
 				this.setState({ emptyCalls: 1 });
 			} else { // delay api calls between empty responses
-				this.setState(state => { emptyCalls: state.emptyCalls+1 });
+				this.setState(state => {
+					return { ...state, emptyCalls: state.emptyCalls+1 }
+				});
 			}
 		});
 	}
@@ -48,9 +50,9 @@ class FeedContainer extends React.Component {
 			this.getHistory();
 			this.keepGettingHistory();
 		},
-		this.state.emptyCalls < 24
+		(this.state.emptyCalls < 24
 		? this.state.emptyCalls * 5000
-		: 24*5000
+		: 24*5000))
 	}
 
 	loadMore() {
@@ -69,9 +71,11 @@ class FeedContainer extends React.Component {
 	}
 
 	toggleEditor(mode) {
-		this.setState(state => { editorMode: mode === state.editorMode
-													? 'hidden'
-													: mode });
+		this.setState(state => { 
+			return {
+				editorMode: mode === state.editorMode ? 'hidden' : mode
+			};
+		});
 	}
 
 	componentDidMount() {
@@ -80,24 +84,23 @@ class FeedContainer extends React.Component {
 			{ crossdomain: true }
 		).then(res => {
 			this.props.prependToFeed(res.data.message);
-			this.keepGettingHistory();
+			//this.keepGettingHistory();
 		});
 	}
 
 	render() {
 		return (
 			<div style={{padding: '3px'}}>
-				{
-					this.state.editorMode !== 'hidden'
-					? <Editor
-						editorMode={this.state.editorMode}
-						toggleEditor={this.toggleEditor}
-						id={this.props.thread._id}
-				}
+
+				{ this.state.editorMode === 'hidden' || <Editor
+					editorMode={this.state.editorMode}
+					toggleEditor={this.toggleEditor}
+					id={this.props.thread._id}
+				/> }
 
 				<Feed 
-					comments={this.props.history
-						.filter(comment => comment.parentID > 't3_000000')
+					comments={this.props.history && this.props.history
+						.filter(comment => /^t1_\S+/.testcomment.parentID)
 					}
 				/>
 			</div>
@@ -115,19 +118,19 @@ FeedContainer.propTypes = {
 		permalink:  PropTypes.string.isRequired,
 		parentID:   PropTypes.string.isRequired,
 		body: 	    PropTypes.string.isRequired
-	}).isRequired).isRequired,
+	}).isRequired),
 	thread: PropTypes.shape({
 		_id:        PropTypes.string.isRequired,
 		kind:       PropTypes.string.isRequired,
 		id:         PropTypes.string.isRequired,
 		permalink:  PropTypes.string.isRequired
-	})
+	}),
 	appendToFeed:   PropTypes.func.isRequired,
 	prependToFeed:  PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
-	return { history: state.history };
+	history: state.history
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

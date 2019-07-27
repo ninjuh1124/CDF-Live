@@ -14,7 +14,7 @@ const initialState = {
 	}
 };
 
-export default const (state = initialState, action) => {
+export default (state = initialState, action) => {
 	switch (action.type) {
 		case APPEND_TO_FEED: {
 			return {

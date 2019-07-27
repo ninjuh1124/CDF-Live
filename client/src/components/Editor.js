@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import renderers from '../resources/renderers';
 import axios from 'axios';
 import querystring from 'querystring';
-import CommentHandler from './CommentHandler';
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -78,7 +79,11 @@ class Editor extends React.Component {
 					: <div className="col-xs-11 list-group-item comment preview">
 						<p><strong>Preview</strong></p>
 						<span className="body-row">
-							<CommentHandler body={this.state.text} />
+							<ReactMarkdown
+								source={this.state.text}
+								disallowedTypes={['imageReference', 'linkReference']}
+								renderers={renderers}
+							/>
 						</span>
 					</div>
 				}

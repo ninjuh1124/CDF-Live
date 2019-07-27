@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import CommentContainer from '../containers/CommentContainer';
 import { CommentBodyRow,
-	CommentAuthorRow
+	CommentAuthorRow,
 	CommentButtonsRow } from './CommentRows';
 
 const Comment = (props) => {
 	let children = props.children.map(comment => {
-		<CommentContainer
+		return <CommentContainer
 			_id={comment._id}
 			key={comment.id}
 			author={comment.author}
@@ -38,6 +38,15 @@ const Comment = (props) => {
 
 		</li>
 	);
+}
+
+Comment.propTypes = {
+		children:       PropTypes.array,
+		isLoggedIn:     PropTypes.bool.isRequired,
+		loggedInAs:     PropTypes.string,
+		prependToFeed:  PropTypes.func.isRequired,
+		editFeed:       PropTypes.func.isRequired,
+		deleteFromFeed: PropTypes.func.isRequired
 }
 
 export default Comment;

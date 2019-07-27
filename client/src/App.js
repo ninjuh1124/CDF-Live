@@ -1,5 +1,5 @@
 import React from 'react';
-import FeedContainer from './components/FeedContainer';
+import FeedContainer from './containers/FeedContainer';
 import About from './components/About';
 import Changelog from './components/Changelog';
 import PageNotFound from './components/PageNotFound';

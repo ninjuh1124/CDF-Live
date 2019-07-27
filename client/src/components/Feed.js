@@ -2,7 +2,7 @@ import React from 'react';
 import CommentContainer from '../containers/CommentContainer';
 
 const Feed = (props) => {
-	let comments = props.comments
+	let comments = props.comments && props.comments
 		.map(comment => {
 			return (
 				<div style={{ marginTop: '5px'}} key={comment.id}>
@@ -22,7 +22,7 @@ const Feed = (props) => {
 	return (
 		<div>
 			<ul className="list-group" id="feed">
-				{comments.length >= 1
+				{comments && comments.length >= 1
 				? comments
 				: <p>Something went wrong :(</p>
 				}

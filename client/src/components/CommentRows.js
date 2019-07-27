@@ -4,6 +4,7 @@ import querystring from 'querystring';
 import Editor from './Editor';
 import Author from './Author';
 import TimeAgo from 'react-timeago';
+import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
 
 const CommentAuthorRow = (props) => {
@@ -89,7 +90,7 @@ class CommentButtonsRow extends React.Component {
 	editPost(body) {
 		axios({
 			method: 'post',
-			url: 'https://oauth.reddit.com/api/editusertext'
+			url: 'https://oauth.reddit.com/api/editusertext',
 			headers: {
 				Authorization: 'bearer ' + this.props.accessToken,
 				'Content-type': 'application/x-www-form-urlencoded'
@@ -185,6 +186,6 @@ class CommentButtonsRow extends React.Component {
 	}
 }
 
-export {CommentAuthorRow,
+export { CommentAuthorRow,
 		CommentBodyRow,
-		CommentButtonsRow}
+		CommentButtonsRow }
