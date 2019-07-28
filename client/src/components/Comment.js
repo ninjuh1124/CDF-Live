@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import CommentContainer from '../containers/CommentContainer';
 import { CommentBodyRow,
@@ -38,15 +37,6 @@ const Comment = (props) => {
 
 		</li>
 	);
-}
-
-Comment.propTypes = {
-		children:       PropTypes.array,
-		isLoggedIn:     PropTypes.bool.isRequired,
-		loggedInAs:     PropTypes.string,
-		prependToFeed:  PropTypes.func.isRequired,
-		editFeed:       PropTypes.func.isRequired,
-		deleteFromFeed: PropTypes.func.isRequired
 }
 
 export default Comment;

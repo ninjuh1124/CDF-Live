@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 
 class Heading extends React.Component {
 	constructor(props) {
 		super(props);
-		this.keepGettingAccessToken = this.KeepGettingAccessToken.bind(this)
+		this.keepGettingAccessToken = this.keepGettingAccessToken.bind(this)
 		this.getNewAccessToken = this.getNewAccessToken.bind(this);
 	}
 	
@@ -17,11 +16,11 @@ class Heading extends React.Component {
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.message.access_token) {
-				accessToken = res.data.message.accessToken;
+				let accessToken = res.data.message.accessToken;
 				this.props.setAccessToken(accessToken);
 
 				if (!this.props.loggedInAs) {
-					axois({
+					axios({
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
 						header: {
@@ -78,7 +77,7 @@ class Heading extends React.Component {
 					className="link-primary"
 					href={
 						this.props.thread.permalink ? 
-						props.thread.permalink :
+						this.props.thread.permalink :
 						"https://reddit.com/r/anime"
 					}
 					rel="noreferrer noopener"
@@ -86,11 +85,10 @@ class Heading extends React.Component {
 				>Latest Thread</a></h5>
 	
 				<h6 id='logged-in-as' className='text-right'><small>
-					{!this.props.refreshToken
-					? null
-					: this.props.loggedInAs
+					{this.props.refreshToken &&
+					(this.props.loggedInAs
 						? "Logged in as " + this.props.loggedInAs
-						: "Loading user info..."
+						: "Loading user info...")
 					}
 				</small></h6>
 	
@@ -105,21 +103,6 @@ class Heading extends React.Component {
 			</div>
 		);
 	}
-}
-
-Heading.propTypes = {
-	refreshToken:       PropTypes.string,
-	accessToken:        PropTypes.string,
-	isLoggedIn:         PropTypes.bool.isRequired,
-	loggedInAs:         PropTypes.string.isRequired,
-	thread:             PropTypes.shape({
-		kind:           PropTypes.string.isRequired,
-		_id:            PropTypes.string.isRequired,
-		id:             PropTypes.string.isRequired,
-		permalink:      PropTypes.string.isRequired
-	}).isRequired,
-	setUser:            PropTypes.func.isRequired,
-	setAccessToken:     PropTypes.func.isRequired
 }
 
 export default Heading;

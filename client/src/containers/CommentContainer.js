@@ -7,10 +7,10 @@ import { prependToFeed,
 	deleteFromFeed } from '../redux/actions';
 
 const mapStateToProps = (state, ownProps) => ({
-	children: state.history
+	children: state.feed.history
 		.filter(comment => comment.parentID === ownProps._id),
-	isLoggedIn: state.isLoggedIn,
-	loggedInAs: state.loggedInAs
+	isLoggedIn: state.feed.isLoggedIn,
+	loggedInAs: state.feed.loggedInAs
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

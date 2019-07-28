@@ -7,7 +7,6 @@ import { appendToFeed,
 	prependToFeed } from '../redux/actions';
 
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 // still verbose, but at least application state isn't dependent on this one file
 class FeedContainer extends React.Component {
@@ -100,7 +99,7 @@ class FeedContainer extends React.Component {
 
 				<Feed 
 					comments={this.props.history && this.props.history
-						.filter(comment => /^t1_\S+/.testcomment.parentID)
+						.filter(comment => comment.parentID > 't3_000000')
 					}
 				/>
 			</div>
@@ -108,29 +107,8 @@ class FeedContainer extends React.Component {
 	}
 }
 
-FeedContainer.propTypes = {
-	history: PropTypes.arrayOf(PropTypes.shape({
-		kind:       PropTypes.string.isRequired,
-		author:     PropTypes.string.isRequired,
-		_id:        PropTypes.string.isRequired,
-		id:         PropTypes.string.isRequired,
-		created:    PropTypes.number.isRequired,
-		permalink:  PropTypes.string.isRequired,
-		parentID:   PropTypes.string.isRequired,
-		body: 	    PropTypes.string.isRequired
-	}).isRequired),
-	thread: PropTypes.shape({
-		_id:        PropTypes.string.isRequired,
-		kind:       PropTypes.string.isRequired,
-		id:         PropTypes.string.isRequired,
-		permalink:  PropTypes.string.isRequired
-	}),
-	appendToFeed:   PropTypes.func.isRequired,
-	prependToFeed:  PropTypes.func.isRequired
-}
-
 const mapStateToProps = (state, ownProps) => ({
-	history: state.history
+	history: state.feed.history
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

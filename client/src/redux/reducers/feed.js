@@ -10,7 +10,7 @@ const initialState = {
 		kind: 'not_loaded',
 		_id: '',
 		id: '',
-		permalink: ''
+		permalink: 'https://reddit.com/r/anime'
 	}
 };
 

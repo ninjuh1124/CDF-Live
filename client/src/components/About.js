@@ -11,7 +11,7 @@ class About extends React.Component {
 
 	componentDidMount() {
 		axios.get(
-			this.props.api+"content/about.md",
+			process.env.NODE_APP_API+"content/about.md",
 			{ crossorigin: true }
 		).then(res => {
 			this.setState({ md: res.data });

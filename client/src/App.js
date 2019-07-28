@@ -1,5 +1,6 @@
 import React from 'react';
 import FeedContainer from './containers/FeedContainer';
+import HeadingContainer from './containers/HeadingContainer';
 import About from './components/About';
 import Changelog from './components/Changelog';
 import PageNotFound from './components/PageNotFound';
@@ -52,9 +53,10 @@ class App extends React.Component {
 					<Route
 						exact path='/feed'
 						render={ () => {
-							return <FeedContainer 
-								api={api} 
-							/>
+							return <div stype={{padding: '3px'}}>
+								<HeadingContainer />
+								<FeedContainer />
+							</div>
 						}}
 					/>
 					<Route
@@ -66,7 +68,7 @@ class App extends React.Component {
 					<Route
 						exact path='/changelog'
 						render={ () => {
-							return <Changelog api={api} />
+							return <Changelog />
 						}}
 					/>
 					<Route
@@ -74,7 +76,6 @@ class App extends React.Component {
 						render={ () => {
 							return <Login 
 								handleLogin={this.handleLogin} 
-								api={api}
 								state={params.state}
 								code={params.code}
 							/>
