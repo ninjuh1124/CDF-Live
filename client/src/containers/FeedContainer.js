@@ -78,12 +78,16 @@ class FeedContainer extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get(
-			process.env.REACT_APP_API+'v1/history.json',
-			{ crossdomain: true }
-		).then(res => {
-			this.props.prependToFeed(res.data.message);
-			//this.keepGettingHistory();
+		this.setState({ isLoading: true }, () => {
+			axios.get(
+				process.env.REACT_APP_API+'v1/history.json',
+				{ crossdomain: true }
+			).then(res => {
+				this.setState({ isLoading: false }, () => {
+					this.props.prependToFeed(res.data.message);
+					//this.keepGettingHistory();
+				});
+			});
 		});
 	}
 
@@ -98,6 +102,7 @@ class FeedContainer extends React.Component {
 				/> }
 
 				<Feed 
+					isLoading={this.state.isLoading}
 					comments={this.props.history && this.props.history
 						.filter(comment => comment.parentID > 't3_000000')
 					}

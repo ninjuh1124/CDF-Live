@@ -5,9 +5,9 @@ import { SET_ACCESS_TOKEN,
 const initialState = {
 	refreshToken: localStorage.getItem('refreshToken')
 		? localStorage.getItem('refreshToken')
-		: null,
+		: '',
 	accessToken: '',
-	isLoggedIn: false,
+	isLoggedIn: !!(localStorage.getItem('refreshToken')),
 	loggedInAs: ''
 }
 

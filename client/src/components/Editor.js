@@ -73,10 +73,8 @@ class Editor extends React.Component {
 	render() {
 		return (
 			<div>
-				{
-					this.state.text === ''
-					? null
-					: <div className="col-xs-11 list-group-item comment preview">
+				{this.state.text === '' ||
+					<div className="col-xs-11 list-group-item comment preview">
 						<p><strong>Preview</strong></p>
 						<span className="body-row">
 							<ReactMarkdown

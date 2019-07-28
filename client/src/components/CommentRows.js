@@ -12,7 +12,15 @@ const CommentAuthorRow = (props) => {
 		<div className="author-row row">
 			<div className="col-xs-11">
 				<h5>
-					<Author {...props} />
+					<a
+						href={props.permalink}
+						className="username"
+						rel="noreferrer noopener"
+						target="_blank"
+					><strong>
+						{props.author}
+					</strong></a>
+
 					<span
 						className="link-primary"
 						style={{float: 'right'}}
@@ -144,25 +152,25 @@ class CommentButtonsRow extends React.Component {
 					reply 
 				</a>
 				
-				{this.props.author === this.props.loggedInAs
-				? <a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.toggleEditor('edit')}
-				>
-					edit
-				</a>
-				: null}
+				{this.props.author === this.props.loggedInAs &&
+					<a
+						href='javascript:void(0)'
+						className='link-primary reddit-button'
+						onClick={ () => this.toggleEditor('edit')}
+					>
+						edit
+					</a>
+				}
 
-				{this.props.author === this.props.loggedInAs
-				? <a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.deletePost()}
-				>
-					delete
-				</a>
-				: null}
+				{this.props.author === this.props.loggedInAs &&
+					<a
+						href='javascript:void(0)'
+						className='link-primary reddit-button'
+						onClick={ () => this.deletePost()}
+					>
+						delete
+					</a>
+				}
 
 				<a
 					href='javascript:void(0)'
@@ -172,14 +180,12 @@ class CommentButtonsRow extends React.Component {
 					save
 				</a>
 				
-				{
-					this.state.editorMode !== 'hidden'
-					? <Editor 
+				{this.state.editorMode !== 'hidden' &&
+					<Editor 
 						editorMode={this.state.editorMode}
 						toggleEditor={this.toggleEditor}
 						{...this.props}
 					/>
-					: null
 				}
 			</div>
 		);
