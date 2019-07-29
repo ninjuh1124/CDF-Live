@@ -1,3 +1,22 @@
+# v2.~~1~~2.0
+
+Lotta stuff happened, and I've been writing code for months on this one. 2.1 was adding in OAuth, 2.2 is implementing Redux to keep my OAuth code sane.
+
+**Frontent**
+
+* Moved data to Redux store (now integrated)
+* Implemented reddit login
+* Implemented reddit API routes: comment, edit, delete, save
+* Minor restyling
+* Restructured files
+* Probably some other stuff I forgot in the several months I updated this
+
+**Backend**
+
+* Added new route for tokens
+* Database connection pooling (why didn't anyone tell me about this earlier?)
+* 
+
 # v2.0.1 - 7/6/19
 
 * Stopped doing things dangerously
