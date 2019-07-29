@@ -1,6 +1,5 @@
-const express = require('express'),
-	routes = express();
+const express = require('express');
 
-routes.use('/', express.static('content'));
-
-module.exports = routes;
+module.exports = (app) => {
+	app.use('/content/', express.static('content'));
+};

@@ -9,7 +9,6 @@ const dotenv = require('dotenv'),
 
 dotenv.load();
 let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
-let uri = 
 MongoClient.connect(
 	(process.env.MONGO_URI ? 
 	process.env.MONGO_URI : 
@@ -26,6 +25,6 @@ MongoClient.connect(
 		next();
 	});
 	require('./routes/api')(app, pool);
-	//require('./routes/content')(app);
+	require('./routes/content')(app);
 	app.listen(apiPort);
 });
