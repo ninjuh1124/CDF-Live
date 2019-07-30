@@ -8,12 +8,14 @@ Please report any issues not already on the list here or you can [send me a mess
 
 ## Known issues:
 
-* ~~Some~~ A lot of comment faces are missing
+* ~~Some~~ A lot of comment faces are missing. See [here](https://pastebin.com/7EzdjC2d)
 * Specific markdown syntax is not parsed: superscript
-* No easy way of listening for comment edits
-* Server error when accessing from mobile network
+* Only edits done through the site will be recorded. Will not be refreshed.
+* Nginx configuration doesn't like mobile networks. PM me if you know Nginx.
 
 ## "Future" Plans:
 
-* Better backend support
-* Better error handling
+* Proper error handling
+* Inline media embedding (Youtube, Twitter, etc)
+* Sleeker comment face handling (static, animated, on-hover)
+* Reconfigure Nginx (seriously, PM me. The documentation might be the driest read in existence)
