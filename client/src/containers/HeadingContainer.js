@@ -1,9 +1,9 @@
-import React from 'react';
 import Heading from '../components/Heading';
 
 import { setUser,
 	setAccessToken,
-	updateThread } from '../redux/actions';
+	updateThread,
+	logout } from '../redux/actions';
 
 import { connect } from 'react-redux';
 
@@ -17,7 +17,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 	setUser: user => dispatch(setUser(user)),
-	setAccessToken: token => dispatch(setAccessToken(token))
+	setAccessToken: token => dispatch(setAccessToken(token)),
+	updateThread: thread => dispatch(updateThread(thread)),
+	logout: () => dispatch(logout())
 });
 
 export default connect(

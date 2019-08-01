@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import querystring from 'querystring';
 import Editor from './Editor';
-import Author from './Author';
 import TimeAgo from 'react-timeago';
 import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
@@ -76,6 +75,8 @@ class CommentButtonsRow extends React.Component {
 		this.deletePost = this.deletePost.bind(this);
 		this.editPost = this.editPost.bind(this);
 		this.save = this.save.bind(this);
+		this.hide = this.hide.bind(this);
+		this.upvote = this.upvote.bind(this);
 	}
 
 	deletePost() {
@@ -131,6 +132,14 @@ class CommentButtonsRow extends React.Component {
 		});
 	}
 
+	hide() {
+		this.props.hide();
+	}
+
+	upvote() {
+		this.props.upvote();
+	}
+
 	toggleEditor(mode) {
 		this.setState(state => {
 			return {
@@ -178,6 +187,14 @@ class CommentButtonsRow extends React.Component {
 					onClick={ () => this.save()}
 				>
 					save
+				</a>
+
+				<a
+					href='javascript:void(0)'
+					className='link-primary reddit-button'
+					onClick={ () => this.hide()}
+				>
+					hide
 				</a>
 				
 				{this.state.editorMode !== 'hidden' &&

@@ -6,7 +6,10 @@ import {
 		SET_REFRESH_TOKEN,
 		EDIT_FEED,
 		DELETE_FROM_FEED,
-		SET_USER
+		HIDE,
+		UPVOTE,
+		SET_USER,
+		LOGOUT
 	} from './actionTypes';
 
 /**
@@ -89,3 +92,18 @@ export const setUser = user => ({
 	type: SET_USER,
 	payload: user
 });
+
+export const logout = () => ({
+	type: LOGOUT,
+	payload: null
+});
+
+export const upvote = _id => ({
+	type: UPVOTE,
+	payload: _id
+})
+
+export const hide = _id => ({
+	type: HIDE,
+	payload: _id
+})

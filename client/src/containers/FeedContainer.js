@@ -85,8 +85,10 @@ class FeedContainer extends React.Component {
 			).then(res => {
 				this.setState({ isLoading: false }, () => {
 					this.props.prependToFeed(res.data.message);
-					//this.keepGettingHistory();
+					this.keepGettingHistory();
 				});
+			}).catch( () => {
+				this.setState({ isLoading: false });
 			});
 		});
 	}
@@ -104,7 +106,8 @@ class FeedContainer extends React.Component {
 				<Feed 
 					isLoading={this.state.isLoading}
 					comments={this.props.history && this.props.history
-						.filter(comment => comment.parentID > 't3_000000')
+						.filter(comment => !this.props.hidden.includes(comment._id))
+						.filter(comment => /^t3_\S+/.test(comment.parentID))
 					}
 				/>
 			</div>
@@ -113,7 +116,8 @@ class FeedContainer extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-	history: state.feed.history
+	history: state.feed.history,
+	hidden: state.feed.hidden
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

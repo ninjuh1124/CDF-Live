@@ -5,25 +5,34 @@ import axios from 'axios';
 class Heading extends React.Component {
 	constructor(props) {
 		super(props);
+		this.updateThread = this.updateThread.bind(this);
 		this.keepGettingAccessToken = this.keepGettingAccessToken.bind(this)
 		this.getNewAccessToken = this.getNewAccessToken.bind(this);
+	}
+
+	updateThread() {
+		axios.get(process.env.REACT_APP_API+'v1/thread.json',
+			{ crossdomain: true }
+		).then(res => {
+			this.props.updateThread(res.data.message[0]);
+		});
 	}
 	
 	getNewAccessToken() {
 		axios.get(
-			process.env.REACT_APP_API+'v1/token.json?refresh_token'+
+			process.env.REACT_APP_API+'v1/token.json?refresh_token='+
 			this.props.refreshToken,
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.message.access_token) {
-				let accessToken = res.data.message.accessToken;
+				let accessToken = res.data.message.access_token;
 				this.props.setAccessToken(accessToken);
 
 				if (!this.props.loggedInAs) {
 					axios({
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
-						header: {
+						headers: {
 							Authorization: 'bearer ' + accessToken
 						}
 					}).then(res => {
@@ -42,6 +51,7 @@ class Heading extends React.Component {
 	}
 
 	componentDidMount() {
+		this.updateThread();
 		if (this.props.refreshToken) {
 			this.getNewAccessToken();
 			this.keepGettingAccessToken();
@@ -84,22 +94,26 @@ class Heading extends React.Component {
 					target="_blank"
 				>Latest Thread</a></h5>
 	
-				<h6 id='logged-in-as' className='text-right'><small>
+				<h6 id='logged-in-as' className='text-right'>
 					{this.props.refreshToken &&
 					(this.props.loggedInAs
-						? "Logged in as " + this.props.loggedInAs
-						: "Loading user info...")
+						? <small>
+							Logged in as {this.props.loggedInAs} (<a 
+								href='javascript:void(0)'
+								onClick={this.props.logout}>logout</a>)
+						</small>
+						: <small>Loading user info...</small>)
 					}
-				</small></h6>
-	
+				</h6>
+
 				<hr id='topbar' />
 	
-				{this.props.isLoggedIn
-				? null
-				: <a
-					id="reddit-login-button"
-					href={uriBase+params}
-				><i className="fab fa-reddit" /> Login</a>}
+				{this.props.isLoggedIn ||
+					<a
+						id="reddit-login-button"
+						href={uriBase+params}
+					><i className="fab fa-reddit" /> Login</a>
+				}
 			</div>
 		);
 	}

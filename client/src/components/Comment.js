@@ -19,6 +19,7 @@ const Comment = (props) => {
 	});
 	
 	return (
+		props.isHidden ||
 		<li
 			className={props.className + " comment list-group-item"}
 			id={props._id}

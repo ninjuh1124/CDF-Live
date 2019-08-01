@@ -1,6 +1,7 @@
 import { SET_ACCESS_TOKEN,
 		SET_REFRESH_TOKEN,
-		SET_USER } from '../actionTypes';
+		SET_USER,
+		LOGOUT } from '../actionTypes';
 
 const initialState = {
 	refreshToken: localStorage.getItem('refreshToken')
@@ -17,14 +18,14 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				accessToken: action.payload.accessToken
-			}
+			};
 		}
 
 		case SET_REFRESH_TOKEN: {
 			return {
 				...state,
 				refreshToken: action.payload.refreshToken
-			}
+			};
 		}
 
 		case SET_USER: {
@@ -32,7 +33,18 @@ export default (state = initialState, action) => {
 				...state,
 				isLoggedIn: true,
 				loggedInAs: action.payload
-			}
+			};
+		}
+
+		case LOGOUT: {
+			localStorage.removeItem('refreshToken');
+			return {
+				...state,
+				accessToken: '',
+				refreshToken: '',
+				isLoggedIn: false,
+				loggedInAs: ''
+			};
 		}
 
 		default: return state;

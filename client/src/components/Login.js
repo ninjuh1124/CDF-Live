@@ -34,7 +34,7 @@ class Login extends React.Component {
 					axios({
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
-						header: {
+						headers: {
 							Authorization: 'bearer ' + at
 						}
 					}).then(res => {

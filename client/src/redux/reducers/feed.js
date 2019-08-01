@@ -2,6 +2,8 @@ import { PREPEND_TO_FEED,
 		APPEND_TO_FEED,
 		EDIT_FEED,
 		DELETE_FROM_FEED,
+		UPVOTE,
+		HIDE,
 		UPDATE_THREAD } from '../actionTypes';
 
 const initialState = {
@@ -11,7 +13,13 @@ const initialState = {
 		_id: '',
 		id: '',
 		permalink: 'https://reddit.com/r/anime'
-	}
+	},
+	upvoted: localStorage.getItem('upvoted')
+		? JSON.parse(localStorage.getItem('hidden'))
+		: [],
+	hidden: localStorage.getItem('hidden')
+		? JSON.parse(localStorage.getItem('hidden'))
+		: []
 };
 
 export default (state = initialState, action) => {
@@ -76,6 +84,16 @@ export default (state = initialState, action) => {
 				...state,
 				thread: action.payload
 			};
+		}
+
+		case UPVOTE: {
+			state.upvoted.push(action.payload);
+			localStorage.setItem('upvoted', JSON.stringify(state.upvoted));
+		}
+
+		case HIDE: {
+			state.hidden.push(action.payload);
+			localStorage.setItem('hidden', JSON.stringify(state.hidden));
 		}
 		
 		default: return state;
