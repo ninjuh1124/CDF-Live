@@ -41,6 +41,24 @@ class Editor extends React.Component {
 					thing_id: this.props._id
 				})
 			}).then(res => {
+				if (this.props.editorMode === 'edit') {
+					this.props.editFeed({
+						_id: this.props._id,
+						body: this.state.text
+					});
+					axios({
+						method: 'post',
+						url: process.env.REACT_APP_API + 'edit',
+						headers: {
+							'Content-type': 'application/json'
+						},
+						data: {
+							_id: this.props._id,
+							id: this.props.id,
+							body: this.state.text
+						}
+					});
+				}
 				this.props.toggleEditor(this.props.editorMode);
 			}).catch(err => {
 				console.log(err);

@@ -73,7 +73,6 @@ class CommentButtonsRow extends React.Component {
 		};
 		this.toggleEditor = this.toggleEditor.bind(this);
 		this.deletePost = this.deletePost.bind(this);
-		this.editPost = this.editPost.bind(this);
 		this.save = this.save.bind(this);
 		this.hide = this.hide.bind(this);
 		this.upvote = this.upvote.bind(this);
@@ -102,37 +101,6 @@ class CommentButtonsRow extends React.Component {
 				data: {
 					_id: this.props._id,
 					id: this.props.id
-				}
-			});
-		});
-	}
-
-	editPost(body) {
-		axios({
-			method: 'post',
-			url: 'https://oauth.reddit.com/api/editusertext',
-			headers: {
-				Authorization: 'bearer ' + this.props.accessToken,
-				'Content-type': 'application/x-www-form-urlencoded'
-			},
-			data: querystring.encode({
-				thing_id: this.props._id,
-				text: body
-			})
-		}).then(res => {
-			this.props.editFeed({
-				_id: this.props._id,
-				body: body
-			});
-			axios({
-				method: 'post',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				data: {
-					_id: this.props._id,
-					id: this.props.id,
-					body: body
 				}
 			});
 		});
