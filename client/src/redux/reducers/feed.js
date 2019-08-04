@@ -15,7 +15,7 @@ const initialState = {
 		permalink: 'https://reddit.com/r/anime'
 	},
 	upvoted: localStorage.getItem('upvoted')
-		? JSON.parse(localStorage.getItem('hidden'))
+		? JSON.parse(localStorage.getItem('upvoted'))
 		: [],
 	hidden: localStorage.getItem('hidden')
 		? JSON.parse(localStorage.getItem('hidden'))
@@ -87,13 +87,27 @@ export default (state = initialState, action) => {
 		}
 
 		case UPVOTE: {
-			state.upvoted.push(action.payload);
-			localStorage.setItem('upvoted', JSON.stringify(state.upvoted));
+			localStorage.setItem('upvoted', JSON.stringify(
+				state.upvoted.includes(action.payload) ?
+					state.upvoted.filter(_id => _id !== action.payload) :
+					[...state.upvoted, action.payload]
+			));
+			return {
+				...state,
+				upvoted: state.upvoted.includes(action.payload) ?
+					state.upvoted.filter(_id => _id !== action.payload) :
+					[...state.upvoted, action.payload]
+			};
 		}
 
 		case HIDE: {
-			state.hidden.push(action.payload);
-			localStorage.setItem('hidden', JSON.stringify(state.hidden));
+			localStorage.setItem('hidden', JSON.stringify(
+				[...state.hidden, action.payload]
+			));
+			return {
+				...state,
+				hidden: [...state.hidden, action.payload]
+			};
 		}
 		
 		default: return state;

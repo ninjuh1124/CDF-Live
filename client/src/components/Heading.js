@@ -1,13 +1,21 @@
 import React from 'react';
+import Editor from './Editor';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class Heading extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = { editorMode: 'hidden' }
+		this.toggleEditor = this.toggleEditor.bind(this);
 		this.updateThread = this.updateThread.bind(this);
 		this.keepGettingAccessToken = this.keepGettingAccessToken.bind(this)
 		this.getNewAccessToken = this.getNewAccessToken.bind(this);
+	}
+
+	toggleEditor(mode) {
+		this.setState(state => ({ editorMode: (mode === state.editorMode
+												? 'hidden' : mode) }))
 	}
 
 	updateThread() {
@@ -108,11 +116,25 @@ class Heading extends React.Component {
 
 				<hr id='topbar' />
 	
-				{this.props.isLoggedIn ||
-					<a
+				{this.props.isLoggedIn ?
+					(<a
+						href='javascript:void(0)'
+						className='reddit-button'
+						onClick={() => this.toggleEditor('reply')}
+					>reply to thread</a>) :
+					(<a
 						id="reddit-login-button"
 						href={uriBase+params}
-					><i className="fab fa-reddit" /> Login</a>
+					><i className="fab fa-reddit" /> Login</a>)
+				}
+
+				{this.state.editorMode === 'hidden' ||
+					<Editor
+						editorMode={this.state.editorMode}
+						toggleEditor={this.toggleEditor}
+						_id={this.props.thread._id}
+						accessToken={this.props.accessToken}
+					/>	
 				}
 			</div>
 		);

@@ -10,11 +10,12 @@ import { prependToFeed,
 
 const mapStateToProps = (state, ownProps) => ({
 	isHidden: state.feed.hidden.includes(ownProps._id),
+	upvoted: state.feed.upvoted.includes(ownProps._id),
 	children: state.feed.history
-		.filter(comment => !state.feed.hidden.includes(ownProps._id))
 		.filter(comment => comment.parentID === ownProps._id),
 	isLoggedIn: state.reddit.isLoggedIn,
-	loggedInAs: state.reddit.loggedInAs
+	loggedInAs: state.reddit.loggedInAs,
+	accessToken: state.reddit.accessToken
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

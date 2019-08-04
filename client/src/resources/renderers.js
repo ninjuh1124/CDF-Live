@@ -15,7 +15,7 @@ export default {
 				outerText={props.children}
 				innerText={props.title}
 			/>
-		} else if (/\/?[ur]\/\S+/.test(props.href)) {
+		} else if (/^\/?[ur]\/\S+/.test(props.href)) {
 			return <a
 				href={'https://reddit.com/'+props.href}
 				title={props.title}

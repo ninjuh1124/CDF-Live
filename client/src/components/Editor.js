@@ -31,8 +31,7 @@ class Editor extends React.Component {
 			axios({
 				method: 'post',
 				headers: { 
-					Authorization: 'Bearer ' + 
-						sessionStorage.getItem('accessToken'),
+					Authorization: 'Bearer ' + this.props.accessToken,
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				url: uri,
@@ -42,7 +41,6 @@ class Editor extends React.Component {
 					thing_id: this.props._id
 				})
 			}).then(res => {
-				console.log(res.config.data);
 				this.props.toggleEditor(this.props.editorMode);
 			}).catch(err => {
 				console.log(err);

@@ -33,7 +33,6 @@ class FeedContainer extends React.Component {
 			if (res.data.message &&
 				Array.isArray(res.data.message) &&
 				res.data.message.length > 0) {
-				console.log(res.data.message);
 				this.props.prependToFeed(res.data.message);
 				this.setState({ emptyCalls: 1 });
 			} else { // delay api calls between empty responses

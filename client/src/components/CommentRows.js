@@ -123,7 +123,7 @@ class CommentButtonsRow extends React.Component {
 			url: 'https://oauth.reddit.com/api/save',
 			headers: {
 				Authorization: 'Bearer ' +
-					sessionStorage.getItem('accessToken'),
+					this.props.accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
@@ -137,7 +137,20 @@ class CommentButtonsRow extends React.Component {
 	}
 
 	upvote() {
-		this.props.upvote();
+		axios({
+			method: 'post',
+			url: 'https://oauth.reddit.com/api/vote',
+			headers: {
+				Authorization: 'Bearer ' + this.props.accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			data: querystring.encode({
+				id: this.props._id,
+				dir: (this.props.upvoted ? 0 : 1)
+			})
+		}).then(res => {
+			this.props.upvote();
+		}).catch(err => console.log(err));
 	}
 
 	toggleEditor(mode) {
@@ -153,6 +166,16 @@ class CommentButtonsRow extends React.Component {
 	render() {
 		return (
 			<div>
+				<a
+					href='javascript:void(0)'
+					className={'reddit-button link-primary' + 
+						(this.props.upvoted ? ' upvoted' : '')
+					}
+					onClick={ () => this.upvote()}
+				>
+					<i className='fas fa-arrow-up'></i>
+				</a>
+
 				<a
 					href='javascript:void(0)'
 					className='link-primary reddit-button'
@@ -196,7 +219,7 @@ class CommentButtonsRow extends React.Component {
 				>
 					hide
 				</a>
-				
+
 				{this.state.editorMode !== 'hidden' &&
 					<Editor 
 						editorMode={this.state.editorMode}
