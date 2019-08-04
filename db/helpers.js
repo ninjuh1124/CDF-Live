@@ -27,7 +27,7 @@ module.exports = (db) => {
 		},
 
 		handleComment: comment => {
-			obj = obj.toJSON();
+			obj = comment.toJSON();
 			return {
 				kind: 		'comment',
 				author: 	obj.author,
