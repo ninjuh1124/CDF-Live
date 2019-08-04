@@ -3,7 +3,8 @@ import Heading from '../components/Heading';
 import { setUser,
 	setAccessToken,
 	updateThread,
-	logout } from '../redux/actions';
+	logout,
+	upvote } from '../redux/actions';
 
 import { connect } from 'react-redux';
 
@@ -19,7 +20,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	setUser: user => dispatch(setUser(user)),
 	setAccessToken: token => dispatch(setAccessToken(token)),
 	updateThread: thread => dispatch(updateThread(thread)),
-	logout: () => dispatch(logout())
+	logout: () => dispatch(logout()),
+	upvote: _id => dispatch(upvote(_id))
 });
 
 export default connect(

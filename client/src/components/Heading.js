@@ -134,6 +134,7 @@ class Heading extends React.Component {
 						toggleEditor={this.toggleEditor}
 						_id={this.props.thread._id}
 						accessToken={this.props.accessToken}
+						upvote={this.props.upvote}
 					/>	
 				}
 			</div>

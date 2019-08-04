@@ -109,6 +109,7 @@ class FeedContainer extends React.Component {
 						.filter(comment => !this.props.hidden.includes(comment._id))
 						.filter(comment => /^t3_\S+/.test(comment.parentID))
 					}
+					upvote={this.props.upvote}
 				/>
 			</div>
 		);

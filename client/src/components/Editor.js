@@ -46,18 +46,16 @@ class Editor extends React.Component {
 						_id: this.props._id,
 						body: this.state.text
 					});
+					/* TODO: cors bullshit
 					axios({
 						method: 'post',
 						url: process.env.REACT_APP_API + 'edit',
-						headers: {
-							'Content-type': 'application/json'
-						},
 						data: {
 							_id: this.props._id,
 							id: this.props.id,
 							body: this.state.text
 						}
-					});
+					});*/
 				}
 				this.props.toggleEditor(this.props.editorMode);
 			}).catch(err => {

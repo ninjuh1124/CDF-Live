@@ -159,35 +159,19 @@ class CommentButtonsRow extends React.Component {
 	render() {
 		return (
 			<div>
-				<a
-					href='javascript:void(0)'
-					className={'reddit-button link-primary' + 
-						(this.props.isUpvoted ? ' upvoted' : '')
-					}
-					onClick={ () => this.upvote()}
-				>
-					<i className='fas fa-arrow-up'></i>
-				</a>
-
-				<a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.toggleEditor('reply')}
-				>
-					reply 
-				</a>
-				
-				{this.props.ownPost &&
+				{this.props.ownPost ||
 					<a
 						href='javascript:void(0)'
-						className='link-primary reddit-button'
-						onClick={ () => this.toggleEditor('edit')}
+						className={'reddit-button link-primary' + 
+							(this.props.isUpvoted ? ' upvoted' : '')
+						}
+						onClick={ () => this.upvote()}
 					>
-						edit
+						<i className='fas fa-arrow-up'></i>
 					</a>
 				}
 
-				{this.props.ownPost &&
+				{/*this.props.ownPost &&
 					<a
 						href='javascript:void(0)'
 						className='link-primary reddit-button'
@@ -195,7 +179,7 @@ class CommentButtonsRow extends React.Component {
 					>
 						delete
 					</a>
-				}
+				*/null}
 
 				<a
 					href='javascript:void(0)'
@@ -222,6 +206,24 @@ class CommentButtonsRow extends React.Component {
 						{...this.props}
 					/>
 				}
+				
+				{this.props.ownPost &&
+					<a
+						href='javascript:void(0)'
+						className='link-primary reddit-button'
+						onClick={ () => this.toggleEditor('edit')}
+					>
+						edit
+					</a>
+				}
+
+				<a
+					href='javascript:void(0)'
+					className='link-primary reddit-button'
+					onClick={ () => this.toggleEditor('reply')}
+				>
+					reply 
+				</a>
 			</div>
 		);
 	}
