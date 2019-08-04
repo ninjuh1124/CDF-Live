@@ -1,6 +1,14 @@
 const fetch = require('node-fetch'),
 	querystring = require('querystring'),
-	helpers = require('./helpers');
+	helpers = require('./helpers'),
+	snoowrap = require('snoowrap')
+	reddit = new snoowrap({
+		userAgent: process.env.REDDIT_USER_AGENT,
+		clientId: process.env.REDDIT_CLIENT_ID,
+		clientSecret: process.env.REDDIT_CLIENT_SECRET,
+		username: process.env.REDDIT_USERNAME,
+		password: process.env.REDDIT_PASSWORD
+	});
 
 module.exports = (db) => {
 	/** DRIVER METHODS **/
@@ -138,6 +146,35 @@ module.exports = (db) => {
 			.catch(err => callback(err));
 	}
 
+	const editComment = (req, callback) => {
+		setTimeout( () => {
+			// verify on reddit comment has changed
+			reddit.getComment(req.body.id)
+				.body
+				.then(res => {
+					// update db
+					db.collection('comments').update(
+						{ id: req.body.id },
+						{ $set: { body: res }},
+						{ upsert: false }
+					);
+				});
+		}, 500);
+	}
+
+	const deleteComment = (req, callback) => {
+		setTimeout( () => {
+			// verify on reddit comment has been deleted
+			reddit.getComment(req.body.id)
+				.author
+				.then(res => {
+					if (res === '[deleted]') {
+						db.deleteOne({ id: req.body.id });
+					}
+				});
+		}, 500);
+	}
+
 	/** ROUTER SEES FOLLOWING JSON **/
 	return {
 		history: (req, res) => {
@@ -160,6 +197,18 @@ module.exports = (db) => {
 
 		token: (req, res) => {
 			getToken(req, (err, data) => {
+				helpers.send(res, err, data);
+			});
+		},
+
+		editComment: (req, res) => {
+			editComment(req, (err, data) => {
+				helpers.send(res, err, data);
+			});
+		},
+
+		deleteComment: (req, res) => {
+			deleteComment(req, (err, data) => {
 				helpers.send(res, err, data);
 			});
 		}

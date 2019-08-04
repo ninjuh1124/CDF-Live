@@ -1,6 +1,7 @@
 // maybe I should organize these better
 const dotenv = require('dotenv'),
 	express = require('express'),
+	bodyParser = require('body-parser'),
 	helmet = require('helmet'),
 	MongoClient = require('mongodb').MongoClient,
 	app = express(),
@@ -24,6 +25,8 @@ MongoClient.connect(
 		res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-type, Accept');
 		next();
 	});
+	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.json());
 	require('./routes/api')(app, pool);
 	require('./routes/content')(app);
 	app.listen(apiPort);

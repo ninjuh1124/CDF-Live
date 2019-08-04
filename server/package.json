@@ -7,12 +7,13 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "helmet": "^3.15.0",
     "mongodb": "^2.2.36",
+    "node-fetch": "^2.6.0",
     "nodemon": "^1.18.10",
-    "snoostorm": "0.0.5",
     "snoowrap": "^1.15.2"
   },
   "main": "index.js",
