@@ -46,7 +46,11 @@ module.exports = (db) => {
 			else if (obj.kind === 'submission') collection = 'threads';
 
 			db.collection(collection)
-				.insertOne(obj);
+				.updateOne(
+					{ _id: obj._id },
+					{ $set: { ...obj }},
+					{ upsert: true }
+				);
 		}
 	}
 }
