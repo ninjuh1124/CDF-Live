@@ -30,7 +30,20 @@
 	margin-bottom: 0px;
 }
 
+@keyframes fade-in {
+	0% {
+		transform: scaleY(0);
+		opacity: 0;
+	}
+	100% {
+		transform: scaleY(1);
+		opacity: 1;
+	}
+}
+
 .comment {
+	transform-origin: top;
+	animation: .3s ease-in-out both fade-in;
 	background: $background-primary;
 	color: $text-primary;
 	padding-bottom: 0px;

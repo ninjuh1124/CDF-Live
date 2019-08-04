@@ -4,6 +4,7 @@ import { PREPEND_TO_FEED,
 		DELETE_FROM_FEED,
 		UPVOTE,
 		HIDE,
+		SAVE,
 		UPDATE_THREAD } from '../actionTypes';
 
 const initialState = {
@@ -19,6 +20,9 @@ const initialState = {
 		: [],
 	hidden: localStorage.getItem('hidden')
 		? JSON.parse(localStorage.getItem('hidden'))
+		: [],
+	saved: localStorage.getItem('saved')
+		? JSON.parse(localStorage.getItem('saved'))
 		: []
 };
 
@@ -102,12 +106,30 @@ export default (state = initialState, action) => {
 
 		case HIDE: {
 			localStorage.setItem('hidden', JSON.stringify(
-				[...state.hidden, action.payload]
+				state.hidden.includes(action.payload) ?
+					state.hidden.filter(_id => _id !== action.payload) :
+					[...state.hidden, action.payload]
 			));
 			return {
 				...state,
-				hidden: [...state.hidden, action.payload]
+				hidden: state.hidden.includes(action.payload) ?
+					state.hidden.filter(_id => _id !== action.payload) :
+					[...state.hidden, action.payload]
 			};
+		}
+
+		case SAVE: {
+			localStorage.setItem('saved', JSON.stringify(
+				state.saved.includes(action.payload) ?
+					state.saved.filter(_id => _id !== action.payload) :
+					[...state.saved, action.payload]
+			));
+			return {
+				...state,
+				saved: state.saved.includes(action.payload) ?
+					state.saved.filter(_id => _id !== action.payload) :
+					[...state.saved, action.payload]
+			}
 		}
 		
 		default: return state;

@@ -104,6 +104,7 @@ class FeedContainer extends React.Component {
 
 				<Feed 
 					isLoading={this.state.isLoading}
+					loadMore={this.loadMore}
 					comments={this.props.history && this.props.history
 						.filter(comment => !this.props.hidden.includes(comment._id))
 						.filter(comment => /^t3_\S+/.test(comment.parentID))

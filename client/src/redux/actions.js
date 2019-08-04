@@ -7,6 +7,7 @@ import {
 		EDIT_FEED,
 		DELETE_FROM_FEED,
 		HIDE,
+		SAVE,
 		UPVOTE,
 		SET_USER,
 		LOGOUT
@@ -93,17 +94,34 @@ export const setUser = user => ({
 	payload: user
 });
 
+/**
+ * removes all login information from client
+ **/
 export const logout = () => ({
 	type: LOGOUT,
 	payload: null
 });
 
+/**
+ * toggles status of post being upvoted
+ **/
 export const upvote = _id => ({
 	type: UPVOTE,
 	payload: _id
 })
 
+/**
+ * toggles visibility of post
+ **/
 export const hide = _id => ({
 	type: HIDE,
+	payload: _id
+})
+
+/**
+ * toggles status of post being saved
+ **/
+export const save = _id => ({
+	type: SAVE,
 	payload: _id
 })

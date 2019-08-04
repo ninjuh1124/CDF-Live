@@ -93,6 +93,17 @@ class CommentButtonsRow extends React.Component {
 			})
 		}).then(res => {
 			this.props.deleteFromFeed(this.props._id);
+			axios({
+				method: 'delete',
+				url: process.env.REACT_APP_API + 'v1/delete',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: {
+					_id: this.props._id,
+					id: this.props.id
+				}
+			});
 		});
 	}
 
@@ -113,14 +124,26 @@ class CommentButtonsRow extends React.Component {
 				_id: this.props._id,
 				body: body
 			});
-			//TODO: backend path to update db
+			axios({
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: {
+					_id: this.props._id,
+					id: this.props.id,
+					body: body
+				}
+			});
 		});
 	}
 
 	save() {
 		axios({
 			method: 'post',
-			url: 'https://oauth.reddit.com/api/save',
+			url: (this.props.isSaved ? 
+				'https://oauth.reddit.com/api/unsave' :
+				'https://oauth.reddit.com/api/save'),
 			headers: {
 				Authorization: 'Bearer ' +
 					this.props.accessToken,
@@ -129,6 +152,8 @@ class CommentButtonsRow extends React.Component {
 			data: querystring.encode({
 				id: this.props._id
 			})
+		}).then(res => {
+			this.props.save();
 		});
 	}
 
@@ -169,7 +194,7 @@ class CommentButtonsRow extends React.Component {
 				<a
 					href='javascript:void(0)'
 					className={'reddit-button link-primary' + 
-						(this.props.upvoted ? ' upvoted' : '')
+						(this.props.isUpvoted ? ' upvoted' : '')
 					}
 					onClick={ () => this.upvote()}
 				>
@@ -184,7 +209,7 @@ class CommentButtonsRow extends React.Component {
 					reply 
 				</a>
 				
-				{this.props.author === this.props.loggedInAs &&
+				{this.props.ownPost &&
 					<a
 						href='javascript:void(0)'
 						className='link-primary reddit-button'
@@ -194,7 +219,7 @@ class CommentButtonsRow extends React.Component {
 					</a>
 				}
 
-				{this.props.author === this.props.loggedInAs &&
+				{this.props.ownPost &&
 					<a
 						href='javascript:void(0)'
 						className='link-primary reddit-button'
@@ -209,7 +234,7 @@ class CommentButtonsRow extends React.Component {
 					className='link-primary reddit-button'
 					onClick={ () => this.save()}
 				>
-					save
+					{this.props.isSaved ? 'unsave' : 'save'}
 				</a>
 
 				<a
@@ -217,13 +242,15 @@ class CommentButtonsRow extends React.Component {
 					className='link-primary reddit-button'
 					onClick={ () => this.hide()}
 				>
-					hide
+					{this.props.isHidden ? 'unhide' : 'hide'}
 				</a>
 
 				{this.state.editorMode !== 'hidden' &&
 					<Editor 
 						editorMode={this.state.editorMode}
 						toggleEditor={this.toggleEditor}
+						editPost={this.editPost}
+						deletePost={this.deletePost}
 						{...this.props}
 					/>
 				}
