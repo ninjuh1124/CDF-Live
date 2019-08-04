@@ -65,5 +65,7 @@ MongoClient.connect(
 			threads.pop();
 		}
 	});
+}).catch(err => {
+	console.log(err);
 });
 
