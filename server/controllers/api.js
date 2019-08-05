@@ -151,7 +151,7 @@ module.exports = (db) => {
 			// verify on reddit comment has changed
 			reddit.getComment(req.body.id).body.then(body => {
 				db.collection('comments').updateOne(
-					{ _id: req.body._id },
+					{ _id: 't1_' + req.body.id },
 					{ $set: { body: body }},
 					{ upsert: false }
 				).then( () => {
@@ -179,7 +179,7 @@ module.exports = (db) => {
 				if (author === '[deleted]') {
 					db.collection('comments')
 						.deleteOne({
-							_id: req.body._id
+							_id: 't1_' + req.body.id
 						}).then( () => {
 							callback(null, 'success')
 						}).catch(err => {
