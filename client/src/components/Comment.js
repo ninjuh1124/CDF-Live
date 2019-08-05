@@ -21,7 +21,10 @@ const Comment = (props) => {
 	return (
 		props.isHidden ||
 		<li
-			className={props.className + " comment list-group-item"}
+			className={
+				props.className + " comment list-group-item" + 
+				(props.ownPost ? ' own-post' : '')
+			}
 			id={props._id}
 		>
 

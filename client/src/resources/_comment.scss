@@ -41,6 +41,10 @@
 	}
 }
 
+.own-post {
+	border-color: $reddit-orangered!important;
+}
+
 .comment {
 	transform-origin: top;
 	animation: .3s ease-in-out both fade-in;

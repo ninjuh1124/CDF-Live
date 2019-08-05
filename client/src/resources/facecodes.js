@@ -238,7 +238,7 @@ const facecodes = {
 	"#konosubawot2:": "/faces/kazumawot.png",
 	"#keikaku": "/faces/keikaku.png",
 	"#killwithfire": "/faces/killwithfire.png",
-	"#killuadisgust": "/faces/killuadisgust",
+	"#killuadisgust": "/faces/killuadisgust.png",
 	"#kms": "/faces/kms.PNG",
 	"#konhug": "/faces/konhug.png",
 	"#konodioda": "/faces/konodioda.png",
