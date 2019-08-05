@@ -1,7 +1,7 @@
 const fetch = require('node-fetch'),
 	querystring = require('querystring'),
 	helpers = require('./helpers'),
-	snoowrap = require('snoowrap')
+	snoowrap = require('snoowrap'),
 	reddit = new snoowrap({
 		userAgent: process.env.REDDIT_USER_AGENT,
 		clientId: process.env.REDDIT_CLIENT_ID,
@@ -149,29 +149,56 @@ module.exports = (db) => {
 	const editComment = (req, callback) => {
 		setTimeout( () => {
 			// verify on reddit comment has changed
-			reddit.getComment(req.body.id)
-				.body
-				.then(res => {
-					// update db
-					db.collection('comments').update(
-						{ id: req.body.id },
-						{ $set: { body: res }},
-						{ upsert: false }
-					);
+			reddit.getComment(req.body.id).body.then(body => {
+				db.collection('comments').updateOne(
+					{ _id: req.body._id },
+					{ $set: { body: body }},
+					{ upsert: false }
+				).then( () => {
+					callback(null, 'success');
+				}).catch(err => {
+					callback({
+						code: 500,
+						message: "Database error"
+					});
 				});
+			}).catch(err => {
+				console.log(err);
+				callback({
+					code: 500,
+					message: "Could not complete request"
+				});
+			});
 		}, 500);
 	}
 
 	const deleteComment = (req, callback) => {
 		setTimeout( () => {
 			// verify on reddit comment has been deleted
-			reddit.getComment(req.body.id)
-				.author
-				.then(res => {
-					if (res === '[deleted]') {
-						db.deleteOne({ id: req.body.id });
-					}
+			reddit.getComment(req.body.id).author.name.then(author => {
+				if (author === '[deleted]') {
+					db.collection('comments')
+						.deleteOne({
+							_id: req.body._id
+						}).then( () => {
+							callback(null, 'success')
+						}).catch(err => {
+							callback({
+								code: 500,
+								message: 'Database error'
+							});
+						});
+				} else callback({
+					code: 409,
+					message: 'Comment still exists'
 				});
+			}).catch(err => {
+				console.log(err);
+				callback({
+					code: 500,
+					message: "Could not complete request"
+				});
+			});
 		}, 500);
 	}
 

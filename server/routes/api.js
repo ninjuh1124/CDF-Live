@@ -8,7 +8,7 @@ module.exports = (app, db) => {
 	routes.get('/comment.json', api.comment);
 	routes.get('/token.json', api.token);
 	routes.post('/edit', api.editComment);
-	routes.delete('/delete', api.deleteComment);
+	routes.post('/delete', api.deleteComment);
 
 	app.use('/v1/', routes);
 }

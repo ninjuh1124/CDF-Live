@@ -21,10 +21,30 @@ MongoClient.connect(
 		next();
 	});
 	app.use( (req, res, next) => {
+		// CORS stuff
 		res.header('Access-Control-Allow-Origin', '*');
-		res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-type, Accept');
-		res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+		res.header(
+			'Access-Control-Allow-Headers', 
+			'Origin, X-Requested-With, Content-type, Accept'
+		);
+		res.header(
+			'Access-Control-Allow-Methods', 
+			'GET, POST, DELETE, OPTIONS'
+		);
 		next();
+	});
+	app.options('/*', (req, res) => {
+		// CORS stuff
+		res.header('Access-Control-Allow-Origin', '*');
+		res.header(
+			'Access-Control-Allow-Methods', 
+			'GET, POST, DELETE, OPTIONS'
+		);
+		res.header(
+			'Access-Control-Allow-Headers', 
+			'Content-Type, Authorization, Content-Length, X-Requested-With'
+		);
+		res.sendStatus(200);
 	});
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
