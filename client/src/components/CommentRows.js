@@ -83,24 +83,26 @@ class CommentButtonsRow extends React.Component {
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/del',
 			headers: {
-				Authorization: 'Bearer ' +
-					sessionStorage.getItem('accessToken'),
+				Authorization: 'Bearer ' + this.props.accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
 				id: this.props._id
 			})
 		}).then(res => {
-			this.props.deleteFromFeed(this.props._id);
 			axios({
-				method: 'delete',
+				method: 'post',
 				url: process.env.REACT_APP_API + 'v1/delete',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				data: {
-					_id: this.props._id,
-					id: this.props.id
+				data: querystring.encode({
+					id: this.props.id,
+					_id: this.props._id
+				})
+			}).then(res => {
+				if (res.data.message === 'success') {
+					this.props.deleteFromFeed(this.props._id);
 				}
 			});
 		});
@@ -171,7 +173,7 @@ class CommentButtonsRow extends React.Component {
 					</a>
 				}
 
-				{/*this.props.ownPost &&
+				{this.props.ownPost &&
 					<a
 						href='javascript:void(0)'
 						className='link-primary reddit-button'
@@ -179,7 +181,7 @@ class CommentButtonsRow extends React.Component {
 					>
 						delete
 					</a>
-				*/null}
+				}
 
 				<a
 					href='javascript:void(0)'

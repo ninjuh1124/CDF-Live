@@ -46,7 +46,6 @@ class Editor extends React.Component {
 						_id: this.props._id,
 						body: this.state.text
 					});
-					/* TODO: cors bullshit
 					axios({
 						method: 'post',
 						url: process.env.REACT_APP_API + 'edit',
@@ -55,11 +54,21 @@ class Editor extends React.Component {
 							id: this.props.id,
 							body: this.state.text
 						}
-					});*/
+					}).then(res => {
+						if (res.data.message === 'success') {
+							this.props.editFeed({
+								_id: this.props._id,
+								body: this.state.text
+							});
+						}
+						this.props.toggleEditor(this.props.editorMode);
+					});
+				} else {
+					this.props.toggleEditor(this.props.editorMode);
 				}
-				this.props.toggleEditor(this.props.editorMode);
 			}).catch(err => {
 				console.log(err);
+				this.props.toggleEditor(this.props.editorMode);
 			});
 		});
 		e.preventDefault();

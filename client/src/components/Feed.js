@@ -9,6 +9,7 @@ const Feed = (props) => {
 					<CommentContainer
 						_id={comment._id}
 						key={comment.id}
+						id={comment.id}
 						author={comment.author}
 						body={comment.body}
 						permalink={comment.permalink}
