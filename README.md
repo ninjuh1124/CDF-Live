@@ -5,8 +5,7 @@ This is a bit of a pet project of mine that I've mostly been using to teach myse
 Please report any issues not already on the list here or you can [send me a message](https://reddit.com/message/compose?to=ninjuh1124).
 
 Live Branch: master  
-Stable Branch: [oauth](https://github.com/ninjuh1124/fridaydotmoe/tree/oauth)  
-Development Branch: [redux](https://github.com/ninjuh1124/fridaydotmoe/tree/redux)
+Development Branch: [dev](https://github.com/ninjuh1124/fridaydotmoe/tree/dev)
 
 ***
 
@@ -23,3 +22,5 @@ Development Branch: [redux](https://github.com/ninjuh1124/fridaydotmoe/tree/redu
 * Inline media embedding (Youtube, Twitter, etc)
 * Sleeker comment face handling (static, animated, on-hover)
 * Reconfigure Nginx (seriously, PM me. The documentation might be the driest read in existence)
+
+[Changelog](https://github.com/ninjuh1124/fridaydotmoe/blob/master/server/content/changelog.md)
