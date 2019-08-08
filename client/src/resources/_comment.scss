@@ -42,7 +42,8 @@
 }
 
 .own-post {
-	border-color: $reddit-orangered!important;
+	border-left-color: $reddit-orangered!important;
+	border-left-style: dashed;
 }
 
 .comment {
