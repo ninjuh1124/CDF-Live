@@ -198,16 +198,6 @@ class CommentButtonsRow extends React.Component {
 				>
 					{this.props.isHidden ? 'unhide' : 'hide'}
 				</a>
-
-				{this.state.editorMode !== 'hidden' &&
-					<Editor 
-						editorMode={this.state.editorMode}
-						toggleEditor={this.toggleEditor}
-						editPost={this.editPost}
-						deletePost={this.deletePost}
-						{...this.props}
-					/>
-				}
 				
 				{this.props.ownPost &&
 					<a
@@ -226,6 +216,16 @@ class CommentButtonsRow extends React.Component {
 				>
 					reply 
 				</a>
+
+				{this.state.editorMode !== 'hidden' &&
+					<Editor 
+						editorMode={this.state.editorMode}
+						toggleEditor={this.toggleEditor}
+						editPost={this.editPost}
+						deletePost={this.deletePost}
+						{...this.props}
+					/>
+				}
 			</div>
 		);
 	}
