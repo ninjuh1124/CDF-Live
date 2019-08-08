@@ -22,3 +22,5 @@ Development Branch: [dev](https://github.com/ninjuh1124/fridaydotmoe/tree/dev)
 * Inline media embedding (Youtube, Twitter, etc)
 * Sleeker comment face handling (static, animated, on-hover)
 * Reconfigure Nginx (seriously, PM me. The documentation might be the driest read in existence)
+
+[Changelog](https://github.com/ninjuh1124/fridaydotmoe/blob/master/server/content/changelog.md)
