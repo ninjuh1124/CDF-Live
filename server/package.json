@@ -13,7 +13,6 @@
     "helmet": "^3.15.0",
     "mongodb": "^2.2.36",
     "node-fetch": "^2.6.0",
-    "nodemon": "^1.18.10",
     "snoowrap": "^1.15.2"
   },
   "main": "index.js",
