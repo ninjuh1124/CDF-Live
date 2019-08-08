@@ -11,7 +11,7 @@ class About extends React.Component {
 
 	componentDidMount() {
 		axios.get(
-			this.props.api+"content/changelog.md",
+			process.env.REACT_APP_API + "content/changelog.md",
 			{ crossorigin: true }
 		).then(res => {
 			this.setState({ md: res.data });
