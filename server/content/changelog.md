@@ -1,3 +1,8 @@
+# v2.2.1 - 8/9/19
+
+* Moved Editor below reddit buttons row
+* Editor now focuses when didMount
+
 # v2.~~1~~2.0 - 8/8/19
 
 Lotta stuff happened, and I've been writing code for months on this one. 2.1 was adding in OAuth, 2.2 is implementing Redux to keep my OAuth code sane. I might add some small things here and there, but I think I'm going to move onto a new project for the time being
