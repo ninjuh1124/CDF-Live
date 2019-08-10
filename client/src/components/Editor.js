@@ -11,9 +11,16 @@ class Editor extends React.Component {
 			isSending: false,
 			text: ''
 		};
+		this.textAreaRef = React.createRef();
+
+		this.focusTextArea = this.focusTextArea.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.submit = this.submit.bind(this);
 		this.cancel = this.cancel.bind(this);
+	}
+
+	focusTextArea() {
+		this.textAreaRef.current.focus();
 	}
 
 	handleChange(e) {
@@ -82,7 +89,9 @@ class Editor extends React.Component {
 	componentDidMount() {
 		if (this.props.editorMode === 'edit') {
 			this.setState({ text: this.props.body });
+			this.focusTextArea();
 		} else if (this.props.editorMode === 'reply') {
+			this.focusTextArea();
 			if (window.getSelection) {
 				this.setState({ text: window.getSelection()
 					.toString()
@@ -112,6 +121,7 @@ class Editor extends React.Component {
 				<form onSubmit={this.submit}>
 					<textarea 
 						className='editor-box'
+						ref={this.textAreaRef}
 						rows='6'
 						cols='100'
 						onChange={this.handleChange}
