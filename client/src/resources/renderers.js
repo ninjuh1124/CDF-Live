@@ -5,6 +5,7 @@ import Spoiler from './Spoiler';
 export default {
 	link: props => {
 		if (/^#\S+/.test(props.href)) {
+			console.log(props.href);
 			return <CommentFace
 				code={props.href}
 				title={props.title}
