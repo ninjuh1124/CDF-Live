@@ -2,10 +2,16 @@ import React from 'react';
 import CommentFace from './CommentFace';
 import Spoiler from './Spoiler';
 
+const supportsStringRender = parseInt((React.version || '16').slice(0, 2), 10) >= 16
+const createElement = React.createElement
+
 export default {
+	sup: props => {
+		return <sup>{props.children}</sup>
+	},
+
 	link: props => {
 		if (/^#\S+/.test(props.href)) {
-			console.log(props.href);
 			return <CommentFace
 				code={props.href}
 				title={props.title}

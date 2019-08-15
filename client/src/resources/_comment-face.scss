@@ -23,6 +23,24 @@
 	.face {
 		vertical-align: middle;
 	}
+
+	.face-no-hover {
+		position: relative;
+		top: 0;
+		left: 0;
+	}
+
+	.face-hover {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	&:hover {
+		.face-no-hover {
+			visibility: hidden;
+		}
+	}
 }
 
 .face-text {
