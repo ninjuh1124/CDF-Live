@@ -151,7 +151,7 @@ module.exports = (db) => {
 			// verify on reddit comment has changed
 			reddit.getComment(req.body.id).body.then(body => {
 				db.collection('comments').updateOne(
-					{ _id: 't1_' + req.body.id },
+					{ _id: req.body._id },
 					{ $set: { body: body }},
 					{ upsert: false }
 				).then( () => {
