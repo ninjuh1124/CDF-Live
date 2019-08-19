@@ -2,6 +2,7 @@
 
 * Moved Editor below reddit buttons row
 * Editor now focuses when didMount
+* Client-side made comments appear locally instantly
 
 # v2.~~1~~2.0 - 8/8/19
 
