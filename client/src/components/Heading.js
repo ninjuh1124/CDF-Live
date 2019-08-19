@@ -133,6 +133,7 @@ class Heading extends React.Component {
 						editorMode={this.state.editorMode}
 						toggleEditor={this.toggleEditor}
 						_id={this.props.thread._id}
+						prependToFeed={this.props.prependToFeed}
 						accessToken={this.props.accessToken}
 						upvote={this.props.upvote}
 					/>	
