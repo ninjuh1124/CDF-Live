@@ -4,7 +4,8 @@ import { setUser,
 	setAccessToken,
 	updateThread,
 	logout,
-	upvote } from '../redux/actions';
+	upvote,
+	prependToFeed } from '../redux/actions';
 
 import { connect } from 'react-redux';
 
@@ -21,7 +22,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 	setAccessToken: token => dispatch(setAccessToken(token)),
 	updateThread: thread => dispatch(updateThread(thread)),
 	logout: () => dispatch(logout()),
-	upvote: _id => dispatch(upvote(_id))
+	upvote: _id => dispatch(upvote(_id)),
+	prependToFeed: arr => dispatch(prependToFeed(arr))
 });
 
 export default connect(

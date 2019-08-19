@@ -14,12 +14,10 @@ class FeedContainer extends React.Component {
 		super(props);
 		this.state = {
 			emptyCalls: 1,
-			isLoading: false,
-			editorMode: 'hidden'
+			isLoading: false
 		};
 		this.getHistory = this.getHistory.bind(this);
 		this.keepGettingHistory = this.keepGettingHistory.bind(this);
-		this.toggleEditor = this.toggleEditor.bind(this);
 		this.loadMore = this.loadMore.bind(this);
 	}
 
@@ -95,13 +93,6 @@ class FeedContainer extends React.Component {
 	render() {
 		return (
 			<div style={{padding: '3px'}}>
-
-				{ this.state.editorMode === 'hidden' || <Editor
-					editorMode={this.state.editorMode}
-					toggleEditor={this.toggleEditor}
-					id={this.props.thread._id}
-				/> }
-
 				<Feed 
 					isLoading={this.state.isLoading}
 					loadMore={this.loadMore}

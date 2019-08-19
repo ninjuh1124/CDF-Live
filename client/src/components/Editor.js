@@ -11,9 +11,16 @@ class Editor extends React.Component {
 			isSending: false,
 			text: ''
 		};
+		this.textAreaRef = React.createRef();
+
+		this.focusTextArea = this.focusTextArea.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.submit = this.submit.bind(this);
 		this.cancel = this.cancel.bind(this);
+	}
+
+	focusTextArea() {
+		this.textAreaRef.current.focus();
 	}
 
 	handleChange(e) {
@@ -46,9 +53,9 @@ class Editor extends React.Component {
 						_id: this.props._id,
 						body: this.state.text
 					});
-					axios({
+/*					axios({
 						method: 'post',
-						url: process.env.REACT_APP_API + 'edit',
+						url: process.env.REACT_APP_API + 'v1/edit',
 						data: {
 							_id: this.props._id,
 							id: this.props.id,
@@ -58,12 +65,29 @@ class Editor extends React.Component {
 						if (res.data.message === 'success') {
 							this.props.editFeed({
 								_id: this.props._id,
+								id: this.props.id,
 								body: this.state.text
 							});
 						}
-						this.props.toggleEditor(this.props.editorMode);
-					});
-				} else {
+*/						this.props.toggleEditor(this.props.editorMode);
+//					});
+/*				} else {
+					this.props.toggleEditor(this.props.editorMode);
+*/				} else if (this.props.editorMode === 'reply') {
+					let data = res.data.json.data.things[0].data;
+					this.props.prependToFeed([
+						{
+							kind: 'comment',
+							author: data.author,
+							_id: data.name,
+							id: data.id,
+							thread: data.link_id,
+							created: data.created_utc,
+							permalink: 'https://reddit.com'+data.permalink,
+							parentID: data.parent_id,
+							body: data.body
+						}
+					]);
 					this.props.toggleEditor(this.props.editorMode);
 				}
 			}).catch(err => {
@@ -82,7 +106,9 @@ class Editor extends React.Component {
 	componentDidMount() {
 		if (this.props.editorMode === 'edit') {
 			this.setState({ text: this.props.body });
+			this.focusTextArea();
 		} else if (this.props.editorMode === 'reply') {
+			this.focusTextArea();
 			if (window.getSelection) {
 				this.setState({ text: window.getSelection()
 					.toString()
@@ -112,6 +138,7 @@ class Editor extends React.Component {
 				<form onSubmit={this.submit}>
 					<textarea 
 						className='editor-box'
+						ref={this.textAreaRef}
 						rows='6'
 						cols='100'
 						onChange={this.handleChange}
