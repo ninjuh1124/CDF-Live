@@ -65,6 +65,7 @@ class Editor extends React.Component {
 						if (res.data.message === 'success') {
 							this.props.editFeed({
 								_id: this.props._id,
+								id: this.props.id,
 								body: this.state.text
 							});
 						}
