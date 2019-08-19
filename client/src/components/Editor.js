@@ -73,7 +73,23 @@ class Editor extends React.Component {
 //					});
 /*				} else {
 					this.props.toggleEditor(this.props.editorMode);
-*/				}
+*/				} else if (this.props.editorMode === 'reply') {
+					let data = res.data.json.data.things[0].data;
+					this.props.prependToFeed([
+						{
+							kind: 'comment',
+							author: data.author,
+							_id: data.name,
+							id: data.id,
+							thread: data.link_id,
+							created: data.created_utc,
+							permalink: 'https://reddit.com'+data.permalink,
+							parentID: data.parent_id,
+							body: data.body
+						}
+					]);
+					this.props.toggleEditor(this.props.editorMode);
+				}
 			}).catch(err => {
 				console.log(err);
 				this.props.toggleEditor(this.props.editorMode);
