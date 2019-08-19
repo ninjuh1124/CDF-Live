@@ -53,7 +53,7 @@ class Editor extends React.Component {
 						_id: this.props._id,
 						body: this.state.text
 					});
-					axios({
+/*					axios({
 						method: 'post',
 						url: process.env.REACT_APP_API + 'v1/edit',
 						data: {
@@ -69,11 +69,11 @@ class Editor extends React.Component {
 								body: this.state.text
 							});
 						}
-						this.props.toggleEditor(this.props.editorMode);
-					});
-				} else {
+*/						this.props.toggleEditor(this.props.editorMode);
+//					});
+/*				} else {
 					this.props.toggleEditor(this.props.editorMode);
-				}
+*/				}
 			}).catch(err => {
 				console.log(err);
 				this.props.toggleEditor(this.props.editorMode);
