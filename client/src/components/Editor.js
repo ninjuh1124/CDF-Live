@@ -55,7 +55,7 @@ class Editor extends React.Component {
 					});
 					axios({
 						method: 'post',
-						url: process.env.REACT_APP_API + 'edit',
+						url: process.env.REACT_APP_API + 'v1/edit',
 						data: {
 							_id: this.props._id,
 							id: this.props.id,

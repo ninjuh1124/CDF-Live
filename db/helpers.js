@@ -33,6 +33,7 @@ module.exports = (db) => {
 				author: 	obj.author,
 				_id: 		obj.name,
 				id: 		obj.id,
+				thread:		obj.link_id,
 				created: 	obj.created_utc,
 				permalink: 	'https://reddit.com' + obj.permalink,
 				parentID: 	obj.parent_id,
