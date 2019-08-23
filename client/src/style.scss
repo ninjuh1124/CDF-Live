@@ -50,3 +50,12 @@ a {
 		color: $link-primary-hover;
 	}
 }
+
+.formatting-button {
+	color: $text-primary;
+	background-color: $background-secondary;
+	border-color: $border-primary;
+	border-style: solid;
+	margin-right: 3px;
+
+}

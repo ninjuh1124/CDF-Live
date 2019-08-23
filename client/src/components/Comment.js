@@ -9,6 +9,7 @@ const Comment = (props) => {
 	let children = props.children.map(comment => {
 		return <CommentContainer
 			_id={comment._id}
+			id={comment.id}
 			key={comment.id}
 			author={comment.author}
 			body={comment.body}
