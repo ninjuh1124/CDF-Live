@@ -19,7 +19,10 @@ const CommentFace = (props) => {
 						facecodes[props.code].filename
 					}
 					alt={props.code}
-					className="face"
+					className={"face" + (facecodes[props.code].active ?
+						'' :
+						' discontinued')
+					}
 					style={style}
 				/> :
 				<><img

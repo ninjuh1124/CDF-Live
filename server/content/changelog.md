@@ -1,4 +1,8 @@
-# v2.2.1 - 8/9/19
+# v2.2.2
+
+* Added formatting bar
+
+# v2.2.1 - 8/19/19
 
 * Moved Editor below reddit buttons row
 * Editor now focuses when didMount

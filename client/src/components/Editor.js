@@ -25,6 +25,7 @@ class Editor extends React.Component {
 		this.textAreaRef.current.focus();
 	}
 
+	// shameless theft from RES
 	wrapSelection(prefix, suffix) {
 		let box = this.textAreaRef.current;
 
@@ -101,10 +102,11 @@ class Editor extends React.Component {
 						_id: this.props._id,
 						body: this.state.text
 					});
-/*					axios({
+					axios({
 						method: 'post',
 						url: process.env.REACT_APP_API + 'v1/edit',
 						data: {
+							token: this.props.accessToken,
 							_id: this.props._id,
 							id: this.props.id,
 							body: this.state.text
@@ -117,11 +119,9 @@ class Editor extends React.Component {
 								body: this.state.text
 							});
 						}
-*/						this.props.toggleEditor(this.props.editorMode);
-//					});
-/*				} else {
-					this.props.toggleEditor(this.props.editorMode);
-*/				} else if (this.props.editorMode === 'reply') {
+						this.props.toggleEditor(this.props.editorMode);
+					});
+				} else if (this.props.editorMode === 'reply') {
 					let data = res.data.json.data.things[0].data;
 					this.props.prependToFeed([
 						{

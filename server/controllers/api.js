@@ -147,59 +147,57 @@ module.exports = (db) => {
 	}
 
 	const editComment = (req, callback) => {
-		setTimeout( () => {
-			// verify on reddit comment has changed
-			reddit.getComment(req.body.id).body.then(body => {
-				db.collection('comments').updateOne(
-					{ _id: req.body._id },
-					{ $set: { body: body }},
-					{ upsert: false }
-				).then( () => {
-					callback(null, 'success');
-				}).catch(err => {
-					callback({
-						code: 500,
-						message: "Database error"
-					});
-				});
+		let token = req.body.token;
+		fetch(
+			'https://oauth.reddit.com/api/me',
+			{ headers: { Authorization: 'bearer ' + token }}
+		).then(res => res.json())
+		.then(res => {
+			let user = res.name;
+			db.collection('comments').updateOne(
+				{
+					author: user,
+					_id: req.body._id,
+					id: req.body.id
+				},
+				{ $set: { body: req.body.body }},
+				{ upsert: false	}
+			).then( () => {
+				callback(null, 'success');
 			}).catch(err => {
 				console.log(err);
 				callback({
 					code: 500,
-					message: "Could not complete request"
+					message: 'Could not complete request'
 				});
 			});
-		}, 500);
+		})
 	}
 
 	const deleteComment = (req, callback) => {
-		setTimeout( () => {
-			// verify on reddit comment has been deleted
-			reddit.getComment(req.body.id).author.name.then(author => {
-				if (author === '[deleted]') {
-					db.collection('comments')
-						.deleteOne({
-							_id: 't1_' + req.body.id
-						}).then( () => {
-							callback(null, 'success')
-						}).catch(err => {
-							callback({
-								code: 500,
-								message: 'Database error'
-							});
-						});
-				} else callback({
-					code: 409,
-					message: 'Comment still exists'
-				});
+		let token = req.body.token;
+		fetch(
+			'https://oauth.reddit.com/api/me',
+			{ headers: { Authorization: 'bearer ' + token }}
+		).then(res => res.json())
+		.then(res => {
+			let user = res.name;
+			db.collection('comments').deleteOne(
+				{
+					author: user,
+					_id: req.body._id,
+					id: req.body.id
+				}
+			).then( () => {
+				callback(null, 'success');
 			}).catch(err => {
 				console.log(err);
 				callback({
 					code: 500,
-					message: "Could not complete request"
+					message: 'Could not complete request'
 				});
 			});
-		}, 500);
+		})
 	}
 
 	/** ROUTER SEES FOLLOWING JSON **/
