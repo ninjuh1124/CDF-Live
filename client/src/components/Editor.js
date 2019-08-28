@@ -180,6 +180,7 @@ class Editor extends React.Component {
 							<ReactMarkdown
 								source={this.state.text}
 								disallowedTypes={['imageReference', 'linkReference']}
+								plugins={[require('../resources/supPlugin')]}
 								renderers={renderers}
 							/>
 						</span>

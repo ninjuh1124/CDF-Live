@@ -43,6 +43,7 @@ const CommentBodyRow = (props) => {
 				<ReactMarkdown
 					source={props.body.replace(/^#{1,}/gm, '$& ')}
 					disallowedTypes={['imageReference', 'linkReference']}
+					plugins={[require('../resources/supPlugin')]}
 					renderers={renderers}
 				/>
 			</div>

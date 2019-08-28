@@ -1,6 +1,7 @@
 # v2.2.2
 
 * Added formatting bar
+* Added superscripting
 
 # v2.2.1 - 8/19/19
 
