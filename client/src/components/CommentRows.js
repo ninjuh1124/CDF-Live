@@ -43,6 +43,7 @@ const CommentBodyRow = (props) => {
 				<ReactMarkdown
 					source={props.body.replace(/^#{1,}/gm, '$& ')}
 					disallowedTypes={['imageReference', 'linkReference']}
+					plugins={[require('../resources/supPlugin')]}
 					renderers={renderers}
 				/>
 			</div>
@@ -97,6 +98,7 @@ class CommentButtonsRow extends React.Component {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				data: querystring.encode({
+					token: this.props.accessToken,
 					id: this.props.id,
 					_id: this.props._id
 				})

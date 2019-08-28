@@ -90,6 +90,12 @@
 		margin-bottom: 10px;
 		border-color: $border-primary;
 	}
+
+	sup {
+		font-size: .86em;
+		line-height: 0;
+		vertical-align: super;
+	}
 }
 
 .reply {

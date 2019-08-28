@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
+import FormattingBar from './FormattingBar';
 import axios from 'axios';
 import querystring from 'querystring';
 
@@ -13,6 +14,7 @@ class Editor extends React.Component {
 		};
 		this.textAreaRef = React.createRef();
 
+		this.wrapSelection = this.wrapSelection.bind(this);
 		this.focusTextArea = this.focusTextArea.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.submit = this.submit.bind(this);
@@ -23,11 +25,58 @@ class Editor extends React.Component {
 		this.textAreaRef.current.focus();
 	}
 
+	// shameless theft from RES
+	wrapSelection(prefix, suffix) {
+		let box = this.textAreaRef.current;
+
+		if (!box) {
+			return;
+		}
+		// record scroll top to restore it later.
+		const scrollTop = box.scrollTop;
+
+		// We will restore the selection later, so record the current selection.
+		const selectionStart = box.selectionStart;
+		const selectionEnd = box.selectionEnd;
+
+		const text = box.value;
+		const beforeSelection = text.substring(0, selectionStart);
+		let selectedText = text.substring(selectionStart, selectionEnd);
+		const afterSelection = text.substring(selectionEnd);
+
+		// Markdown doesn't like it when you tag a word like **this **. The space messes it up. So we'll account for that because Firefox selects the word, and the followign space when you double click a word.
+		let trailingSpace = '';
+		let cursor = selectedText.length - 1;
+		while (cursor > 0 && selectedText[cursor] === ' ') {
+			trailingSpace += ' ';
+			cursor--;
+		}
+		selectedText = selectedText.substring(0, cursor + 1);
+	
+		this.setState({ 
+				text: beforeSelection+prefix+selectedText+suffix+
+					trailingSpace+afterSelection
+		}, () => {
+			box.selectionEnd = beforeSelection.length + prefix.length + 
+				selectedText.length;
+			if (selectionStart === selectionEnd) {
+				box.selectionStart = box.selectionEnd;
+			} else {
+				box.selectionStart = beforeSelection.length + prefix.length;
+			}
+
+			box.scrollTop = scrollTop;
+			this.focusTextArea();
+		});
+	}
+
 	handleChange(e) {
 		this.setState({text: e.target.value});
 	}
 
 	submit(e) {
+		if (!this.state.text.trim()) return;
+
 		let uri;
 		if (this.props.editorMode === 'reply')
 			uri = "https://oauth.reddit.com/api/comment";
@@ -53,10 +102,11 @@ class Editor extends React.Component {
 						_id: this.props._id,
 						body: this.state.text
 					});
-/*					axios({
+					axios({
 						method: 'post',
 						url: process.env.REACT_APP_API + 'v1/edit',
 						data: {
+							token: this.props.accessToken,
 							_id: this.props._id,
 							id: this.props.id,
 							body: this.state.text
@@ -69,11 +119,9 @@ class Editor extends React.Component {
 								body: this.state.text
 							});
 						}
-*/						this.props.toggleEditor(this.props.editorMode);
-//					});
-/*				} else {
-					this.props.toggleEditor(this.props.editorMode);
-*/				} else if (this.props.editorMode === 'reply') {
+						this.props.toggleEditor(this.props.editorMode);
+					});
+				} else if (this.props.editorMode === 'reply') {
 					let data = res.data.json.data.things[0].data;
 					this.props.prependToFeed([
 						{
@@ -92,7 +140,7 @@ class Editor extends React.Component {
 				}
 			}).catch(err => {
 				console.log(err);
-				this.props.toggleEditor(this.props.editorMode);
+				this.setState({ isSending: false });
 			});
 		});
 		e.preventDefault();
@@ -122,18 +170,25 @@ class Editor extends React.Component {
 	render() {
 		return (
 			<div>
-				{this.state.text === '' ||
-					<div className="col-xs-11 list-group-item comment preview">
+				{this.state.text.trim() === '' ||
+					<div 
+						className="col-xs-11 list-group-item comment preview"
+						style={{ float: 'none', marginBottom: '5px' }}
+					>
 						<p><strong>Preview</strong></p>
 						<span className="body-row">
 							<ReactMarkdown
 								source={this.state.text}
 								disallowedTypes={['imageReference', 'linkReference']}
+								plugins={[require('../resources/supPlugin')]}
 								renderers={renderers}
 							/>
 						</span>
+					<br />
 					</div>
 				}
+
+				<FormattingBar wrapSelection={this.wrapSelection} />
 
 				<form onSubmit={this.submit}>
 					<textarea 
