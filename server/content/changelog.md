@@ -1,3 +1,8 @@
+# v2.2.3 - 8/29/19
+
+* Fixed issue with not quoting highlighted text
+* Fixed styling on narrower comment faces
+
 # v2.2.2 - 8/28/19
 
 * Added formatting bar
