@@ -2,6 +2,8 @@
 
 * Fixed issue with not quoting highlighted text
 * Fixed styling on narrower comment faces
+* Added Umi's face for facecode errors
+* Grayed out faces not active on /r/anime
 
 # v2.2.2 - 8/28/19
 
