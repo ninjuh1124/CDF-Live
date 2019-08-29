@@ -24,6 +24,10 @@
 		vertical-align: middle;
 	}
 
+	.face-discontinued {
+		filter: grayscale(90%);
+	}
+
 	.face-no-hover {
 		position: relative;
 		top: 0;

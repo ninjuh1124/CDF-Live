@@ -2,7 +2,21 @@ import React from 'react';
 import facecodes from './facecodes';
 
 const CommentFace = (props) => {
-	if (!facecodes[props.code]) return null;
+	if (!facecodes[props.code]) {
+		let style = {
+			height: '125px',
+			width: '125px'
+		}
+		return (
+			<span className="comment-face" 
+				style={style} title={props.title}>
+				<img src='/faces/active/umiface.jpg' alt='#facenotfound'
+					className='face face-discontinued' style={style} />
+				<span className='face-text'>{props.children}</span>
+			</span>
+		);
+	}
+
 	let style = {
 		height: facecodes[props.code].height+'px',
 		width: facecodes[props.code].width+'px'
@@ -21,7 +35,7 @@ const CommentFace = (props) => {
 					alt={props.code}
 					className={"face" + (facecodes[props.code].active ?
 						'' :
-						' discontinued')
+						' face-discontinued')
 					}
 					style={style}
 				/> :
