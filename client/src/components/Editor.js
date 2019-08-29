@@ -152,16 +152,16 @@ class Editor extends React.Component {
 	}
 
 	componentDidMount() {
+		let selection = window.getSelection.toString();
 		if (this.props.editorMode === 'edit') {
 			this.setState({ text: this.props.body });
 			this.focusTextArea();
 		} else if (this.props.editorMode === 'reply') {
 			this.focusTextArea();
 			if (window.getSelection) {
-				this.setState({ text: window.getSelection()
-					.toString()
+				this.setState({ text: selection
 					.replace(/^.*/gm, t => '>'+t)
-					.replace(/^>$/gm, t => '')
+					.replace(/^>$/gm, t => '') + '\n\n'					
 				});
 			}
 		}
