@@ -10,13 +10,13 @@
 			font-weight: normal;
 			position: absolute;
 			margin: auto;
-			width: 178px;
+			width: 100%;
 			left: 0;
 			word-break: break-word;
 			overflow-x: hidden;
 			overflow-y: hidden;
 			overflow-wrap: break-word;
-			bottom: 0;
+			bottom: 2px;
 		}
 	}
 
@@ -45,7 +45,7 @@
 
 .face-text {
 	height: 100%;
-	width: 178px;
+	width: 100%;
 	position: absolute;
 	top: 0;
 	word-break: break-word;
