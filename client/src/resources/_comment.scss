@@ -20,6 +20,11 @@
 	margin-top: 14px;
 }
 
+.arrow-col {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
 .arrow-link {
 	margin-top: 0px;
 	margin-bottom: 0px;
@@ -95,6 +100,7 @@
 		font-size: .86em;
 		line-height: 0;
 		vertical-align: super;
+		top: unset;
 	}
 }
 
