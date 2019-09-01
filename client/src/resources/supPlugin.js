@@ -33,10 +33,10 @@ function inlinePlugin() {
 			let endMarkerIndex = value.match(/\^\S+/)[0].length;
 
 			if (silent) return true;
-			eat(value.substring(0, endMarkerIndex + 1))({
+			eat(value.substring(0, endMarkerIndex))({
 				type: 'sup',
 				children: this.tokenizeInline(
-					value.substring(1, endMarkerIndex) + SPACE,
+					value.substring(1, endMarkerIndex),
 					now),
 				data: {
 					hName: 'sup'
