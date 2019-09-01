@@ -195,7 +195,7 @@ class Editor extends React.Component {
 						className='editor-box'
 						ref={this.textAreaRef}
 						rows='6'
-						cols='100'
+						cols='50'
 						onChange={this.handleChange}
 						value={this.state.text}
 						disabled={this.state.isSending}
