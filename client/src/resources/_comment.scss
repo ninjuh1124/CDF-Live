@@ -68,10 +68,16 @@
 		font-size: x-small;
 	}
 
-	.body-row a {
-		color: $link-secondary;
-		&:hover {
+	.body-row {
+		.col-xs-11 {
+			overflow-x: hidden;
+		}
+
+		a {
 			color: $link-secondary;
+			&:hover {
+				color: $link-secondary;
+			}
 		}
 	}
 
