@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import querystring from 'querystring';
 import Editor from './Editor';
+import Source from './Source';
 import TimeAgo from 'react-timeago';
 import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
@@ -70,6 +71,7 @@ class CommentButtonsRow extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			source: 'hidden',
 			editorMode: 'hidden'
 		};
 		this.toggleEditor = this.toggleEditor.bind(this);
@@ -77,6 +79,13 @@ class CommentButtonsRow extends React.Component {
 		this.save = this.save.bind(this);
 		this.hide = this.hide.bind(this);
 		this.upvote = this.upvote.bind(this);
+		this.toggleSource = this.toggleSource.bind(this);
+	}
+
+	toggleSource() {
+		this.setState(oldState => ({
+			source: (oldState.source === 'hidden' ? 'visible' : 'hidden')
+		}));
 	}
 
 	deletePost() {
@@ -175,6 +184,14 @@ class CommentButtonsRow extends React.Component {
 					</a>
 				}
 
+				<a
+					href='javascript:void(0)'
+					className='reddit-button link-primary'
+					onClick={() => this.toggleSource()}
+				>
+					source
+				</a>
+
 				{this.props.ownPost &&
 					<a
 						href='javascript:void(0)'
@@ -218,6 +235,13 @@ class CommentButtonsRow extends React.Component {
 				>
 					reply 
 				</a>
+
+				{this.state.source !== 'hidden' &&
+					<Source
+						body={this.props.body}
+						close={this.toggleSource}
+					/>
+				}
 
 				{this.state.editorMode !== 'hidden' &&
 					<Editor 
