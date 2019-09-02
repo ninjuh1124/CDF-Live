@@ -12755,4 +12755,4 @@ const list = [
   }
 ]
 
-export { map };
+export { map, list };

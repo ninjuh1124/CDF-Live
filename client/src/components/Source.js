@@ -7,7 +7,7 @@ const Source = props => (
 			rows='6'
 			cols='50'
 			value={props.body}
-			disabled='true'
+			disabled={true}
 		/>
 		<br />
 		<button

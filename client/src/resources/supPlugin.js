@@ -2,7 +2,6 @@
  * based on zestedesavoir's remark-sub-super: https://github.com/zestedesavoir/zmarkdown/tree/master/packages/remark-sub-super
  **/
 
-const SPACE = ' ';
 const MARKER = '^';
 
 function locator(value, fromIndex) {
@@ -29,7 +28,7 @@ function inlinePlugin() {
 		now.column += 1;
 		now.offset += 1;
 
-		if (MARKER == marker && !/(\^[\s\n])|(\^$)/.test(value)) {
+		if (MARKER === marker && !/(\^[\s\n])|(\^$)/.test(value)) {
 			let endMarkerIndex = value.match(/\^\S+/)[0].length;
 
 			if (silent) return true;
