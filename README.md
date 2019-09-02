@@ -11,16 +11,12 @@ Development Branch: [dev](https://github.com/ninjuh1124/fridaydotmoe/tree/dev)
 
 ## Known issues:
 
-* ~~Some~~ A lot of comment faces are missing. See [here](https://pastebin.com/7EzdjC2d)
 * Superscripting text is a bit buggy
 * Only edits done through the site will be recorded. Will not be refreshed.
-* Nginx configuration doesn't like mobile networks. PM me if you know Nginx.
 
 ## "Future" Plans:
 
 * Proper error handling
 * Inline media embedding (Youtube, Twitter, etc)
-* Sleeker comment face handling (static, animated, on-hover)
-* Reconfigure Nginx (seriously, PM me. The documentation might be the driest read in existence)
 
 [Changelog](https://github.com/ninjuh1124/fridaydotmoe/blob/master/server/content/changelog.md)
