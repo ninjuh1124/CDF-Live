@@ -133,7 +133,7 @@ class Editor extends React.Component {
 							created: data.created_utc,
 							permalink: 'https://reddit.com'+data.permalink,
 							parentID: data.parent_id,
-							body: data.body
+							body: this.state.text
 						}
 					]);
 					this.props.toggleEditor(this.props.editorMode);
