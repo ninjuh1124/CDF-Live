@@ -13,7 +13,8 @@ class FeedContainer extends React.Component {
 		super(props);
 		this.state = {
 			emptyCalls: 1,
-			isLoading: false
+			isLoading: false,
+			newestComment: null
 		};
 		this.getHistory = this.getHistory.bind(this);
 		this.keepGettingHistory = this.keepGettingHistory.bind(this);
@@ -23,7 +24,7 @@ class FeedContainer extends React.Component {
 	getHistory() {
 		axios.get(
 			process.env.REACT_APP_API+'v1/history.json?newerthan=' +
-			this.props.history[0]._id,
+			this.state.newestComment._id,
 			{ crossdomain: true }
 		).then(res => {
 			// verify message
@@ -31,11 +32,15 @@ class FeedContainer extends React.Component {
 				Array.isArray(res.data.message) &&
 				res.data.message.length > 0) {
 				this.props.prependToFeed(res.data.message);
-				this.setState({ emptyCalls: 1 });
+				this.setState(state => ({
+					newestComment: res.data.message[0],
+					emptyCalls: 1
+				}));
 			} else { // delay api calls between empty responses
-				this.setState(state => {
-					return { ...state, emptyCalls: state.emptyCalls+1 }
-				});
+				this.setState(state => ({
+					...state, 
+					emptyCalls: state.emptyCalls+1,
+				}));
 			}
 		});
 	}
@@ -65,24 +70,22 @@ class FeedContainer extends React.Component {
 		});
 	}
 
-	toggleEditor(mode) {
-		this.setState(state => { 
-			return {
-				editorMode: mode === state.editorMode ? 'hidden' : mode
-			};
-		});
-	}
-
 	componentDidMount() {
 		this.setState({ isLoading: true }, () => {
 			axios.get(
 				process.env.REACT_APP_API+'v1/history.json',
 				{ crossdomain: true }
 			).then(res => {
-				this.setState({ isLoading: false }, () => {
-					this.props.prependToFeed(res.data.message);
-					this.keepGettingHistory();
-				});
+				this.setState(
+					{
+						isLoading: false,
+						newestComment: res.data.message[0]
+					},
+					() => {
+						this.props.prependToFeed(res.data.message);
+						this.keepGettingHistory();
+					}
+				);
 			}).catch( () => {
 				this.setState({ isLoading: false });
 			});
