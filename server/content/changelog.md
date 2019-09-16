@@ -1,3 +1,9 @@
+# v2.2.4 - 9/15/19
+
+* Updated comment face list
+* Updated certain gifs not looking good
+* Probably some other stuff I've already forgotten about
+
 # v2.2.3 - 8/29/19
 
 * Fixed issue with not quoting highlighted text
