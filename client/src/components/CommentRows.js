@@ -45,6 +45,7 @@ const CommentBodyRow = (props) => {
 					source={props.body.replace(/^#{1,}/gm, '$& ')}
 					disallowedTypes={['imageReference', 'linkReference']}
 					plugins={[require('../resources/supPlugin')]}
+					parserOptions={{ commonmark: true, pedantic: true }}
 					renderers={renderers}
 				/>
 			</div>
