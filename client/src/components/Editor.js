@@ -179,8 +179,16 @@ class Editor extends React.Component {
 						<span className="body-row">
 							<ReactMarkdown
 								source={this.state.text}
-								disallowedTypes={['imageReference', 'linkReference']}
+								disallowedTypes={[
+									'imageReference',
+									'linkReference'
+								]}
+								unwrapDisallowed={true}
 								plugins={[require('../resources/supPlugin')]}
+								parserOptions={{ 
+									commonmark: true, 
+									pedantic: true
+								}}
 								renderers={renderers}
 							/>
 						</span>

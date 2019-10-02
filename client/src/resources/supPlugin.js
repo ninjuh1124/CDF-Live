@@ -29,18 +29,33 @@ function inlinePlugin() {
 		now.offset += 1;
 
 		if (MARKER === marker && !/(\^[\s\n])|(\^$)/.test(value)) {
-			let endMarkerIndex = value.match(/\^\S+/)[0].length;
+			if (value.match(/\^\(.+\)/)) {
+				let endMarkerIndex = value.match(/\^\(.+\)/)[0].length;
 
-			if (silent) return true;
-			eat(value.substring(0, endMarkerIndex))({
-				type: 'sup',
-				children: this.tokenizeInline(
-					value.substring(1, endMarkerIndex),
-					now),
-				data: {
-					hName: 'sup'
-				}
-			});
+				if (silent) return true;
+				eat(value.substring(0, endMarkerIndex))({
+					type: 'sup',
+					children: this.tokenizeInline(
+							value.substring(2, endMarkerIndex-1),
+							now),
+					data: {
+						hName: 'sup'
+					}
+				});
+			} else {	// single word
+				let endMarkerIndex = value.match(/\^\S+/)[0].length;
+
+				if (silent) return true;
+				eat(value.substring(0, endMarkerIndex))({
+					type: 'sup',
+					children: this.tokenizeInline(
+						value.substring(1, endMarkerIndex),
+						now),
+					data: {
+						hName: 'sup'
+					}
+				});
+			}
 		}
 	}
 
