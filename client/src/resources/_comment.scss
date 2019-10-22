@@ -20,15 +20,9 @@
 	margin-top: 14px;
 }
 
-.arrow-col {
-	padding-left: 0px;
-	padding-right: 0px;
-}
-
 .arrow-link {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	transform: translateY(-.6em);
 }
 
 .comment-replies {
@@ -51,27 +45,51 @@
 	border-left-style: dashed;
 }
 
+#feed {
+	padding-left: 0px;
+}
+
 .comment {
-	transform-origin: top;
-	animation: .3s ease-in-out both fade-in;
 	background: $background-primary;
-	color: $text-primary;
-	padding-bottom: 0px;
-	padding-top: 5px;
-	padding-right: 0px;
-	padding-left: 15px;
+
+	border-top-width: 1px;
+	border-left-width: 1px;
 	border-color: $border-primary;
+	border-style: solid;
+
+	padding: 5px 0px 0px 0px;
+
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 1em;
+	color: $text-primary;
 
-	.author-row h5 {
-		font-size: x-small;
+	transform-origin: top;
+	animation: .3s ease-in-out both fade-in;
+
+	display: grid;
+	grid-template-columns: [padL] 15px [content] auto 15px [arrow] 10px [padR] 15px [right];
+	grid-template-rows: [author] auto [body] auto [replies] auto [bot];
+
+	.author-row, .body-row, .comment-replies {
+		grid-column-start: content;
+	}
+
+	.author-row, .body-row {
+		grid-column-end: arrow;
+	}
+
+	.author-row {
+		grid-row-start: author;
+
+		h5 {
+			font-size: x-small;
+		}
 	}
 
 	.body-row {
-		.col-xs-11 {
-			overflow-x: hidden;
-		}
+		padding-right: 45px;
+
+		grid-row-start: body;
 
 		a {
 			color: $link-secondary;
@@ -79,40 +97,59 @@
 				color: $link-secondary;
 			}
 		}
+		
+		blockquote {
+			font-size: 100%;
+			border-left: 3px solid $border-primary;
+			padding-left: 15px;
+			margin-bottom: 5px;
+			padding-left: 10px;
+		}
+
+		code {
+			color: $text-emphasis;
+		}
+	
+		table, th, td {
+			border-collapse: collapse!important;
+			border-style: solid!important;
+			border: 1px;
+			padding: 4px 9px 4px 9px;
+			margin-bottom: 10px;
+			border-color: $border-primary;
+		}
+
+		sup {
+			font-size: .86em;
+			line-height: 0;
+			vertical-align: super;
+			top: unset;
+		}
 	}
 
-	blockquote {
-		font-size: 100%;
-		border-left: 3px solid $border-primary;
-		padding-left: 15px;
-		margin-bottom: 5px;
-		padding-left: 10px;
+	.comment-replies {
+		padding-left: 0px;
+
+		grid-column-end: right;
 	}
 
-	code {
-		color: $text-emphasis;
-	}
-
-	table, th, td {
-		border-collapse: collapse!important;
-		border-style: solid!important;
-		border: 1px;
-		padding: 4px 9px 4px 9px;
-		margin-bottom: 10px;
-		border-color: $border-primary;
-	}
-
-	sup {
-		font-size: .86em;
-		line-height: 0;
-		vertical-align: super;
-		top: unset;
+	.arrow {
+		grid-column-start: arrow;
+		grid-row-start: author;
+		grid-row-end: bot;
+		align-self: center;
 	}
 }
 
+.parent {
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-radius: 4px;
+}
+
 .reply {
-	border-right: 0px;
-	border-bottom: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
 	border-top-right-radius: 0px!important;
 	border-bottom-left-radius: 0px!important;
 }

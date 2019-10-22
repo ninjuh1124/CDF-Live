@@ -22,7 +22,7 @@ const Feed = (props) => {
 
 	return (
 		<div>
-			<ul className="list-group" id="feed">
+			<ul id="feed">
 				{props.isLoading ?
 					<p>Loading...</p> :
 					comments && comments.length >= 1 ?

@@ -9,7 +9,7 @@ import renderers from '../resources/renderers';
 
 const CommentAuthorRow = (props) => {
 	return (
-		<div className="author-row row">
+		<div className="author-row">
 			<div className="col-xs-11">
 				<h5>
 					<a
@@ -39,8 +39,9 @@ const CommentAuthorRow = (props) => {
 
 const CommentBodyRow = (props) => {
 	return (
-		<div className="body-row row">
-			<div className="col-xs-11">
+		<div className="body-row">
+
+			<div className="body">
 				<ReactMarkdown
 					source={props.body.replace(/^#{1,}/gm, '$& ')}
 					disallowedTypes={['imageReference', 'linkReference']}
@@ -49,21 +50,6 @@ const CommentBodyRow = (props) => {
 					parserOptions={{ commonmark: true, pedantic: true }}
 					renderers={renderers}
 				/>
-			</div>
-			<div className="col-xs-1">
-				<a
-					href={props.permalink}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<h2
-						className="arrow-link text-center"
-					>
-						<i
-							className="fa fa-angle-right"
-						/>
-						</h2>
-				</a>
 			</div>
 		</div>
 	);

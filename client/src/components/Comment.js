@@ -23,7 +23,7 @@ const Comment = (props) => {
 		props.isHidden ||
 		<li
 			className={
-				props.className + " comment list-group-item" + 
+				props.className + " comment" + 
 				(props.ownPost ? ' own-post' : '')
 			}
 			id={props._id}
@@ -33,8 +33,16 @@ const Comment = (props) => {
 			<CommentBodyRow {...props} />
 			{props.isLoggedIn ? <CommentButtonsRow {...props} /> : null}
 
+			<div className="arrow">
+				<h2 className="arrow-link"><a
+					href={props.permalink}
+					target="_blank"
+					rel="noopener noreferrer"
+				><i className="fa fa-angle-right" /></a></h2>
+			</div>
+
 			<ul
-				className="comment-replies list-group"
+				className="comment-replies"
 				id={props._id+'-replies'}
 			>
 				{children}
