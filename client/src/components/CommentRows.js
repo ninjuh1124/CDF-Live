@@ -10,29 +10,27 @@ import renderers from '../resources/renderers';
 const CommentAuthorRow = (props) => {
 	return (
 		<div className="author-row">
-			<div className="col-xs-11">
-				<h5>
-					<a
-						href={props.permalink}
-						className="username"
-						rel="noreferrer noopener"
-						target="_blank"
-					><strong>
-						{props.author}
-					</strong></a>
+			<h5>
+				<a
+					href={props.permalink}
+					className="username"
+					rel="noreferrer noopener"
+					target="_blank"
+				><strong>
+					{props.author}
+				</strong></a>
 
-					<span
-						className="link-primary"
-						style={{float: 'right'}}
-						title={new Date(props.created*1000)}
-					>
-						<TimeAgo
-							date={props.created*1000}
-							title={null}
-						/>
-					</span>
-				</h5>
-			</div>
+				<span
+					className="link-primary"
+					style={{float: 'right'}}
+					title={new Date(props.created*1000)}
+				>
+					<TimeAgo
+						date={props.created*1000}
+						title={null}
+					/>
+				</span>
+			</h5>
 		</div>
 	);
 }

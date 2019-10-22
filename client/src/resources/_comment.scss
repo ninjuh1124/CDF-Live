@@ -76,6 +76,8 @@
 
 	.author-row, .body-row {
 		grid-column-end: arrow;
+		padding-right: 45px;
+		margin-left: 10px;
 	}
 
 	.author-row {
@@ -87,8 +89,6 @@
 	}
 
 	.body-row {
-		padding-right: 45px;
-
 		grid-row-start: body;
 
 		a {
@@ -136,7 +136,7 @@
 	.arrow {
 		grid-column-start: arrow;
 		grid-row-start: author;
-		grid-row-end: bot;
+		grid-row-end: replies;
 		align-self: center;
 	}
 }
