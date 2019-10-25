@@ -1,42 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Editor from './Editor';
+import RedditButton from '../resources/RedditButton';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-class Heading extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = { editorMode: 'hidden' }
-		this.toggleEditor = this.toggleEditor.bind(this);
-		this.updateThread = this.updateThread.bind(this);
-		this.keepGettingAccessToken = this.keepGettingAccessToken.bind(this)
-		this.getNewAccessToken = this.getNewAccessToken.bind(this);
-	}
+const Heading = props => {
+	const [editorMode, toggleEditor] = useState('hidden');
 
-	toggleEditor(mode) {
-		this.setState(state => ({ editorMode: (mode === state.editorMode
-												? 'hidden' : mode) }))
-	}
-
-	updateThread() {
+	const getNewThread = () => {
 		axios.get(process.env.REACT_APP_API+'v1/thread.json',
 			{ crossdomain: true }
 		).then(res => {
-			this.props.updateThread(res.data.message[0]);
+			props.updateThread(res.data.message[0]);
 		});
 	}
-	
-	getNewAccessToken() {
+
+	const getAccessToken = () => {
 		axios.get(
 			process.env.REACT_APP_API+'v1/token.json?refresh_token='+
-			this.props.refreshToken,
+			props.refreshToken,
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.message.access_token) {
 				let accessToken = res.data.message.access_token;
-				this.props.setAccessToken(accessToken);
+				props.setAccessToken(accessToken);
 
-				if (!this.props.loggedInAs) {
+				if (!props.loggedInAs) {
 					axios({
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
@@ -44,103 +33,102 @@ class Heading extends React.Component {
 							Authorization: 'bearer ' + accessToken
 						}
 					}).then(res => {
-						this.props.setUser(res.data.name);
+						props.setUser(res.data.name);
 					});
 				}
 			}
 		});
 	}
 
-	keepGettingAccessToken() {
+	const keepGettingAccessToken = () => {
 		setTimeout( () => {
-			this.getNewAccessToken();
-			this.keepGettingAccessToken();
+			getAccessToken();
+			keepGettingAccessToken();
 		}, 3300000)
 	}
 
-	componentDidMount() {
-		this.updateThread();
-		if (this.props.refreshToken) {
-			this.getNewAccessToken();
-			this.keepGettingAccessToken();
+	useEffect( () => {
+		getNewThread();
+		if (props.refreshToken) {
+			getAccessToken();
+			keepGettingAccessToken();
 		}
-	}
+	}, []);
 
-	render() {
-		let uriBase = "https://reddit.com/api/v1/authorize?",
-			redirect = encodeURIComponent(process.env.REACT_APP_REDIRECT),
-			scope = ["edit", "read", "save", "submit", "vote", "identity"],
-			params = [
-				"client_id=" + process.env.REACT_APP_CLIENT_ID,
-				"response_type=code",
-				"state=" + localStorage.getItem('device'),
-				"redirect_uri=" + redirect,
-				"duration=permanent",
-				"scope=" + scope.join('+')
-			].join('&');
+	let uriBase = "https://reddit.com/api/v1/authorize?",
+		redirect = encodeURIComponent(process.env.REACT_APP_REDIRECT),
+		scope = ["edit", "read", "save", "submit", "vote", "identity"],
+		params = [
+			"client_id=" + process.env.REACT_APP_CLIENT_ID,
+			"response_type=code",
+			"state=" + localStorage.getItem('device'),
+			"redirect_uri=" + redirect,
+			"duration=permanent",
+			"scope=" + scope.join('+')
+		].join('&');
 
-		return (
+	return (
 			<div className="heading">
 				<h6 className="text-right"><small>
-					<Link to="/about" className="corner-link link-primary">
-						About
-					</Link>
-				</small></h6>
+				<Link to="/about" className="corner-link link-primary">
+					About
+				</Link>
+			</small></h6>
 	
-				<h2
-					className="text-center"
-					id="title">Casual Discussion Friday</h2>
-				<h5 className="text-center"><a
-					id="latest"
-					className="link-primary"
-					href={
-						this.props.thread.permalink ? 
-						this.props.thread.permalink :
-						"https://reddit.com/r/anime"
-					}
-					rel="noreferrer noopener"
-					target="_blank"
-				>Latest Thread</a></h5>
-	
-				<h6 id='logged-in-as' className='text-right'>
-					{this.props.refreshToken &&
-					(this.props.loggedInAs
-						? <small>
-							Logged in as {this.props.loggedInAs} (<a 
-								href='javascript:void(0)'
-								onClick={this.props.logout}>logout</a>)
-						</small>
-						: <small>Loading user info...</small>)
-					}
-				</h6>
-
-				<hr id='topbar' />
-	
-				{this.props.isLoggedIn ?
-					(<a
-						href='javascript:void(0)'
-						className='reddit-button'
-						onClick={() => this.toggleEditor('reply')}
-					>reply to thread</a>) :
-					(<a
-						id="reddit-login-button"
-						href={uriBase+params}
-					><i className="fab fa-reddit" /> Login</a>)
+			<h2
+				className="text-center"
+				id="title">Casual Discussion Friday</h2>
+			<h5 className="text-center"><a
+				id="latest"
+				className="link-primary"
+				href={
+					props.thread.permalink ? 
+					props.thread.permalink :
+					"https://reddit.com/r/anime"
 				}
-
-				{this.state.editorMode === 'hidden' ||
-					<Editor
-						editorMode={this.state.editorMode}
-						toggleEditor={this.toggleEditor}
-						_id={this.props.thread._id}
-						prependToFeed={this.props.prependToFeed}
-						accessToken={this.props.accessToken}
-						upvote={this.props.upvote}
-					/>	
+				rel="noreferrer noopener"
+				target="_blank"
+			>Latest Thread</a></h5>
+	
+			<h6 id='logged-in-as' className='text-right'>
+				{props.refreshToken &&
+				(props.loggedInAs
+					? <small>
+						Logged in as {props.loggedInAs} (<a 
+							href='javascript:void(0)'
+							onClick={props.logout}>logout</a>)
+					</small>
+					: <small>Loading user info...</small>)
 				}
-			</div>
-		);
-	}
+			</h6>
+
+			<hr id='topbar' />
+	
+			{props.isLoggedIn ?
+				(<RedditButton
+					onClick={() => toggleEditor(editorMode === 'hidden' ?
+						'reply' :
+						'hidden')
+					}
+				>reply to thread</RedditButton>) :
+				(<a
+					id="reddit-login-button"
+					href={uriBase+params}
+				><i className="fab fa-reddit" /> Login</a>)
+			}
+
+			{editorMode === 'hidden' ||
+				<Editor
+					editorMode={editorMode}
+					toggleEditor={() => toggleEditor('hidden')}
+					_id={props.thread._id}
+					prependToFeed={props.prependToFeed}
+					accessToken={props.accessToken}
+					upvote={props.upvote}
+				/>	
+			}
+		</div>
+	);
 }
 
 export default Heading;

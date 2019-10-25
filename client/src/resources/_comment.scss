@@ -68,13 +68,13 @@
 
 	display: grid;
 	grid-template-columns: [padL] 15px [content] auto 15px [arrow] 10px [padR] 15px [right];
-	grid-template-rows: [author] auto [body] auto [replies] auto [bot];
+	grid-template-rows: [author] auto [body] auto [buttons] auto [replies] auto [bot];
 
-	.author-row, .body-row, .comment-replies {
+	.author-row, .body-row, .comment-replies, .reddit-buttons-row {
 		grid-column-start: content;
 	}
 
-	.author-row, .body-row {
+	.author-row, .body-row, .reddit-buttons-row {
 		grid-column-end: arrow;
 		padding-right: 45px;
 		margin-left: 10px;
@@ -131,6 +131,10 @@
 		padding-left: 0px;
 
 		grid-column-end: right;
+	}
+
+	.reddit-buttons-row {
+		grid-rows-start: buttons;
 	}
 
 	.arrow {

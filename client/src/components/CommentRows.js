@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import querystring from 'querystring';
 import Editor from './Editor';
@@ -6,6 +6,7 @@ import Source from './Source';
 import TimeAgo from 'react-timeago';
 import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
+import RedditButton from '../resources/RedditButton';
 
 const CommentAuthorRow = (props) => {
 	return (
@@ -53,37 +54,20 @@ const CommentBodyRow = (props) => {
 	);
 }
 
-class CommentButtonsRow extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			source: 'hidden',
-			editorMode: 'hidden'
-		};
-		this.toggleEditor = this.toggleEditor.bind(this);
-		this.deletePost = this.deletePost.bind(this);
-		this.save = this.save.bind(this);
-		this.hide = this.hide.bind(this);
-		this.upvote = this.upvote.bind(this);
-		this.toggleSource = this.toggleSource.bind(this);
-	}
+const CommentButtonsRow = props => {
+	const [source, toggleSource] = useState('hidden');
+	const [editorMode, toggleEditor] = useState('hidden');
 
-	toggleSource() {
-		this.setState(oldState => ({
-			source: (oldState.source === 'hidden' ? 'visible' : 'hidden')
-		}));
-	}
-
-	deletePost() {
+	const deletePost = () => {
 		axios({
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/del',
 			headers: {
-				Authorization: 'Bearer ' + this.props.accessToken,
+				Authorization: 'Bearer ' + props.accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: this.props._id
+				id: props._id
 			})
 		}).then(res => {
 			axios({
@@ -93,154 +77,129 @@ class CommentButtonsRow extends React.Component {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				data: querystring.encode({
-					token: this.props.accessToken,
-					id: this.props.id,
-					_id: this.props._id
+					token: props.accessToken,
+					id: props.id,
+					_id: props._id
 				})
 			}).then(res => {
 				if (res.data.message === 'success') {
-					this.props.deleteFromFeed(this.props._id);
+					props.deleteFromFeed(props._id);
 				}
 			});
 		});
 	}
 
-	save() {
+	const save = () => {
 		axios({
 			method: 'post',
-			url: (this.props.isSaved ? 
+			url: (props.isSaved ? 
 				'https://oauth.reddit.com/api/unsave' :
 				'https://oauth.reddit.com/api/save'),
 			headers: {
 				Authorization: 'Bearer ' +
-					this.props.accessToken,
+					props.accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: this.props._id
+				id: props._id
 			})
 		}).then(res => {
-			this.props.save();
+			props.save();
 		});
 	}
 
-	hide() {
-		this.props.hide();
-	}
-
-	upvote() {
+	const upvote = () => {
 		axios({
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/vote',
 			headers: {
-				Authorization: 'Bearer ' + this.props.accessToken,
+				Authorization: 'Bearer ' + props.accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: this.props._id,
-				dir: (this.props.upvoted ? 0 : 1)
+				id: props._id,
+				dir: (props.upvoted ? 0 : 1)
 			})
 		}).then(res => {
-			this.props.upvote();
+			props.upvote();
 		}).catch(err => console.log(err));
 	}
 
-	toggleEditor(mode) {
-		this.setState(state => {
-			return {
-				editorMode: (mode === state.editorMode
-							? 'hidden'
-							: mode)
-			};
-		});
-	}
-
-	render() {
-		return (
-			<div>
-				{this.props.ownPost ||
-					<a
-						href='javascript:void(0)'
-						className={'reddit-button link-primary' + 
-							(this.props.isUpvoted ? ' upvoted' : '')
-						}
-						onClick={ () => this.upvote()}
-					>
-						<i className='fas fa-arrow-up'></i>
-					</a>
-				}
-
-				<a
-					href='javascript:void(0)'
-					className='reddit-button link-primary'
-					onClick={() => this.toggleSource()}
+	return (
+		<div className="reddit-buttons-row">
+			{props.ownPost ||
+				<RedditButton
+					onClick={() => upvote()}
+					className={'reddit-button link-primary' + 
+						(props.isUpvoted ? ' upvoted' : '')
+					}
 				>
-					source
-				</a>
+					<i className='fas fa-arrow-up'></i>
+				</RedditButton>
+			}
 
-				{this.props.ownPost &&
-					<a
-						href='javascript:void(0)'
-						className='link-primary reddit-button'
-						onClick={ () => this.deletePost()}
-					>
-						delete
-					</a>
-				}
+			<RedditButton
+				onClick={() => toggleSource(source === 'hidden' ?
+					'visible' : 
+					'hidden'
+				)}
+			>
+				source
+			</RedditButton>
 
-				<a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.save()}
+			{props.ownPost &&
+				<RedditButton
+					onClick={ () => deletePost()}
 				>
-					{this.props.isSaved ? 'unsave' : 'save'}
-				</a>
+					delete
+				</RedditButton>
+			}
 
-				<a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.hide()}
+			<RedditButton
+				onClick={ () => save()}
+			>
+				{props.isSaved ? 'unsave' : 'save'}
+			</RedditButton>
+
+			<RedditButton
+				onClick={ () => props.hide()}
+			>
+				{props.isHidden ? 'unhide' : 'hide'}
+			</RedditButton>
+			
+			{props.ownPost &&
+				<RedditButton
+					onClick={ () => toggleEditor(editorMode === 'hidden' ?
+						'edit' : 'reply')}
 				>
-					{this.props.isHidden ? 'unhide' : 'hide'}
-				</a>
-				
-				{this.props.ownPost &&
-					<a
-						href='javascript:void(0)'
-						className='link-primary reddit-button'
-						onClick={ () => this.toggleEditor('edit')}
-					>
-						edit
-					</a>
-				}
+					edit
+				</RedditButton>
+			}
 
-				<a
-					href='javascript:void(0)'
-					className='link-primary reddit-button'
-					onClick={ () => this.toggleEditor('reply')}
-				>
-					reply 
-				</a>
+			<RedditButton
+				onClick={ () => toggleEditor(editorMode === 'hidden' ?
+					'reply' : 'hidden')}
+			>
+				reply 
+			</RedditButton>
 
-				{this.state.source !== 'hidden' &&
-					<Source
-						body={this.props.body}
-						close={this.toggleSource}
-					/>
-				}
+			{source !== 'hidden' &&
+				<Source
+					body={props.body}
+					close={() => toggleSource()}
+				/>
+			}
 
-				{this.state.editorMode !== 'hidden' &&
-					<Editor 
-						editorMode={this.state.editorMode}
-						toggleEditor={this.toggleEditor}
-						editPost={this.editPost}
-						deletePost={this.deletePost}
-						{...this.props}
-					/>
-				}
-			</div>
-		);
-	}
+			{editorMode !== 'hidden' &&
+				<Editor 
+					editorMode={editorMode}
+					toggleEditor={() => toggleEditor('hidden')}
+					deletePost={deletePost}
+					{...props}
+				/>
+			}
+		</div>
+	);
 }
 
 export { CommentAuthorRow,

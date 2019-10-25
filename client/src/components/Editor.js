@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
 import FormattingBar from './FormattingBar';
 import axios from 'axios';
 import querystring from 'querystring';
 
+// cannot be converted to function component because fuck refs
 class Editor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -175,7 +176,11 @@ class Editor extends React.Component {
 						className="col-xs-11 list-group-item comment preview"
 						style={{ float: 'none', marginBottom: '5px' }}
 					>
-						<p><strong>Preview</strong></p>
+
+						<p className="author-row">
+							<strong>Preview</strong>
+						</p>
+
 						<span className="body-row">
 							<ReactMarkdown
 								source={this.state.text}
@@ -192,6 +197,7 @@ class Editor extends React.Component {
 								renderers={renderers}
 							/>
 						</span>
+
 					<br />
 					</div>
 				}
