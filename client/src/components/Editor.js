@@ -173,7 +173,7 @@ class Editor extends React.Component {
 			<div>
 				{this.state.text.trim() === '' ||
 					<div 
-						className="col-xs-11 list-group-item comment preview"
+						className="comment preview"
 						style={{ float: 'none', marginBottom: '5px' }}
 					>
 

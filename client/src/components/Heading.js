@@ -68,18 +68,15 @@ const Heading = props => {
 		].join('&');
 
 	return (
-			<div className="heading">
-				<h6 className="text-right"><small>
-				<Link to="/about" className="corner-link link-primary">
+		<div className="heading">
+			<h6 id="about"><small>
+				<Link to="/about" className="link-primary">
 					About
 				</Link>
 			</small></h6>
-	
-			<h2
-				className="text-center"
-				id="title">Casual Discussion Friday</h2>
-			<h5 className="text-center"><a
-				id="latest"
+
+			<h2 id="title">Casual Discussion Friday</h2>
+			<h5 id="latest"><a
 				className="link-primary"
 				href={
 					props.thread.permalink ? 
@@ -89,8 +86,8 @@ const Heading = props => {
 				rel="noreferrer noopener"
 				target="_blank"
 			>Latest Thread</a></h5>
-	
-			<h6 id='logged-in-as' className='text-right'>
+
+			<h6 id='logged-in-as'>
 				{props.refreshToken &&
 				(props.loggedInAs
 					? <small>

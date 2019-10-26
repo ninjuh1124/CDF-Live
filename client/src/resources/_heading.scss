@@ -2,9 +2,12 @@
 	color: $text-primary
 }
 
-.heading {
-	padding-left: 5px;
-	padding-right: 5px;
+#about, #logged-in-as {
+	text-align: right;
+}
+
+#title, #latest {
+	text-align: center;
 }
 
 .link-primary {
