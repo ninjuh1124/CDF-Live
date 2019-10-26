@@ -69,7 +69,7 @@ const Heading = props => {
 
 	return (
 		<div className="heading">
-			<h6 id="about"><small>
+			<h6 className="corner-link" id="about"><small>
 				<Link to="/about" className="link-primary">
 					About
 				</Link>

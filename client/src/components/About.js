@@ -18,15 +18,15 @@ const About = props => {
 	return (
 		<div>
 			<h6
-				className="text-right"
+				className="corner-link"
 			><small>
-				<Link to='/feed' className="corner-link">Feed</Link>
+				<Link to='/feed'>Feed</Link>
 			</small></h6>
 
 			<h6
-				className="text-right"
+				className="corner-link"
 			><small>
-				<Link to='/changelog' className="corner-link">Changelog</Link>
+				<Link to='/changelog'>Changelog</Link>
 			</small></h6>
 
 			<h2

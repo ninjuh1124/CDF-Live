@@ -1,15 +1,23 @@
 @import 'resources/variables';
 @import 'resources/heading';
 @import 'resources/comment';
+@import 'resources/editor';
 
-body {
-	background-color: $background-primary!important;
+* {
+	font-family: inherit;
+	line-height: inherit;
+	color: inherit;
 }
 
-.row {
-	// bootstrap is dumb
-	margin-right: 0px;
-	margin-left: -15px;
+body {
+	background-color: $background-primary;
+	line-height: 1.4285714285714286em;
+	font: normal 14px verdana,arial,helvetica,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 hr {
@@ -21,8 +29,8 @@ hr {
 	margin-bottom: 10px;
 }
 
-#logged-in-as:hover {
-	color: $link-primary;	
+#logged-in-as {
+	color: $link-primary;
 }
 
 #root {
@@ -31,6 +39,16 @@ hr {
 
 #title {
 	color: $text-primary;
+	font-size: 30px;
+	line-height: 1.1;
+}
+
+#title, #latest, .corner-link, #logged-in-as {
+	font-weight: 500;
+}
+
+.corner-link {
+	text-align: right;
 }
 
 #content {
@@ -52,16 +70,9 @@ hr {
 
 a {
 	color: $link-primary;
+	text-decoration: none;
 	&:hover {
 		color: $link-primary-hover;
+		text-decoration: underline;
 	}
-}
-
-.formatting-button {
-	color: $text-primary;
-	background-color: $background-secondary;
-	border-color: $border-primary;
-	border-style: solid;
-	margin-right: 3px;
-
 }

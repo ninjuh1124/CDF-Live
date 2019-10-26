@@ -43,11 +43,6 @@
 	}
 }
 
-.own-post {
-	border-left-color: $reddit-orangered!important;
-	border-left-style: dashed;
-}
-
 #feed {
 	padding-left: 0px;
 }
@@ -80,7 +75,7 @@
 	.author-row, .body-row, .reddit-buttons-row {
 		grid-column-end: arrow;
 		padding-right: 45px;
-		margin-left: 10px;
+		margin-left: 5px;
 	}
 
 	.author-row {
@@ -88,6 +83,7 @@
 
 		h5 {
 			font-size: x-small;
+			font-weight: 500;
 		}
 	}
 
@@ -97,7 +93,6 @@
 
 	.comment-replies {
 		padding-left: 0px;
-
 		grid-column-end: right;
 	}
 
@@ -106,10 +101,16 @@
 	}
 
 	.arrow {
+		font-size: 1.5em;
 		grid-column-start: arrow;
 		grid-row-start: author;
 		grid-row-end: replies;
 		align-self: center;
+	}
+
+	&.own-post {
+		border-left-color: $reddit-orangered!important;
+		border-left-style: dashed;
 	}
 }
 
@@ -122,8 +123,12 @@
 .reply {
 	border-right-width: 0px;
 	border-bottom-width: 0px;
-	border-top-right-radius: 0px!important;
-	border-bottom-left-radius: 0px!important;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+
+	&:first-child {
+		border-top-left-radius: 4px;
+	}
 }
 
 .reddit-button {
