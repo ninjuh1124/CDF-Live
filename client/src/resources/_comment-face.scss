@@ -5,19 +5,31 @@
 	align-items: center;
 	text-align: center;
 
+	.face-text strong {
+		bottom: 2px;
+	}
+
 	.face-text {
-		strong {
+		height: 100%;
+		top: 0;
+	}
+
+	.face-text, .face-text strong {
+			color: white;
 			font-weight: normal;
+			font-size: 18px;
+			font-family: arial, sans-serif;
+			text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
+			
 			position: absolute;
 			margin: auto;
 			width: 100%;
 			left: 0;
+
 			word-break: break-word;
 			overflow-x: hidden;
 			overflow-y: hidden;
 			overflow-wrap: break-word;
-			bottom: 2px;
-		}
 	}
 
 	.face {
@@ -47,17 +59,3 @@
 	}
 }
 
-.face-text {
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	top: 0;
-	word-break: break-word;
-	overflow-x: hidden;
-	overflow-y: hidden;
-	overflow-wrap: break-word;
-	color: white;
-	font-size: 18px;
-	font-family: arial, sans-serif;
-	text-shadow: 1px 1px #000, 1px -1px #000, -1px 1px #000, -1px -1px #000, 0 1px #000, 0 -1px #000, 1px 0 #000, -1px 0 #000;
-}
