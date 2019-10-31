@@ -1,38 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import renderers from '../resources/renderers';
 import FormattingBar from './FormattingBar';
 import axios from 'axios';
 import querystring from 'querystring';
 
-// cannot be converted to function component because fuck refs
-class Editor extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isSending: false,
-			text: ''
-		};
-		this.textAreaRef = React.createRef();
+const Editor = props => {
+	const [isSending, startSending] = useState(false);
+	const [text, changeText] = useState('');
+	const textAreaRef = useRef();
 
-		this.wrapSelection = this.wrapSelection.bind(this);
-		this.focusTextArea = this.focusTextArea.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.submit = this.submit.bind(this);
-		this.cancel = this.cancel.bind(this);
-	}
+	const focusTextArea = () => textAreaRef.current.focus(); 
+	const handleChange = e => changeText(e.target.value);
 
-	focusTextArea() {
-		this.textAreaRef.current.focus();
-	}
-
-	// shameless theft from RES
-	wrapSelection(prefix, suffix) {
-		let box = this.textAreaRef.current;
+	/**
+	 * Thanks RES
+	 * TODO move to container
+	 **/
+	const wrapSelection = (prefix, suffix) => {
+		let box = textAreaRef.current;
 
 		if (!box) {
 			return;
 		}
+
 		// record scroll top to restore it later.
 		const scrollTop = box.scrollTop;
 
@@ -53,189 +44,186 @@ class Editor extends React.Component {
 			cursor--;
 		}
 		selectedText = selectedText.substring(0, cursor + 1);
-	
-		this.setState({ 
-				text: beforeSelection+prefix+selectedText+suffix+
-					trailingSpace+afterSelection
-		}, () => {
-			box.selectionEnd = beforeSelection.length + prefix.length + 
-				selectedText.length;
-			if (selectionStart === selectionEnd) {
-				box.selectionStart = box.selectionEnd;
-			} else {
-				box.selectionStart = beforeSelection.length + prefix.length;
-			}
 
-			box.scrollTop = scrollTop;
-			this.focusTextArea();
-		});
+		changeText(beforeSelection+prefix+selectedText+suffix+trailingSpace+afterSelection);
+		
+		box.selectionEnd = beforeSelection.length+prefix.length+selectedText.length;
+		if (selectionStart === selectionEnd) {
+			box.selectionStart = box.selectionEnd;
+		} else {
+			box.selectionStart = beforeSelection.length + prefix.length;
+		}
+
+		box.scrollTop = scrollTop;
+		focusTextArea();
 	}
 
-	handleChange(e) {
-		this.setState({text: e.target.value});
-	}
-
-	submit(e) {
-		if (!this.state.text.trim()) return;
+	/**
+	 * DOUBLE HANDLER FOR REPLIES AND EDITS
+	 * TODO move to container
+	 **/
+	const submit = e => {
+		if (!text.trim()) return;
 
 		let uri;
-		if (this.props.editorMode === 'reply')
+		if (props.editorMode === 'reply')
 			uri = "https://oauth.reddit.com/api/comment";
-		else if (this.props.editorMode === 'edit')
+		else if (props.editorMode === 'edit')
 			uri = "https://oauth.reddit.com/api/editusertext";
 
-		this.setState({ isSending: true }, () => {
-			axios({
-				method: 'post',
-				headers: { 
-					Authorization: 'Bearer ' + this.props.accessToken,
-					'Content-Type': 'application/x-www-form-urlencoded'
-				},
-				url: uri,
-				data: querystring.encode({
-					text: this.state.text,
-					api_type: 'json',
-					thing_id: this.props._id
-				})
-			}).then(res => {
-				if (this.props.editorMode === 'edit') {
-					this.props.editFeed({
-						_id: this.props._id,
-						body: this.state.text
-					});
-					axios({
-						method: 'post',
-						url: process.env.REACT_APP_API + 'v1/edit',
-						data: {
-							token: this.props.accessToken,
-							_id: this.props._id,
-							id: this.props.id,
-							body: this.state.text
-						}
-					}).then(res => {
-						if (res.data.message === 'success') {
-							this.props.editFeed({
-								_id: this.props._id,
-								id: this.props.id,
-								body: this.state.text
-							});
-						}
-						this.props.toggleEditor(this.props.editorMode);
-					});
-				} else if (this.props.editorMode === 'reply') {
-					let data = res.data.json.data.things[0].data;
-					this.props.prependToFeed([
-						{
-							kind: 'comment',
-							author: data.author,
-							_id: data.name,
-							id: data.id,
-							thread: data.link_id,
-							created: data.created_utc,
-							permalink: 'https://reddit.com'+data.permalink,
-							parentID: data.parent_id,
-							body: this.state.text
-						}
-					]);
-					this.props.toggleEditor(this.props.editorMode);
-				}
-			}).catch(err => {
-				console.log(err);
-				this.setState({ isSending: false });
-			});
+		startSending(true);
+
+		axios({
+			method: 'post',
+			headers: { 
+				Authorization: 'Bearer ' + props.accessToken,
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			url: uri,
+			data: querystring.encode({
+				text: text,
+				api_type: 'json',
+				thing_id: props._id
+			})
+		}).then(res => {
+			if (props.editorMode === 'edit') {
+				props.editFeed({
+					_id: props._id,
+					body: text
+				});
+				axios({
+					method: 'post',
+					url: process.env.REACT_APP_API + 'v1/edit',
+					data: {
+						token: props.accessToken,
+						_id: props._id,
+						id: props.id,
+						body: text
+					}
+				}).then(res => {
+					if (res.data.message === 'success') {
+						props.editFeed({
+							_id: props._id,
+							id: props.id,
+							body: text
+						});
+					}
+					props.toggleEditor(props.editorMode);
+				});
+			} else if (props.editorMode === 'reply') {
+				let data = res.data.json.data.things[0].data;
+				props.prependToFeed([
+					{
+						kind: 'comment',
+						author: data.author,
+						_id: data.name,
+						id: data.id,
+						thread: data.link_id,
+						created: data.created_utc,
+						permalink: 'https://reddit.com'+data.permalink,
+						parentID: data.parent_id,
+						body: text
+					}
+				]);
+				props.toggleEditor(props.editorMode);
+			}
+		}).catch(err => {
+			console.log(err);
+			startSending(false);
 		});
+	}
+
+	const cancel = e => {
+		props.toggleEditor(props.editorMode);
 		e.preventDefault();
 	}
 
-	cancel(e) {
-		this.props.toggleEditor(this.props.editorMode);
-		e.preventDefault();
-	}
-
-	componentDidMount() {
+	/**
+	 * On initial render, quote in highlighted text
+	 **/
+	useEffect( () => {
 		let selection = window.getSelection().toString();
-		if (this.props.editorMode === 'edit') {
-			this.setState({ text: this.props.body });
-			this.focusTextArea();
-		} else if (this.props.editorMode === 'reply') {
-			this.focusTextArea();
+		if (props.editorMode === 'edit') {
+			changeText(props.body);
+			focusTextArea();
+		} else if (props.editorMode === 'reply') {
+			focusTextArea();
 			if (window.getSelection) {
-				this.setState({ text: selection ? selection
+				changeText(selection ? selection
 					.replace(/^.*/gm, t => '>'+t)
 					.replace(/^>$/gm, t => '') + '\n\n'	: ''				
-				});
+				);
 			}
 		}
-	}
+	}, []);
+	
+	return (
+		<div>
+			{text.trim() === '' ||
+				<div 
+					className="comment preview"
+					style={{ float: 'none', marginBottom: '5px' }}
+				>
 
-	render() {
-		return (
-			<div>
-				{this.state.text.trim() === '' ||
-					<div 
-						className="comment preview"
-						style={{ float: 'none', marginBottom: '5px' }}
-					>
+					<p className="author-row">
+						<strong>Preview</strong>
+					</p>
 
-						<p className="author-row">
-							<strong>Preview</strong>
-						</p>
+					<span className="body-row">
+						<ReactMarkdown
+							source={text}
+							disallowedTypes={[
+								'imageReference',
+								'linkReference'
+							]}
+							unwrapDisallowed={true}
+							plugins={[require('../resources/supPlugin')]}
+							parserOptions={{ 
+								commonmark: true, 
+								pedantic: true
+							}}
+							renderers={renderers}
+						/>
+					</span>
 
-						<span className="body-row">
-							<ReactMarkdown
-								source={this.state.text}
-								disallowedTypes={[
-									'imageReference',
-									'linkReference'
-								]}
-								unwrapDisallowed={true}
-								plugins={[require('../resources/supPlugin')]}
-								parserOptions={{ 
-									commonmark: true, 
-									pedantic: true
-								}}
-								renderers={renderers}
-							/>
-						</span>
+				<br />
+				</div>
+			}
 
-					<br />
-					</div>
-				}
+			<FormattingBar wrapSelection={wrapSelection} />
 
-				<FormattingBar wrapSelection={this.wrapSelection} />
+			<form onSubmit={submit}>
+				<textarea 
+					className='editor-box'
+					ref={textAreaRef}
+					rows='6'
+					cols='50'
+					onChange={handleChange}
+					value={text}
+					disabled={isSending}
+				/>
 
-				<form onSubmit={this.submit}>
-					<textarea 
-						className='editor-box'
-						ref={this.textAreaRef}
-						rows='6'
-						cols='50'
-						onChange={this.handleChange}
-						value={this.state.text}
-						disabled={this.state.isSending}
-					/>
+				<br />
 
-					<br />
-
-					<button
-						className="form-button"
-						type="submit"
-						disabled={this.state.isSending}
-					>
-						{this.props.editorMode}
-					</button>
-					<button
-						className="form-button"
-						onClick={this.cancel}
-						type="button"
-						disabled={this.state.isSending}
-					>
-						cancel
-					</button>
-				</form>
-			</div>
-		);
-	}
+				<button
+					className="form-button"
+					type="submit"
+					disabled={isSending}
+				>
+					{props.editorMode}
+				</button>
+				<button
+					className="form-button"
+					onClick={cancel}
+					type="button"
+					disabled={isSending}
+				>
+					cancel
+				</button>
+			</form>
+		</div>
+	);
 }
+
 
 export default Editor;
