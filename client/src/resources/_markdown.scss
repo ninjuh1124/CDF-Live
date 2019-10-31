@@ -1,0 +1,94 @@
+@import 'variables';
+
+.comment .body-row {
+	p {
+		margin: 0px 0px 10px 0px;
+		line-height: 1.42857143
+	}
+
+	a {
+		color: $link-secondary;
+		&:hover {
+			color: $link-secondary;
+		}
+	}
+		
+	blockquote {
+		font-size: 100%;
+		border-left: 3px solid $border-primary;
+		padding-left: 15px;
+		margin-bottom: 5px;
+		padding-left: 10px;
+	}
+
+	pre, code {
+		padding: 3px 5px 3px 5px;
+		border-width: 0px;
+		border-radius: 2px;
+		color: $text-emphasis;
+		background: $background-secondary;
+	}
+
+	pre {
+		padding: 3px 20px 3px 20px;
+	}
+			table, th, td {
+		border-collapse: collapse!important;
+		border-style: solid!important;
+		border: 1px;
+		padding: 4px 9px 4px 9px;
+		margin-bottom: 10px;
+		border-color: $border-primary;
+	}
+
+	sup {
+		font-size: .86em;
+		line-height: 0;
+		vertical-align: super;
+		top: unset;
+	}
+
+	del {
+		color: $text-secondary;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		padding: 0px;
+		margin-top: 0px;
+	}
+
+	h1 {
+		font-size: 2.15em;
+	}
+
+	h2 {
+		font-size: 1.5em;
+	}
+
+	h3 {
+		font-weight: 600;
+	}
+
+	h3, h4{
+		font-size: 1.1428571428571428em;
+		line-height: 1.25em;
+		margin-top: .625em;
+	}
+
+	h4 {
+		font-weight: 500;
+	}
+
+	h5 {
+		font-weight: 500;
+	}
+
+	h5, h6 {
+		font-size: 1em;
+		line-height: 1.1428571428571428em;
+	}
+
+	h6 {
+		font-weight: 400;
+	}
+}

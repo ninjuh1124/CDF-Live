@@ -1,0 +1,24 @@
+@import 'variables';
+
+.editor-box {
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	overflow: auto;
+}
+
+.formatting-button, .form-button {
+	background-color: $background-secondary;
+}
+
+.form-button {
+	font-size: inherit;
+}
+
+.formatting-button {
+	font-size: inherit;
+	border-style: solid;
+	border-color: $border-primary;
+	margin-right: 3px;
+}
