@@ -38,6 +38,7 @@ const Comment = (props) => {
 					href={props.permalink}
 					target="_blank"
 					rel="noopener noreferrer"
+					title="View comment on reddit"
 				><i className="fa fa-angle-right" /></a></h2>
 			</div>
 

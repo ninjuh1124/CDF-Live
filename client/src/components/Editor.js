@@ -131,6 +131,8 @@ const Editor = props => {
 			console.log(err);
 			startSending(false);
 		});
+
+		e.preventDefault();
 	}
 
 	const cancel = e => {
@@ -155,7 +157,7 @@ const Editor = props => {
 				);
 			}
 		}
-	}, []);
+	}, [props.editorMode, props.body]);
 	
 	return (
 		<div>

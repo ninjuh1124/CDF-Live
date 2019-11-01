@@ -40,7 +40,7 @@ const Login = props => {
 		}
 	}, []);
 
-	if (this.state.gotToken) {
+	if (gotToken) {
 		return <Redirect to='/feed' />
 	} else {
 		return (

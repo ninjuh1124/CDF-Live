@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import querystring from 'querystring';
 import Editor from './Editor';
@@ -186,7 +186,7 @@ const CommentButtonsRow = props => {
 			{source !== 'hidden' &&
 				<Source
 					body={props.body}
-					close={() => toggleSource()}
+					close={() => toggleSource('hidden')}
 				/>
 			}
 

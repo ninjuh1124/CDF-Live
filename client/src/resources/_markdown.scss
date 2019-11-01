@@ -3,7 +3,8 @@
 .comment .body-row {
 	p {
 		margin: 0px 0px 10px 0px;
-		line-height: 1.42857143
+		line-height: 1.42857143;
+		word-break: break-word;
 	}
 
 	a {
@@ -14,11 +15,10 @@
 	}
 		
 	blockquote {
-		font-size: 100%;
 		border-left: 3px solid $border-primary;
 		padding-left: 15px;
-		margin-bottom: 5px;
-		padding-left: 10px;
+		margin: 5px 5px 5px 5px;
+		padding: 10px 5px 5px 10px;
 	}
 
 	pre, code {
