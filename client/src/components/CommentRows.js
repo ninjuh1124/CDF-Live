@@ -3,7 +3,7 @@ import axios from 'axios';
 import querystring from 'querystring';
 import { CommentContext } from './Comment';
 import Markdown from './Markdown';
-import Editor from './Editor';
+import EditorContainer from '../containers/EditorContainer';
 import Source from './Source';
 import TimeAgo from 'react-timeago';
 import RedditButton from '../resources/RedditButton';
@@ -194,13 +194,11 @@ const CommentButtonsRow = () => {
 				/>
 			}
 
-			{editorMode !== 'hidden' &&
-				<Editor 
-					editorMode={editorMode}
-					toggleEditor={() => toggleEditor('hidden')}
-					deletePost={deletePost}
-				/>
-			}
+			<EditorContainer 
+				editorMode={editorMode}
+				toggleEditor={() => toggleEditor('hidden')}
+				deletePost={deletePost}
+			/>
 		</div>
 	);
 }

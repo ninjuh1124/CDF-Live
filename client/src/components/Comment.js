@@ -38,9 +38,9 @@ const Comment = (props) => {
 				id={props._id}
 			>
 
-				<CommentAuthorRow {...props} />
-				<CommentBodyRow {...props} />
-				{props.isLoggedIn ? <CommentButtonsRow {...props} /> : null}
+				<CommentAuthorRow />
+				<CommentBodyRow />
+				{props.isLoggedIn ? <CommentButtonsRow /> : null}
 
 				<div className="arrow">
 					<h2 className="arrow-link"><a
