@@ -1,33 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import querystring from 'querystring';
+import { CommentContext } from './Comment';
+import Markdown from './Markdown';
 import Editor from './Editor';
 import Source from './Source';
 import TimeAgo from 'react-timeago';
-import ReactMarkdown from 'react-markdown';
-import renderers from '../resources/renderers';
 import RedditButton from '../resources/RedditButton';
 
-const CommentAuthorRow = (props) => {
+const CommentAuthorRow = () => {
+	const { permalink, author, created } = useContext(CommentContext);
+
 	return (
 		<div className="author-row">
 			<h5>
 				<a
-					href={props.permalink}
+					href={permalink}
 					className="username"
 					rel="noreferrer noopener"
 					target="_blank"
 				><strong>
-					{props.author}
+					{author}
 				</strong></a>
 
 				<span
 					className="link-primary"
 					style={{float: 'right'}}
-					title={new Date(props.created*1000)}
+					title={new Date(created*1000)}
 				>
 					<TimeAgo
-						date={props.created*1000}
+						date={created*1000}
 						title={null}
 					/>
 				</span>
@@ -36,38 +38,40 @@ const CommentAuthorRow = (props) => {
 	);
 }
 
-const CommentBodyRow = (props) => {
+const CommentBodyRow = () => {
+	const { body } = useContext(CommentContext);
+
 	return (
 		<div className="body-row">
 
 			<div className="body">
-				<ReactMarkdown
-					source={props.body.replace(/^#{1,}/gm, '$& ')}
-					disallowedTypes={['imageReference', 'linkReference']}
-					unwrapDisallowed={true}
-					plugins={[require('../resources/supPlugin')]}
-					parserOptions={{ commonmark: true, pedantic: true }}
-					renderers={renderers}
+				<Markdown
+					source={body}
 				/>
 			</div>
 		</div>
 	);
 }
 
-const CommentButtonsRow = props => {
+const CommentButtonsRow = () => {
 	const [source, toggleSource] = useState('hidden');
 	const [editorMode, toggleEditor] = useState('hidden');
+
+	const { 
+		_id, id, ownPost, upvoted, body, accessToken, isUpvoted, 
+		isSaved, isHidden, deleteFromFeed, upvote, hide, save 
+	} = useContext(CommentContext);
 
 	const deletePost = () => {
 		axios({
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/del',
 			headers: {
-				Authorization: 'Bearer ' + props.accessToken,
+				Authorization: 'Bearer ' + accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: props._id
+				id: _id
 			})
 		}).then(res => {
 			axios({
@@ -77,61 +81,61 @@ const CommentButtonsRow = props => {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				data: querystring.encode({
-					token: props.accessToken,
-					id: props.id,
-					_id: props._id
+					token: accessToken,
+					id: id,
+					_id: _id
 				})
 			}).then(res => {
 				if (res.data.message === 'success') {
-					props.deleteFromFeed(props._id);
+					deleteFromFeed(_id);
 				}
 			});
 		});
 	}
 
-	const save = () => {
+	const saveComment = () => {
 		axios({
 			method: 'post',
-			url: (props.isSaved ? 
+			url: (isSaved ? 
 				'https://oauth.reddit.com/api/unsave' :
 				'https://oauth.reddit.com/api/save'),
 			headers: {
 				Authorization: 'Bearer ' +
-					props.accessToken,
+					accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: props._id
+				id: _id
 			})
 		}).then(res => {
-			props.save();
+			save();
 		});
 	}
 
-	const upvote = () => {
+	const upvoteComment = () => {
 		axios({
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/vote',
 			headers: {
-				Authorization: 'Bearer ' + props.accessToken,
+				Authorization: 'Bearer ' + accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
-				id: props._id,
-				dir: (props.upvoted ? 0 : 1)
+				id: _id,
+				dir: (upvoted ? 0 : 1)
 			})
 		}).then(res => {
-			props.upvote();
+			upvote();
 		}).catch(err => console.log(err));
 	}
 
 	return (
 		<div className="reddit-buttons-row">
-			{props.ownPost ||
+			{ownPost ||
 				<RedditButton
-					onClick={() => upvote()}
+					onClick={() => upvoteComment()}
 					className={'reddit-button link-primary' + 
-						(props.isUpvoted ? ' upvoted' : '')
+						(isUpvoted ? ' upvoted' : '')
 					}
 				>
 					<i className='fas fa-arrow-up'></i>
@@ -147,7 +151,7 @@ const CommentButtonsRow = props => {
 				source
 			</RedditButton>
 
-			{props.ownPost &&
+			{ownPost &&
 				<RedditButton
 					onClick={ () => deletePost()}
 				>
@@ -156,18 +160,18 @@ const CommentButtonsRow = props => {
 			}
 
 			<RedditButton
-				onClick={ () => save()}
+				onClick={ () => saveComment()}
 			>
-				{props.isSaved ? 'unsave' : 'save'}
+				{isSaved ? 'unsave' : 'save'}
 			</RedditButton>
 
 			<RedditButton
-				onClick={ () => props.hide()}
+				onClick={ () => hide()}
 			>
-				{props.isHidden ? 'unhide' : 'hide'}
+				{isHidden ? 'unhide' : 'hide'}
 			</RedditButton>
 			
-			{props.ownPost &&
+			{ownPost &&
 				<RedditButton
 					onClick={ () => toggleEditor(editorMode === 'hidden' ?
 						'edit' : 'reply')}
@@ -185,7 +189,7 @@ const CommentButtonsRow = props => {
 
 			{source !== 'hidden' &&
 				<Source
-					body={props.body}
+					body={body}
 					close={() => toggleSource('hidden')}
 				/>
 			}
@@ -195,7 +199,6 @@ const CommentButtonsRow = props => {
 					editorMode={editorMode}
 					toggleEditor={() => toggleEditor('hidden')}
 					deletePost={deletePost}
-					{...props}
 				/>
 			}
 		</div>

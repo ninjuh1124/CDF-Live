@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import renderers from '../resources/renderers';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { CommentContext } from './Comment';
+import Markdown from './Markdown';
 import FormattingBar from './FormattingBar';
 import axios from 'axios';
 import querystring from 'querystring';
@@ -9,6 +9,9 @@ const Editor = props => {
 	const [isSending, startSending] = useState(false);
 	const [text, changeText] = useState('');
 	const textAreaRef = useRef();
+	const {
+		_id, id, accessToken, editFeed, prependToFeed
+	} = useContext(CommentContext);
 
 	const focusTextArea = () => textAreaRef.current.focus(); 
 	const handleChange = e => changeText(e.target.value);
@@ -76,35 +79,35 @@ const Editor = props => {
 		axios({
 			method: 'post',
 			headers: { 
-				Authorization: 'Bearer ' + props.accessToken,
+				Authorization: 'Bearer ' + accessToken,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			url: uri,
 			data: querystring.encode({
 				text: text,
 				api_type: 'json',
-				thing_id: props._id
+				thing_id: _id
 			})
 		}).then(res => {
 			if (props.editorMode === 'edit') {
-				props.editFeed({
-					_id: props._id,
+				editFeed({
+					_id: _id,
 					body: text
 				});
 				axios({
 					method: 'post',
 					url: process.env.REACT_APP_API + 'v1/edit',
 					data: {
-						token: props.accessToken,
-						_id: props._id,
-						id: props.id,
+						token: accessToken,
+						_id: _id,
+						id: id,
 						body: text
 					}
 				}).then(res => {
 					if (res.data.message === 'success') {
-						props.editFeed({
-							_id: props._id,
-							id: props.id,
+						editFeed({
+							_id: _id,
+							id: id,
 							body: text
 						});
 					}
@@ -112,7 +115,7 @@ const Editor = props => {
 				});
 			} else if (props.editorMode === 'reply') {
 				let data = res.data.json.data.things[0].data;
-				props.prependToFeed([
+				prependToFeed([
 					{
 						kind: 'comment',
 						author: data.author,
@@ -146,7 +149,6 @@ const Editor = props => {
 	useEffect( () => {
 		let selection = window.getSelection().toString();
 		if (props.editorMode === 'edit') {
-			changeText(props.body);
 			focusTextArea();
 		} else if (props.editorMode === 'reply') {
 			focusTextArea();
@@ -157,7 +159,7 @@ const Editor = props => {
 				);
 			}
 		}
-	}, [props.editorMode, props.body]);
+	}, [props.editorMode]);
 	
 	return (
 		<div>
@@ -172,19 +174,8 @@ const Editor = props => {
 					</p>
 
 					<span className="body-row">
-						<ReactMarkdown
+						<Markdown
 							source={text}
-							disallowedTypes={[
-								'imageReference',
-								'linkReference'
-							]}
-							unwrapDisallowed={true}
-							plugins={[require('../resources/supPlugin')]}
-							parserOptions={{ 
-								commonmark: true, 
-								pedantic: true
-							}}
-							renderers={renderers}
 						/>
 					</span>
 

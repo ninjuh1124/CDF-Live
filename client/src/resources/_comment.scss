@@ -118,6 +118,11 @@
 	border-bottom-width: 1px;
 	border-right-width: 1px;
 	border-radius: 4px;
+	margin-top: 5px;
+
+	&:first-child {
+		margin-top: 0px;
+	}
 }
 
 .reply {

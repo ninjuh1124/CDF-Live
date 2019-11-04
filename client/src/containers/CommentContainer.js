@@ -17,7 +17,6 @@ const mapStateToProps = (state, ownProps) => ({
 	children: state.feed.history
 		.filter(comment => comment.parentID === ownProps._id),
 	isLoggedIn: state.reddit.isLoggedIn,
-	loggedInAs: state.reddit.loggedInAs,
 	accessToken: state.reddit.accessToken
 });
 

@@ -7,6 +7,8 @@ import { appendToFeed,
 
 import { connect } from 'react-redux';
 
+export const FeedContext = React.createContext({});
+
 // still verbose, but at least application state isn't dependent on this one file
 class FeedContainer extends React.Component {
 	constructor(props) {
@@ -14,7 +16,8 @@ class FeedContainer extends React.Component {
 		this.state = {
 			emptyCalls: 1,
 			isLoading: false,
-			newestComment: null
+			newestComment: null,
+			error: null
 		};
 		this.getHistory = this.getHistory.bind(this);
 		this.keepGettingHistory = this.keepGettingHistory.bind(this);
@@ -94,17 +97,16 @@ class FeedContainer extends React.Component {
 
 	render() {
 		return (
-			<div style={{padding: '3px'}}>
+			<FeedContext.Provider value={{
+				comments: this.props.history,
+				hidden: this.props.hidden,
+				isLoading: this.state.isLoading,
+				error: this.state.error
+			}}>
 				<Feed 
-					isLoading={this.state.isLoading}
 					loadMore={this.loadMore}
-					comments={this.props.history && this.props.history
-						.filter(comment => !this.props.hidden.includes(comment._id))
-						.filter(comment => /^t3_\S+/.test(comment.parentID))
-					}
-					upvote={this.props.upvote}
 				/>
-			</div>
+			</FeedContext.Provider>
 		);
 	}
 }

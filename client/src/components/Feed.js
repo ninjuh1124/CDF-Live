@@ -1,29 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { FeedContext } from '../containers/FeedContainer';
 import CommentContainer from '../containers/CommentContainer';
 
 const Feed = (props) => {
-	let comments = props.comments && props.comments
+	const feed = useContext(FeedContext);
+
+	const comments = feed.comments && feed.comments
+		.filter(comment => !feed.hidden.includes(comment._id))
+		.filter(comment => /^t3_\S+/.test(comment.parentID))
 		.map(comment => {
 			return (
-				<div style={{ marginTop: '5px'}} key={comment.id}>
-					<CommentContainer
-						_id={comment._id}
-						key={comment.id}
-						id={comment.id}
-						author={comment.author}
-						body={comment.body}
-						permalink={comment.permalink}
-						created={comment.created}
-						className="parent"
-					/>
-				</div>
+				<CommentContainer
+					_id={comment._id}
+					key={comment.id}
+					id={comment.id}
+					author={comment.author}
+					body={comment.body}
+					permalink={comment.permalink}
+					created={comment.created}
+					depth={0}
+					className="parent"
+				/>
 			);
 		});
 
 	return (
 		<div>
 			<ul id="feed">
-				{props.isLoading ?
+				{feed.isLoading ?
 					<p>Loading...</p> :
 					comments && comments.length >= 1 ?
 						comments :
