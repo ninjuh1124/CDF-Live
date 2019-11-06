@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Editor from './Editor';
+import EditorContainer from '../containers/EditorContainer';
 import RedditButton from '../resources/RedditButton';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -8,7 +8,7 @@ const Heading = props => {
 	const [editorMode, toggleEditor] = useState('hidden');
 
 	const getNewThread = () => {
-		axios.get(process.env.REACT_APP_API+'v1/thread.json',
+		axios.get(`${process.env.REACT_APP_API}v1/thread.json`,
 			{ crossdomain: true }
 		).then(res => {
 			props.updateThread(res.data.message[0]);
@@ -17,8 +17,7 @@ const Heading = props => {
 
 	const getAccessToken = () => {
 		axios.get(
-			process.env.REACT_APP_API+'v1/token.json?refresh_token='+
-			props.refreshToken,
+			`${process.env.REACT_APP_API}v1/token.json?refresh_token=${props.refreshToken}`,
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.message.access_token) {
@@ -30,7 +29,7 @@ const Heading = props => {
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
 						headers: {
-							Authorization: 'bearer ' + accessToken
+							Authorization: `bearer ${accessToken}`
 						}
 					}).then(res => {
 						props.setUser(res.data.name);
@@ -59,12 +58,12 @@ const Heading = props => {
 		redirect = encodeURIComponent(process.env.REACT_APP_REDIRECT),
 		scope = ["edit", "read", "save", "submit", "vote", "identity"],
 		params = [
-			"client_id=" + process.env.REACT_APP_CLIENT_ID,
+			`client_id=${process.env.REACT_APP_CLIENT_ID}`,
 			"response_type=code",
-			"state=" + localStorage.getItem('device'),
-			"redirect_uri=" + redirect,
+			`state=${localStorage.getItem('device')}`,
+			`redirect_uri=${redirect}`,
 			"duration=permanent",
-			"scope=" + scope.join('+')
+			`scope=${scope.join('+')}`
 		].join('&');
 
 	return (
@@ -115,13 +114,9 @@ const Heading = props => {
 			}
 
 			{editorMode === 'hidden' ||
-				<Editor
+				<EditorContainer
 					editorMode={editorMode}
 					toggleEditor={() => toggleEditor('hidden')}
-					_id={props.thread._id}
-					prependToFeed={props.prependToFeed}
-					accessToken={props.accessToken}
-					upvote={props.upvote}
 				/>	
 			}
 		</div>

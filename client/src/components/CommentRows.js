@@ -67,7 +67,7 @@ const CommentButtonsRow = () => {
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/del',
 			headers: {
-				Authorization: 'Bearer ' + accessToken,
+				Authorization: `Bearer ${accessToken}`,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
@@ -76,7 +76,7 @@ const CommentButtonsRow = () => {
 		}).then(res => {
 			axios({
 				method: 'post',
-				url: process.env.REACT_APP_API + 'v1/delete',
+				url: `${process.env.REACT_APP_API}v1/delete`,
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
@@ -100,8 +100,7 @@ const CommentButtonsRow = () => {
 				'https://oauth.reddit.com/api/unsave' :
 				'https://oauth.reddit.com/api/save'),
 			headers: {
-				Authorization: 'Bearer ' +
-					accessToken,
+				Authorization: `Bearer ${accessToken}`,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
@@ -117,7 +116,7 @@ const CommentButtonsRow = () => {
 			method: 'post',
 			url: 'https://oauth.reddit.com/api/vote',
 			headers: {
-				Authorization: 'Bearer ' + accessToken,
+				Authorization: `Bearer ${accessToken}`,
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			data: querystring.encode({
@@ -134,8 +133,7 @@ const CommentButtonsRow = () => {
 			{ownPost ||
 				<RedditButton
 					onClick={() => upvoteComment()}
-					className={'reddit-button link-primary' + 
-						(isUpvoted ? ' upvoted' : '')
+					className={`reddit-button link-primary ${isUpvoted ? ' upvoted' : ''}`
 					}
 				>
 					<i className='fas fa-arrow-up'></i>
@@ -197,7 +195,6 @@ const CommentButtonsRow = () => {
 			<EditorContainer 
 				editorMode={editorMode}
 				toggleEditor={() => toggleEditor('hidden')}
-				deletePost={deletePost}
 			/>
 		</div>
 	);

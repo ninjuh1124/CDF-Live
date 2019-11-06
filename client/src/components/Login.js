@@ -14,9 +14,7 @@ const Login = props => {
 	useEffect( () => {
 		if (props.state && props.code) {
 			axios.get(
-				process.env.REACT_APP_API + 
-					'v1/token.json?code=' + 
-					props.code,
+				`${process.env.REACT_APP_API}v1/token.json?code=${props.code}`,
 					{ crossdomain: true }
 			).then(res => {
 				if (res.data.message.refresh_token) {
@@ -29,7 +27,7 @@ const Login = props => {
 						method: 'get',
 						url: 'https://oauth.reddit.com/api/v1/me',
 						headers: {
-							Authorization: 'bearer ' + at
+							Authorization: `bearer ${at}`
 						}
 					}).then(res => {
 						props.setUser(res.data.name);

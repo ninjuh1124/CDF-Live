@@ -32,8 +32,7 @@ const Comment = (props) => {
 		<CommentContext.Provider value={{...props}}>
 			<li
 				className={
-					props.className + " comment" + 
-					(props.ownPost ? ' own-post' : '')
+				`${props.className} comment ${props.ownPost ? 'own-post' : ''}`
 				}
 				id={props._id}
 			>
@@ -53,7 +52,7 @@ const Comment = (props) => {
 
 				<ul
 					className="comment-replies"
-					id={props._id+'-replies'}
+					id={`${props._id}-replies`}
 				>
 					{children}
 				</ul>

@@ -8,7 +8,7 @@ const About = props => {
 
 	useEffect( () => {
 		axios.get(
-			process.env.REACT_APP_API+"content/about.md",
+			`${process.env.REACT_APP_API}content/about.md`,
 			{ crossorigin: true }
 		).then(res => {
 			changeMd(res.data);

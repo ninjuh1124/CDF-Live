@@ -8,7 +8,7 @@ const Changelog = props => {
 
 	useEffect( () => {
 		axios.get(
-			process.env.REACT_APP_API+"content/changelog.md",
+			`${process.env.REACT_APP_API}content/changelog.md`,
 			{ crossorigin: true }
 		).then(res => {
 			changeMd(res.data);
