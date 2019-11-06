@@ -26,8 +26,7 @@ class FeedContainer extends React.Component {
 
 	getHistory() {
 		axios.get(
-			process.env.REACT_APP_API+'v1/history.json?newerthan=' +
-			this.state.newestComment._id,
+			`${process.env.REACT_APP_API}v1/history.json?newerthan=${this.state.newestComment._id}`,
 			{ crossdomain: true }
 		).then(res => {
 			// verify message
@@ -60,8 +59,7 @@ class FeedContainer extends React.Component {
 
 	loadMore() {
 		axios.get(
-			process.env.REACT_APP_API+'v1/history.json?olderthan=' +
-			this.props.history[this.props.history.length-1]._id,
+			`${process.env.REACT_APP_API}v1/history.json?olderthan=${this.props.history[this.props.history.length-1]._id}`,
 			{ crossdomain: true }
 		).then(res => {
 			if (res.data.message &&
@@ -76,7 +74,7 @@ class FeedContainer extends React.Component {
 	componentDidMount() {
 		this.setState({ isLoading: true }, () => {
 			axios.get(
-				process.env.REACT_APP_API+'v1/history.json',
+				`${process.env.REACT_APP_API}v1/history.json`,
 				{ crossdomain: true }
 			).then(res => {
 				this.setState(
