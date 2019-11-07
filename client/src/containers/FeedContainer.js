@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Feed from '../components/Feed';
 
@@ -9,104 +9,89 @@ import { connect } from 'react-redux';
 
 export const FeedContext = React.createContext({});
 
-// still verbose, but at least application state isn't dependent on this one file
-class FeedContainer extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			emptyCalls: 1,
-			isLoading: false,
-			newestComment: null,
-			error: null
-		};
-		this.getHistory = this.getHistory.bind(this);
-		this.keepGettingHistory = this.keepGettingHistory.bind(this);
-		this.loadMore = this.loadMore.bind(this);
-	}
+const FeedContainer = props => {
+	const [emptyCalls, setEmptyCalls] = useState(1);
+	const [isLoading, loading] = useState(false);
+	const [newestComment, setNewestComment] = useState({});
+	const [error, setError] = useState(null);
 
-	getHistory() {
+	const loadMore = () => {
 		axios.get(
-			`${process.env.REACT_APP_API}v1/history.json?newerthan=${this.state.newestComment._id}`,
+			`${process.env.REACT_APP_API}v1/history.json?olderthan=${props.history[props.history.length-1]._id}`,
 			{ crossdomain: true }
 		).then(res => {
-			// verify message
 			if (res.data.message &&
 				Array.isArray(res.data.message) &&
 				res.data.message.length > 0) {
-				this.props.prependToFeed(res.data.message);
-				this.setState(state => ({
-					newestComment: res.data.message[0],
-					emptyCalls: 1
-				}));
-			} else { // delay api calls between empty responses
-				this.setState(state => ({
-					...state, 
-					emptyCalls: state.emptyCalls+1,
-				}));
+				props.appendToFeed(res.data.message);
+				setEmptyCalls(1);
 			}
 		});
 	}
 
-	keepGettingHistory() {
+	const getHistory = () => {
+		axios
+			.get(
+				`${process.env.REACT_APP_API}v1/history.json?newerthan=${newestComment._id}`,
+				{ crossdomain: true }
+			)
+			.then(res => {
+				// verify message
+				if (res.data.message &&
+					Array.isArray(res.data.message) &&
+					res.data.message.length > 0) {
+					props.prependToFeed(res.data.message);
+					setNewestComment(res.data.message[0]);
+					setEmptyCalls(1);
+				} else { // delay api calls between empty responses
+					setEmptyCalls(emptyCalls+1);
+				}
+			})
+			.catch(err => {
+				setError(err);
+			});
+	}
+
+	const keepGettingHistory = () => {
 		setTimeout( () => {
-			this.getHistory();
-			this.keepGettingHistory();
+			getHistory();
+			keepGettingHistory();
 		},
-		(this.state.emptyCalls < 24
-		? this.state.emptyCalls * 5000
+		(emptyCalls < 24
+		? emptyCalls * 5000
 		: 24*5000))
 	}
 
-	loadMore() {
-		axios.get(
-			`${process.env.REACT_APP_API}v1/history.json?olderthan=${this.props.history[this.props.history.length-1]._id}`,
-			{ crossdomain: true }
-		).then(res => {
-			if (res.data.message &&
-				Array.isArray(res.data.message) &&
-				res.data.message.length > 0) {
-				this.props.appendToFeed(res.data.message);
-				this.setState({ emptyCalls: 1 });
-			}
-		});
-	}
-
-	componentDidMount() {
-		this.setState({ isLoading: true }, () => {
-			axios.get(
+	useEffect( () => {
+		loading(true);
+		axios
+			.get(
 				`${process.env.REACT_APP_API}v1/history.json`,
 				{ crossdomain: true }
-			).then(res => {
-				this.setState(
-					{
-						isLoading: false,
-						newestComment: res.data.message[0]
-					},
-					() => {
-						this.props.prependToFeed(res.data.message);
-						this.keepGettingHistory();
-					}
-				);
-			}).catch( () => {
-				this.setState({ isLoading: false });
+			)
+			.then(res => {
+				loading(false);
+				props.prependToFeed(res.data.message);
+				setNewestComment(res.data.message[0]);
+				keepGettingHistory();
+			})
+			.catch(err => {
+				setError(err);
 			});
-		});
-	}
+	}, []);
 
-	render() {
-		return (
-			<FeedContext.Provider value={{
-				comments: this.props.history,
-				hidden: this.props.hidden,
-				isLoading: this.state.isLoading,
-				error: this.state.error
-			}}>
-				<Feed 
-					loadMore={this.loadMore}
-				/>
-			</FeedContext.Provider>
-		);
-	}
+	return (
+		<FeedContext.Provider value={{
+			comments: props.history,
+			hidden: props.hidden,
+			isLoading: isLoading,
+			error: error
+		}}>
+			<Feed 
+				loadMore={loadMore}
+			/>
+		</FeedContext.Provider>
+	);
 }
 
 const mapStateToProps = (state, ownProps) => ({
