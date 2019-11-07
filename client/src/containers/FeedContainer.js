@@ -10,8 +10,8 @@ import { connect } from 'react-redux';
 export const FeedContext = React.createContext({});
 
 const FeedContainer = props => {
-	const [emptyCalls, setEmptyCalls] = useState(1);
-	const [isLoading, loading] = useState(false);
+	const [emptyCalls, setEmptyCalls] = useState(0);
+	const [isLoading, loading] = useState(true);
 	const [newestComment, setNewestComment] = useState({});
 	const [error, setError] = useState(null);
 
@@ -64,20 +64,23 @@ const FeedContainer = props => {
 
 	useEffect( () => {
 		loading(true);
-		axios
-			.get(
-				`${process.env.REACT_APP_API}v1/history.json`,
-				{ crossdomain: true }
-			)
-			.then(res => {
-				loading(false);
-				props.prependToFeed(res.data.message);
-				setNewestComment(res.data.message[0]);
-				keepGettingHistory();
-			})
-			.catch(err => {
-				setError(err);
-			});
+		setTimeout( () => {
+			axios
+				.get(
+					`${process.env.REACT_APP_API}v1/history.json${newestComment._id ? `?newerthan=${newestComment._id}` : ''}`,
+					{ crossdomain: true }
+				)
+				.then(res => {
+					loading(false);
+					props.prependToFeed(res.data.message);
+					setNewestComment(res.data.message[0]);
+					setEmptyCalls(emptyCalls+1);
+				})
+				.catch(err => {
+					setError(err);
+				});
+
+		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000);
 	}, []);
 
 	return (
