@@ -1,55 +1,59 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import EditorContainer from '../containers/EditorContainer';
 import RedditButton from '../resources/RedditButton';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+import { getMe } from '../resources/redditAPI';
+import { getThread, getAccessToken } from '../resources/appAPI';
 
 const Heading = props => {
 	const [editorMode, toggleEditor] = useState('hidden');
-
-	const getNewThread = () => {
-		axios.get(`${process.env.REACT_APP_API}v1/thread.json`,
-			{ crossdomain: true }
-		).then(res => {
-			props.updateThread(res.data.message[0]);
-		});
-	}
-
-	const getAccessToken = () => {
-		axios.get(
-			`${process.env.REACT_APP_API}v1/token.json?refresh_token=${props.refreshToken}`,
-			{ crossdomain: true }
-		).then(res => {
-			if (res.data.message.access_token) {
-				let accessToken = res.data.message.access_token;
-				props.setAccessToken(accessToken);
-
-				if (!props.loggedInAs) {
-					axios({
-						method: 'get',
-						url: 'https://oauth.reddit.com/api/v1/me',
-						headers: {
-							Authorization: `bearer ${accessToken}`
-						}
-					}).then(res => {
-						props.setUser(res.data.name);
-					});
-				}
-			}
-		});
-	}
+	const [error, setError] = useState(null);
 
 	const keepGettingAccessToken = () => {
 		setTimeout( () => {
-			getAccessToken();
+			try {
+				const res = getAccessToken(props.refreshToken);
+				if (res.message.access_token) {
+					props.setAccessToken(res.message.access_token);
+				}
+				if (!props.loggedInAs) {
+					getMe(props.accessToken).then(d => props.setUser(d.name));
+				}
+			} catch(err) {
+				setError(err);
+				console.log(err);
+			}
 			keepGettingAccessToken();
 		}, 3300000)
 	}
 
 	useEffect( () => {
-		getNewThread();
+		try {
+			const res = getThread();
+			props.updateThread(res.message[0]);
+		} catch(err) {
+			setError(err);
+			console.log(err);
+		}
+
 		if (props.refreshToken) {
-			getAccessToken();
+			try {
+				const res = getAccessToken(props.refreshToken);
+
+				if (res.message.access_token) {
+					props.setAccessToken(res.message.access_token);
+				}
+
+				if (!props.loggedInAs) {
+					getMe(props.accessToken).then(d => props.setUser(d.name));
+				}
+			} catch(err) {
+				setError(err);
+				console.log(err);
+			}
+
 			keepGettingAccessToken();
 		}
 	}, []);

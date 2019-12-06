@@ -27,12 +27,9 @@ const Feed = (props) => {
 	return (
 		<div>
 			<ul id="feed">
-				{feed.isLoading ?
-					<p>Loading...</p> :
-					comments && comments.length >= 1 ?
-						comments :
-						<p>Something went wrong.</p>
-				}
+				{feed.error && <p>Something went wrong: {feed.error}</p>}
+				{feed.isLoading && <p>Loading...</p>}
+				{comments}
 			</ul>
 			<a 
 				className="link-primary"

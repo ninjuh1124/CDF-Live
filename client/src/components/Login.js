@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
+
+import { getMe } from '../resources/redditAPI';
+import { getRefreshToken } from '../resources/appAPI';
 
 import { setUser,
 	setAccessToken,
@@ -10,31 +12,30 @@ import { connect } from 'react-redux';
 
 const Login = props => {
 	const [gotToken, receiveToken] = useState(false);
+	const [error, setError] = useState(null);
 
 	useEffect( () => {
 		if (props.state && props.code) {
-			axios.get(
-				`${process.env.REACT_APP_API}v1/token.json?code=${props.code}`,
-					{ crossdomain: true }
-			).then(res => {
-				if (res.data.message.refresh_token) {
-					let rt = res.data.message.refresh_token;
-					let at = res.data.message.access_token;
+			try {
+				const res = getRefreshToken(props.code);
+				if (res.message.refresh_token) {
+					let rt = res.message.refresh_token;
+					let at = res.message.access_token;
+
 					props.setRefreshToken(rt);
 					props.setAccessToken(at);
+
 					localStorage.setItem('refreshToken', rt);
-					axios({
-						method: 'get',
-						url: 'https://oauth.reddit.com/api/v1/me',
-						headers: {
-							Authorization: `bearer ${at}`
-						}
-					}).then(res => {
+
+					getMe(at).then(res => {
 						props.setUser(res.data.name);
 						receiveToken(true);
-					})
-				}
-			});
+					});
+				} else throw new Error('TokenNotReceived')
+			} catch(err) {
+				setError(err);
+				console.log(err);
+			}
 		}
 	}, []);
 

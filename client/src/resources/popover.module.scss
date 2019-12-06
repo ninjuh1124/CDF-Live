@@ -1,0 +1,25 @@
+@import 'variables';
+
+.wrapper {
+	display: inline-block;
+
+	&:hover .content {
+		z-index: 10;
+		opacity: 1;
+		visibility: visible;
+		transition: all 0.5s ease-in;
+	}
+}
+
+.content {
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	background-color: $background-secondary;
+
+	&:before {
+		position: absolute;
+		z-index: -1;
+		content: "";
+	}
+}

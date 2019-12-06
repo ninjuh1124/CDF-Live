@@ -1,12 +1,19 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
-import querystring from 'querystring';
 import { CommentContext } from './Comment';
+
+import TimeAgo from 'react-timeago';
+
 import Markdown from './Markdown';
 import EditorContainer from '../containers/EditorContainer';
-import Source from './Source';
-import TimeAgo from 'react-timeago';
+
 import RedditButton from '../resources/RedditButton';
+import Source from './Source';
+
+import {
+	deletePost,
+	saveComment,
+	unsaveComment,
+	upvoteComment } from '../resources/redditAPI';
 
 const CommentAuthorRow = () => {
 	const { permalink, author, created } = useContext(CommentContext);
@@ -59,80 +66,14 @@ const CommentButtonsRow = () => {
 
 	const { 
 		_id, id, ownPost, upvoted, body, accessToken, isUpvoted, 
-		isSaved, isHidden, deleteFromFeed, upvote, hide, save 
+		isSaved, isHidden, deleteFromFeed, upvote, hide, save, loggedInAs 
 	} = useContext(CommentContext);
-
-	const deletePost = () => {
-		axios({
-			method: 'post',
-			url: 'https://oauth.reddit.com/api/del',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			data: querystring.encode({
-				id: _id
-			})
-		}).then(res => {
-			axios({
-				method: 'post',
-				url: `${process.env.REACT_APP_API}v1/delete`,
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				},
-				data: querystring.encode({
-					token: accessToken,
-					id: id,
-					_id: _id
-				})
-			}).then(res => {
-				if (res.data.message === 'success') {
-					deleteFromFeed(_id);
-				}
-			});
-		});
-	}
-
-	const saveComment = () => {
-		axios({
-			method: 'post',
-			url: (isSaved ? 
-				'https://oauth.reddit.com/api/unsave' :
-				'https://oauth.reddit.com/api/save'),
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			data: querystring.encode({
-				id: _id
-			})
-		}).then(res => {
-			save();
-		});
-	}
-
-	const upvoteComment = () => {
-		axios({
-			method: 'post',
-			url: 'https://oauth.reddit.com/api/vote',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			data: querystring.encode({
-				id: _id,
-				dir: (upvoted ? 0 : 1)
-			})
-		}).then(res => {
-			upvote();
-		}).catch(err => console.log(err));
-	}
 
 	return (
 		<div className="reddit-buttons-row">
-			{ownPost ||
+			{(ownPost || loggedInAs !== "") ||
 				<RedditButton
-					onClick={() => upvoteComment()}
+					onClick={() => upvoteComment({ accessToken, _id, upvoted })}
 					className={`reddit-button link-primary ${isUpvoted ? ' upvoted' : ''}`
 					}
 				>
@@ -151,17 +92,23 @@ const CommentButtonsRow = () => {
 
 			{ownPost &&
 				<RedditButton
-					onClick={ () => deletePost()}
+					onClick={ () => deletePost({ accessToken, id, _id })}
 				>
 					delete
 				</RedditButton>
 			}
 
-			<RedditButton
-				onClick={ () => saveComment()}
-			>
-				{isSaved ? 'unsave' : 'save'}
-			</RedditButton>
+			{loggedInAs !== "" ||
+				<RedditButton
+					onClick={ () => {
+						isSaved ? 
+							unsaveComment({ accessToken, _id }) :
+							saveComment({ accessToken, _id });
+					}}
+				>
+					{isSaved ? 'unsave' : 'save'}
+				</RedditButton>
+			}
 
 			<RedditButton
 				onClick={ () => hide()}
@@ -178,12 +125,14 @@ const CommentButtonsRow = () => {
 				</RedditButton>
 			}
 
-			<RedditButton
-				onClick={ () => toggleEditor(editorMode === 'hidden' ?
-					'reply' : 'hidden')}
-			>
-				reply 
-			</RedditButton>
+			{loggedInAs !== "" ||
+				<RedditButton
+					onClick={ () => toggleEditor(editorMode === 'hidden' ?
+						'reply' : 'hidden')}
+				>
+					reply 
+				</RedditButton>
+			}
 
 			{source !== 'hidden' &&
 				<Source

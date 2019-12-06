@@ -8,7 +8,7 @@ import { CommentBodyRow,
 
 export const CommentContext = React.createContext({});
 
-const Comment = (props) => {
+const Comment = props => {
 	const feed = useContext(FeedContext);
 
 	const children = feed.comments
@@ -39,7 +39,7 @@ const Comment = (props) => {
 
 				<CommentAuthorRow />
 				<CommentBodyRow />
-				{props.isLoggedIn ? <CommentButtonsRow /> : null}
+				<CommentButtonsRow />
 
 				<div className="arrow">
 					<h2 className="arrow-link"><a

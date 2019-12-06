@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import Popover from './Popver';
+import Popover from './Popover';
 
 import { list } from '../resources/facecodes';
 
+/** Editor formatting bar for one-click markdown insertions **/
 const FormattingBar = props => {
 	const [hidePopover, toggleHidden] = useState(true);
 
@@ -31,10 +32,8 @@ const FormattingBar = props => {
 			Spoiler
 		</Button>
 
-		/** TODO: finish this
-		 * reference: https://codepen.io/mihaeltomic/pen/PqxVaq
 		<Popover hide={hidePopover} render={() => {
-			const faces = list.filter(face => face.active).map(face => {
+			const faces = list.filter(face => face.active).map(face => (
 				<a
 					className="add-face"
 					onClick={() => {
@@ -45,20 +44,20 @@ const FormattingBar = props => {
 				>
 					<img src={`active/${face.name}`} />
 				</a>
-			});
+			));
 
 			return (
-				
+				null	
 			);
-		}>
-			<Button onClick={() => toggleHidden(!hide)}>
+		}}>
+			<Button onClick={() => toggleHidden(!hidePopover)}>
 				Face
 			</Button>
 		</Popover>
-		**/
 	</div>
 };
 
+/** Button for formatting bar. Should not be used outside this component **/
 const Button = props => {
 	return (
 		<button

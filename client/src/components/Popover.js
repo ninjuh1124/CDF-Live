@@ -1,12 +1,13 @@
 import React from 'react';
+import popover from '../resources/popover.module.scss';
 
 const Popover = props => {
-	return props.hide || (
-		<div className="popover-wrapper">
+	return (
+		<div className={popover.wrapper}>
 			{props.children}
-			<div className="popover-content" style={{overflowY: 'scroll'}}>
+			{props.hide || <div className={popover.content}>
 				{props.render}
-			</div>
+			</div>}
 		</div>
 	);
 };

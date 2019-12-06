@@ -10,9 +10,9 @@ const CommentFace = (props) => {
 		return (
 			<span className="comment-face" 
 				style={style} title={props.title}>
+				<span className='face-text'>{props.children}</span>
 				<img src='/faces/active/umiface.jpg' alt='#facenotfound'
 					className='face face-discontinued' style={style} />
-				<span className='face-text'>{props.children}</span>
 			</span>
 		);
 	}

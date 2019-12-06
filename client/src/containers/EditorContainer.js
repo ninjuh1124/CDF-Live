@@ -1,10 +1,9 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
-import Editor from '../components/Editor';
-
 import { CommentContext } from '../components/Comment';
 
-import axios from 'axios';
-import querystring from 'querystring';
+import Editor from '../components/Editor';
+
+import { comment, editComment } from '../resources/redditAPI';
 
 const EditorContainer = props => {
 	const [isSending, startSending] = useState(false);
@@ -66,54 +65,17 @@ const EditorContainer = props => {
 	 **/
 	const submit = e => {
 		if (!text.trim()) return;
-
-		let uri;
-		if (props.editorMode === 'reply')
-			uri = "https://oauth.reddit.com/api/comment";
-		else if (props.editorMode === 'edit')
-			uri = "https://oauth.reddit.com/api/editusertext";
-
 		startSending(true);
 
-		axios({
-			method: 'post',
-			headers: {
-				Authorization: 'Bearer ' + accessToken,
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			url: uri,
-			data: querystring.encode({
-				text: text,
-				api_type: 'json',
-				thing_id: _id
-			})
-		}).then(res => {
-			if (props.editorMode === 'edit') {
-				editFeed({
-					_id: _id,
-					body: text
-				});
-				axios({
-					method: 'post',
-					url: process.env.REACT_APP_API + 'v1/edit',
-					data: {
-						token: accessToken,
-						_id: _id,
-						id: id,
-						body: text
-					}
-				}).then(res => {
-					if (res.data.message === 'success') {
-						editFeed({
-							_id: _id,
-							id: id,
-							body: text
-						});
-					}
-					props.toggleEditor(props.editorMode);
-				});
-			} else if (props.editorMode === 'reply') {
+		if (props.editorMode === 'reply') {
+			comment({
+				accessToken,
+				parent_id: _id,
+				body: text.trim()
+			}).then(res => {
+				props.toggleEditor(props.editorMode);
 				let data = res.data.json.data.things[0].data;
+				startSending(false);
 				prependToFeed([
 					{
 						kind: 'comment',
@@ -122,17 +84,29 @@ const EditorContainer = props => {
 						id: data.id,
 						thread: data.link_id,
 						created: data.created_utc,
-						permalink: 'https://reddit.com'+data.permalink,
+						permalink: `https://reddit.com${data.permalink}`,
 						parentID: data.parent_id,
 						body: text
 					}
 				]);
+			}).catch(err => {
+				startSending(false);
+				console.log(err);
+			});
+		} else if (props.editorMode === 'edit') {
+			editComment({
+				accessToken, 
+				_id,
+				body: text.trim()
+			}).then(res => {
 				props.toggleEditor(props.editorMode);
-			}
-		}).catch(err => {
-			console.log(err);
-			startSending(false);
-		});
+				startSending(false);
+				return;
+			}).catch (err => {
+				startSending(false);
+				console.log(err);
+			});
+		}
 
 		e.preventDefault();
 	}

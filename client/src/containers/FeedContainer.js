@@ -4,6 +4,7 @@ import Feed from '../components/Feed';
 
 import { appendToFeed,
 	prependToFeed } from '../redux/actions';
+import { getHistory, loadMore } from '../resources/appAPI';
 
 import { connect } from 'react-redux';
 
@@ -15,73 +16,39 @@ const FeedContainer = props => {
 	const [newestComment, setNewestComment] = useState({});
 	const [error, setError] = useState(null);
 
-	const loadMore = () => {
-		axios.get(
-			`${process.env.REACT_APP_API}v1/history.json?olderthan=${props.history[props.history.length-1]._id}`,
-			{ crossdomain: true }
-		).then(res => {
-			if (res.data.message &&
-				Array.isArray(res.data.message) &&
-				res.data.message.length > 0) {
-				props.appendToFeed(res.data.message);
+	const forceRefresh = () => setEmptyCalls(0);
+
+	const load = () => {
+		try {
+			const res = loadMore(props.history[props.history.length-1]._id);
+			if (res.message.length > 0) {
+				props.appendToFeed(res.message);
 				setEmptyCalls(1);
 			}
-		});
-	}
-
-	const getHistory = () => {
-		axios
-			.get(
-				`${process.env.REACT_APP_API}v1/history.json?newerthan=${newestComment._id}`,
-				{ crossdomain: true }
-			)
-			.then(res => {
-				// verify message
-				if (res.data.message &&
-					Array.isArray(res.data.message) &&
-					res.data.message.length > 0) {
-					props.prependToFeed(res.data.message);
-					setNewestComment(res.data.message[0]);
-					setEmptyCalls(1);
-				} else { // delay api calls between empty responses
-					setEmptyCalls(emptyCalls+1);
-				}
-			})
-			.catch(err => {
-				setError(err);
-			});
-	}
-
-	const keepGettingHistory = () => {
-		setTimeout( () => {
-			getHistory();
-			keepGettingHistory();
-		},
-		(emptyCalls < 24
-		? emptyCalls * 5000
-		: 24*5000))
-	}
+		} catch(err) {
+			setError(err);
+			console.log(err);
+		}
+	};
 
 	useEffect( () => {
-		loading(true);
 		setTimeout( () => {
-			axios
-				.get(
-					`${process.env.REACT_APP_API}v1/history.json${newestComment._id ? `?newerthan=${newestComment._id}` : ''}`,
-					{ crossdomain: true }
-				)
-				.then(res => {
-					loading(false);
-					props.prependToFeed(res.data.message);
-					setNewestComment(res.data.message[0]);
+			try {
+				const res = getHistory(newestComment._id);
+				console.log(res);
+				if (res.length > 0) {
+					props.prependToFeed(res.message);
+					setNewestComment(res.message[0]);
+					setEmptyCalls(1);
+				} else {
 					setEmptyCalls(emptyCalls+1);
-				})
-				.catch(err => {
-					setError(err);
-				});
-
+				}
+			} catch(err) {
+				setError(err);
+				console.log(err);
+			}
 		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000);
-	}, []);
+	}, [emptyCalls]);
 
 	return (
 		<FeedContext.Provider value={{
@@ -91,7 +58,7 @@ const FeedContainer = props => {
 			error: error
 		}}>
 			<Feed 
-				loadMore={loadMore}
+				loadMore={load}
 			/>
 		</FeedContext.Provider>
 	);
