@@ -19,34 +19,33 @@ const FeedContainer = props => {
 	const forceRefresh = () => setEmptyCalls(0);
 
 	const load = () => {
-		try {
-			const res = loadMore(props.history[props.history.length-1]._id);
-			if (res.message.length > 0) {
-				props.appendToFeed(res.message);
-				setEmptyCalls(1);
-			}
-		} catch(err) {
-			setError(err);
-			console.log(err);
-		}
+		loadMore(props.history[props.history.length-1]._id)
+			.then(res => {
+				if (res.message.length > 0) {
+					props.appendToFeed(res.message);
+					setEmptyCalls(1);
+				}
+			})
+			.catch(err => {
+				setError(err);
+				console.log(err);
+			});
 	};
 
 	useEffect( () => {
 		setTimeout( () => {
-			try {
-				const res = getHistory(newestComment._id);
-				console.log(res);
-				if (res.length > 0) {
-					props.prependToFeed(res.message);
-					setNewestComment(res.message[0]);
-					setEmptyCalls(1);
-				} else {
-					setEmptyCalls(emptyCalls+1);
-				}
-			} catch(err) {
-				setError(err);
-				console.log(err);
-			}
+			getHistory()
+				.then(res => {
+					if (res.message.length > 0) {
+						props.prependToFeed(res.message);
+						setNewestComment(res.message[0]);
+						setEmptyCalls(1);
+					} else setEmptyCalls(emptyCalls+1);
+				})
+				.catch(err => {
+					setError(err);
+					console.log(err);
+				});
 		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000);
 	}, [emptyCalls]);
 

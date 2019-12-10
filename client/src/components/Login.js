@@ -16,26 +16,27 @@ const Login = props => {
 
 	useEffect( () => {
 		if (props.state && props.code) {
-			try {
-				const res = getRefreshToken(props.code);
-				if (res.message.refresh_token) {
-					let rt = res.message.refresh_token;
-					let at = res.message.access_token;
+			getRefreshToken(props.code)
+				.then(res => {
+					if (res.message.refresh_token) {
+						let rt = res.message.refresh_token;
+						let at = res.message.access_token;
 
-					props.setRefreshToken(rt);
-					props.setAccessToken(at);
+						props.setRefreshToken(rt);
+						props.setAccessToken(at);
 
-					localStorage.setItem('refreshToken', rt);
+						localStorage.setItem('refreshToken', rt);
 
-					getMe(at).then(res => {
-						props.setUser(res.data.name);
-						receiveToken(true);
-					});
-				} else throw new Error('TokenNotReceived')
-			} catch(err) {
-				setError(err);
-				console.log(err);
-			}
+						getMe(at).then(res => {
+							props.setUser(res.data.name);
+							receiveToken(true);
+						});
+					}
+				})
+				.catch(err => {
+					setError(err);
+					console.log(err);
+				});
 		}
 	}, []);
 
