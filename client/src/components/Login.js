@@ -17,21 +17,19 @@ const Login = props => {
 	useEffect( () => {
 		if (props.state && props.code) {
 			getRefreshToken(props.code)
-				.then(res => {
-					if (res.message.refresh_token) {
-						let rt = res.message.refresh_token;
-						let at = res.message.access_token;
+				.then(tokens => {
+					let rt = tokens.refresh_token;
+					let at = tokens.access_token;
 
-						props.setRefreshToken(rt);
-						props.setAccessToken(at);
+					props.setRefreshToken(rt);
+					props.setAccessToken(at);
 
-						localStorage.setItem('refreshToken', rt);
+					localStorage.setItem('refreshToken', rt);
 
-						getMe(at).then(res => {
-							props.setUser(res.data.name);
-							receiveToken(true);
-						});
-					}
+					getMe(at).then(res => {
+						props.setUser(res.data.name);
+						receiveToken(true);
+					});
 				})
 				.catch(err => {
 					setError(err);

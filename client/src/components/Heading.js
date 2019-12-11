@@ -14,10 +14,8 @@ const Heading = props => {
 	const keepGettingAccessToken = () => {
 		setTimeout( () => {
 			getAccessToken(props.refreshToken)
-				.then(res => {
-					if (res.message.accessToken) {
-						props.setAccessToken(res.message.access_token);
-					}
+				.then(accessToken => {
+					props.setAccessToken(accessToken);
 				})
 				.catch(err => {
 					setError(err);
@@ -30,7 +28,7 @@ const Heading = props => {
 
 	useEffect( () => {
 		getThread()
-			.then(res => props.updateThread(res.message[0]))
+			.then(threads => props.updateThread(threads[0]))
 			.catch(err => {
 				setError(err);
 				console.log(err);
@@ -38,10 +36,8 @@ const Heading = props => {
 
 		if (props.refreshToken) {
 			getAccessToken(props.refreshToken)
-				.then(res => {
-					if (res.message.access_token) {
-						props.setAccessToken(res.message.access_token);
-					}
+				.then(accessToken => {
+					props.setAccessToken(accessToken);
 
 					if (!props.loggedInAs) {
 						getMe(props.accessToken)

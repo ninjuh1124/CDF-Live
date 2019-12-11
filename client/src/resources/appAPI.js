@@ -15,7 +15,7 @@ const appAPI = process.env.REACT_APP_API;
 export const getThread = () => {
 	return axios
 		.get(`${appAPI}v1/thread.json`, { crossdomain: true })
-		.then(res => res.data);
+		.then(res => res.data.message);
 };
 
 export const getAccessToken = refreshToken => {
@@ -24,7 +24,10 @@ export const getAccessToken = refreshToken => {
 			`${appAPI}v1/token.json?refresh_token=${refreshToken}`,
 			{ crossdomain: true }
 		)
-		.then(res => res.data);
+		.then(res => {
+			if (res.message.access_token) return res.message.access_token;
+			else throw ({ response: res });
+		});
 };
 
 export const getRefreshToken = async (code) => {
@@ -33,7 +36,11 @@ export const getRefreshToken = async (code) => {
 			`${appAPI}v1/token.json?code=${code}`,
 			{ crossdomain: true }
 		)
-		.then(res => res.data);
+		.then(res => {
+			if (res.data.message.refresh_token) {
+				return res.data.message;
+			} else throw ({ response: res });
+		});
 }
 
 export const getHistory = newerThan => {
@@ -46,8 +53,13 @@ export const getHistory = newerThan => {
 				Array.isArray(res.data.message) && 
 				res.data.message.length > 0
 			) {
-				return res.data;
-			} else return [];
+				return res.data.message;
+			} else if (
+				res.data.message && 
+				Array.isArray(res.data.message) && 
+				res.data.message.length === 0
+			) return null;
+			else throw ({ response: res });
 		});
 };
 
@@ -63,8 +75,13 @@ export const loadMore = olderThan => {
 				Array.isArray(res.data.message) && 
 				res.data.message.length > 0
 			) {
-				return res.data;
-			} else return [];
+				return res.data.message;
+			} else if (
+				res.data.message && 
+				Array.isArray(res.data.message) && 
+				res.data.message.length === 0
+			) return null;
+			else throw ({ response: res });
 		});
 }
 
@@ -79,7 +96,7 @@ export const deleteComment = ({ accessToken, _id }) => {
 				token: accessToken,
 			})
 		})
-		.then(res => res.data);
+		.then(res => res.data.message);
 };
 
 export const editComment = ({ accessToken, _id, body }) => {
@@ -94,5 +111,5 @@ export const editComment = ({ accessToken, _id, body }) => {
 				token: accessToken
 			})
 		})
-		.then(res => res.data);
+		.then(res => res.data.message);
 };

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Feed from '../components/Feed';
 
 import { appendToFeed,
@@ -20,9 +19,9 @@ const FeedContainer = props => {
 
 	const load = () => {
 		loadMore(props.history[props.history.length-1]._id)
-			.then(res => {
-				if (res.message.length > 0) {
-					props.appendToFeed(res.message);
+			.then(comments => {
+				if (comments) {
+					props.appendToFeed(comments);
 					setEmptyCalls(1);
 				}
 			})
@@ -34,18 +33,20 @@ const FeedContainer = props => {
 
 	useEffect( () => {
 		setTimeout( () => {
-			getHistory()
-				.then(res => {
-					if (res.message.length > 0) {
-						props.prependToFeed(res.message);
-						setNewestComment(res.message[0]);
+			loading(true);
+			getHistory(newestComment._id)
+				.then(comments => {
+					if (comments) {
+						props.prependToFeed(comments);
+						setNewestComment(comments[0]);
 						setEmptyCalls(1);
 					} else setEmptyCalls(emptyCalls+1);
 				})
 				.catch(err => {
 					setError(err);
 					console.log(err);
-				});
+				})
+				.finally( () => loading(false));
 		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000);
 	}, [emptyCalls]);
 

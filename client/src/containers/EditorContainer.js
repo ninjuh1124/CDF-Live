@@ -3,7 +3,7 @@ import { CommentContext } from '../components/Comment';
 
 import Editor from '../components/Editor';
 
-import { comment, editComment } from '../resources/redditAPI';
+import { comment, editPost } from '../resources/redditAPI';
 
 const EditorContainer = props => {
 	const [isSending, startSending] = useState(false);
@@ -94,11 +94,12 @@ const EditorContainer = props => {
 				console.log(err);
 			});
 		} else if (props.editorMode === 'edit') {
-			editComment({
+			editPost({
 				accessToken, 
 				_id,
 				body: text.trim()
 			}).then(res => {
+				editFeed({ body: text.trim(), _id });
 				props.toggleEditor(props.editorMode);
 				startSending(false);
 				return;

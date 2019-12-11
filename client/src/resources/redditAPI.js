@@ -46,7 +46,7 @@ export const deletePost = ({ accessToken, _id, id }) => {
 	});
 };
 
-export const saveComment = ({ accessToken, _id }) => {
+export const savePost = ({ accessToken, _id }) => {
 	return axios({
 		method: 'post',
 		url: 'https://oauth.reddit.com/api/save',
@@ -60,7 +60,7 @@ export const saveComment = ({ accessToken, _id }) => {
 	});
 };
 
-export const unsaveComment = ({ accessToken, _id }) => {
+export const unsavePost = ({ accessToken, _id }) => {
 	return axios({
 		method: 'post',
 		url: 'https://oauth.reddit.com/api/unsave',
@@ -74,7 +74,7 @@ export const unsaveComment = ({ accessToken, _id }) => {
 	});
 };
 
-export const upvoteComment = ({ accessToken, _id, upvoted }) => {
+export const upvotePost = ({ accessToken, _id, upvoted }) => {
 	return axios({
 		method: 'post',
 		url: 'https://oauth.reddit.com/api/vote',
@@ -89,7 +89,7 @@ export const upvoteComment = ({ accessToken, _id, upvoted }) => {
 	});
 };
 
-export const editComment = ({ accessToken, _id, body }) => {
+export const editPost = ({ accessToken, _id, body }) => {
 	return axios({
 		method: 'post',
 		headers: {

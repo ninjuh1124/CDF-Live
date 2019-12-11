@@ -28,7 +28,9 @@ const Feed = (props) => {
 		<div>
 			<ul id="feed">
 				{feed.error && <p>Something went wrong: {feed.error}</p>}
-				{feed.isLoading && <p>Loading...</p>}
+				{feed.isLoading && feed.comments.length === 0 &&
+					<p>Loading...</p>
+				}
 				{comments}
 			</ul>
 			<a 

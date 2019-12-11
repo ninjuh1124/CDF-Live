@@ -11,9 +11,10 @@ import Source from './Source';
 
 import {
 	deletePost,
-	saveComment,
-	unsaveComment,
-	upvoteComment } from '../resources/redditAPI';
+	savePost,
+	unsavePost,
+	upvotePost } from '../resources/redditAPI';
+import { deleteComment } from '../resources/appAPI';
 
 const CommentAuthorRow = () => {
 	const { permalink, author, created } = useContext(CommentContext);
@@ -73,7 +74,10 @@ const CommentButtonsRow = () => {
 		<div className="reddit-buttons-row">
 			{(ownPost || loggedInAs !== "") ||
 				<RedditButton
-					onClick={() => upvoteComment({ accessToken, _id, upvoted })}
+					onClick={() => {
+						upvote();
+						upvotePost({ accessToken, _id, upvoted });
+					}}
 					className={`reddit-button link-primary ${isUpvoted ? ' upvoted' : ''}`
 					}
 				>
@@ -92,7 +96,17 @@ const CommentButtonsRow = () => {
 
 			{ownPost &&
 				<RedditButton
-					onClick={ () => deletePost({ accessToken, id, _id })}
+					onClick={ () => {
+						deletePost({ accessToken, id, _id })
+							.catch(err => {
+								console.log(err);
+							});
+						deleteComment({ accessToken, _id })
+							.catch(err => {
+								console.log(err);
+							});
+						deleteFromFeed(_id);
+					}}
 				>
 					delete
 				</RedditButton>
@@ -102,8 +116,9 @@ const CommentButtonsRow = () => {
 				<RedditButton
 					onClick={ () => {
 						isSaved ? 
-							unsaveComment({ accessToken, _id }) :
-							saveComment({ accessToken, _id });
+							unsavePost({ accessToken, _id }) :
+							savePost({ accessToken, _id });
+						save(_id);
 					}}
 				>
 					{isSaved ? 'unsave' : 'save'}
