@@ -41,9 +41,8 @@ const Heading = props => {
 
 					if (!props.loggedInAs) {
 						getMe(accessToken)
-							.then(d => {
-								console.log(d);
-								props.setUser(d.name)
+							.then(me => {
+								props.setUser(me.name)
 							});
 					}
 				})
