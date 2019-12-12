@@ -8,7 +8,7 @@ module.exports = ({
 	 **/
 	getUser: accessToken => {
 		return fetch(
-			'https://oauth.reddit.com/api/me',
+			'https://oauth.reddit.com/api/v1/me',
 			{ headers: { Authorization: `Bearer ${accessToken}` }}
 		)
 			.then(res => res.json())
