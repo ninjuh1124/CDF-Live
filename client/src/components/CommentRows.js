@@ -66,7 +66,7 @@ const CommentButtonsRow = () => {
 	const [editorMode, toggleEditor] = useState('hidden');
 
 	const { 
-		_id, id, ownPost, upvoted, body, accessToken, isUpvoted, 
+		_id, id, ownPost, upvoted, body, accessToken, isUpvoted, setError,
 		isSaved, isHidden, deleteFromFeed, upvote, hide, save, loggedInAs 
 	} = useContext(CommentContext);
 
@@ -100,10 +100,12 @@ const CommentButtonsRow = () => {
 						deletePost({ accessToken, id, _id })
 							.catch(err => {
 								console.log(err);
+								setError(err);
 							});
 						deleteComment({ accessToken, _id })
 							.catch(err => {
 								console.log(err);
+								setError(err);
 							});
 						deleteFromFeed(_id);
 					}}

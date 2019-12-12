@@ -28,7 +28,7 @@ const Heading = props => {
 
 	useEffect( () => {
 		getThread()
-			.then(threads => props.updateThread(threads[0]))
+			.then(thread => props.updateThread(thread))
 			.catch(err => {
 				setError(err);
 				console.log(err);
@@ -40,8 +40,11 @@ const Heading = props => {
 					props.setAccessToken(accessToken);
 
 					if (!props.loggedInAs) {
-						getMe(props.accessToken)
-							.then(d => props.setUser(d.name));
+						getMe(accessToken)
+							.then(d => {
+								console.log(d);
+								props.setUser(d.name)
+							});
 					}
 				})
 				.catch(err => {

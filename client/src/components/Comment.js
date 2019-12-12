@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 
 import CommentContainer from '../containers/CommentContainer';
 import { FeedContext } from '../containers/FeedContainer';
@@ -10,6 +10,7 @@ export const CommentContext = React.createContext({});
 
 const Comment = props => {
 	const feed = useContext(FeedContext);
+	const [error, setError] = useState(null);
 
 	const children = feed.comments
 		.filter(comment => !feed.hidden.includes(comment._id))
@@ -29,7 +30,7 @@ const Comment = props => {
 		});
 	
 	return (
-		<CommentContext.Provider value={{...props}}>
+		<CommentContext.Provider value={{...props, setError}}>
 			<li
 				className={
 				`${props.className} comment ${props.ownPost ? 'own-post' : ''}`

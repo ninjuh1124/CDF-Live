@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 export const FeedContext = React.createContext({});
 
 const FeedContainer = props => {
+	const [timeoutId, newTimeoutId] = useState(0);
 	const [emptyCalls, setEmptyCalls] = useState(0);
 	const [isLoading, loading] = useState(true);
 	const [newestComment, setNewestComment] = useState({});
@@ -22,6 +23,7 @@ const FeedContainer = props => {
 			.then(comments => {
 				if (comments) {
 					props.appendToFeed(comments);
+					clearTimeout(timeoutId);
 					setEmptyCalls(1);
 				}
 			})
@@ -32,7 +34,7 @@ const FeedContainer = props => {
 	};
 
 	useEffect( () => {
-		setTimeout( () => {
+		newTimeoutId(setTimeout( () => {
 			loading(true);
 			getHistory(newestComment._id)
 				.then(comments => {
@@ -47,7 +49,7 @@ const FeedContainer = props => {
 					console.log(err);
 				})
 				.finally( () => loading(false));
-		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000);
+		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000));
 	}, [emptyCalls]);
 
 	return (

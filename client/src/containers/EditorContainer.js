@@ -8,6 +8,7 @@ import { comment, editPost } from '../resources/redditAPI';
 const EditorContainer = props => {
 	const [isSending, startSending] = useState(false);
 	const [text, changeText] = useState('');
+	const [error, setError] = useState(null);
 	const textAreaRef = useRef();
 	const {
 		_id, id, accessToken, editFeed, prependToFeed
@@ -91,6 +92,7 @@ const EditorContainer = props => {
 				]);
 			}).catch(err => {
 				startSending(false);
+				setError(err);
 				console.log(err);
 			});
 		} else if (props.editorMode === 'edit') {
@@ -105,6 +107,7 @@ const EditorContainer = props => {
 				return;
 			}).catch (err => {
 				startSending(false);
+				setError(err);
 				console.log(err);
 			});
 		}

@@ -23,13 +23,16 @@ export const request = (uri, options) => {
 };
 
 export const getMe = accessToken => {
-	return axios({
-		method: 'get',
-		url: 'https://oauth.reddit.com/api/v1/me',
-		headers: {
-			Authorization: `Bearer ${accessToken}`
-		}
-	});
+	return axios
+		.get(
+			'https://oauth.reddit.com/api/v1/me',
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`
+				}
+			}
+		)
+		.then(res => res.data);
 };
 
 export const deletePost = ({ accessToken, _id, id }) => {

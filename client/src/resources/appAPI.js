@@ -25,7 +25,7 @@ export const getAccessToken = refreshToken => {
 			{ crossdomain: true }
 		)
 		.then(res => {
-			if (res.message.access_token) return res.message.access_token;
+			if (res.data.message.access_token) return res.data.message.access_token;
 			else throw ({ response: res });
 		});
 };
