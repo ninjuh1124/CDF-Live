@@ -1,4 +1,4 @@
-module.exports = (db) => {
+module.exports = db => {
 	const helpers = require('./helpers'),
 		commentService = require('../services/comments')(db),
 		threadService = require('../services/threads')(db),
