@@ -1,8 +1,8 @@
 const dotenv = require('dotenv'),
 	express = require('express'),
-	dbService = require('./services/dbConnection'),
+	dbService = require('./config/dbConnection'),
 	app = express(),
-	config = require('./services/appConfig')(app);
+	config = require('./config/appConfig')(app);
 
 dotenv.load();
 let apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
