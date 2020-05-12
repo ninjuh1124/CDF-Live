@@ -1,0 +1,27 @@
+{
+  "name": "fridaydotmoe-db",
+  "version": "1.0.0",
+  "description": "Backend DB handler for website",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninjuh1124/fridaydotmoe.git"
+  },
+  "author": "ninjuh1124",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ninjuh1124/fridaydotmoe/issues"
+  },
+  "homepage": "https://github.com/ninjuh1124/fridaydotmoe#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.10"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}

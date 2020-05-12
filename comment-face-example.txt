@@ -1,6 +1,0 @@
-<a href="#facecode" title="hovertext">
-    "Top text"
-    <strong>Bottom text</strong>
-</a>
-
-<a href="#facecode">Only top text</a>

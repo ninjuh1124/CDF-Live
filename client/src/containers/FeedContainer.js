@@ -7,7 +7,15 @@ import { getHistory, loadMore } from '../resources/appAPI';
 
 import { connect } from 'react-redux';
 
-export const FeedContext = React.createContext({});
+export const FeedContext = React.createContext({
+	comments: [],
+	hidden: [],
+	isLoading: false,
+	error: null,
+	appendToFeed: null,
+	prependToFeed: null,
+	loadMore: null
+});
 
 const FeedContainer = props => {
 	const [timeoutId, newTimeoutId] = useState(0);
@@ -21,7 +29,7 @@ const FeedContainer = props => {
 	const load = () => {
 		loadMore(props.history[props.history.length-1]._id)
 			.then(comments => {
-				if (comments) {
+				if (comments.length > 0) {
 					props.appendToFeed(comments);
 					clearTimeout(timeoutId);
 					setEmptyCalls(1);
@@ -33,12 +41,11 @@ const FeedContainer = props => {
 			});
 	};
 
-	useEffect( () => {
-		newTimeoutId(setTimeout( () => {
-			loading(true);
+	useEffect(() => {
+		newTimeoutId(setTimeout(() => {
 			getHistory(newestComment._id)
 				.then(comments => {
-					if (comments) {
+					if (comments.length > 0) {
 						props.prependToFeed(comments);
 						setNewestComment(comments[0]);
 						setEmptyCalls(1);
@@ -48,7 +55,9 @@ const FeedContainer = props => {
 					setError(err);
 					console.log(err);
 				})
-				.finally( () => loading(false));
+				.finally(() => {
+					if (isLoading) loading(false)
+				});
 		}, emptyCalls < 24 ? emptyCalls * 5000 : 24*5000));
 	}, [emptyCalls]);
 
@@ -57,11 +66,12 @@ const FeedContainer = props => {
 			comments: props.history,
 			hidden: props.hidden,
 			isLoading: isLoading,
+			appendToFeed: props.appendToFeed,
+			prependToFeed: props.prependToFeed,
+			loadMore: load,
 			error: error
 		}}>
-			<Feed 
-				loadMore={load}
-			/>
+			<Feed />
 		</FeedContext.Provider>
 	);
 }

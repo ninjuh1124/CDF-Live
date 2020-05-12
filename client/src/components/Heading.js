@@ -43,12 +43,18 @@ const Heading = props => {
 						getMe(accessToken)
 							.then(me => {
 								props.setUser(me.name)
+							})
+							.catch(err => {
+								setError(err);
+								console.log(error);
+								props.logout();
 							});
 					}
 				})
 				.catch(err => {
 					setError(err);
-					console.log(err);
+					console.log(error);
+					props.logout();
 				});
 
 			keepGettingAccessToken();

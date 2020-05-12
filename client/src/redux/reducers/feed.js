@@ -31,30 +31,24 @@ export default (state = initialState, action) => {
 		case APPEND_TO_FEED: {
 			return {
 				...state,
-				history: [
-					...state.history,
-					...action.payload.filter(comment => {
-						return !(state.history
-							.map(comment => comment._id)
-							.includes(comment._id)
-						);
-					})
-				]
+				history: state.history.concat(
+					action.payload.filter(comment => !(state.history
+						.map(c => c._id)
+						.includes(comment._id)
+					))
+				)
 			};
 		}
 
 		case PREPEND_TO_FEED: {
 			return {
 				...state,
-				history: [
-					...action.payload.filter(comment => {
-						return !(state.history
-							.map(comment => comment._id)
-							.includes(comment._id)
-						);
-					}),
-					...state.history
-				]
+				history: action.payload
+					.filter(comment => !(state.history
+						.map(c=>c._id)
+						.includes(comment._id)
+					))
+					.concat(state.history)
 			};
 		}
 

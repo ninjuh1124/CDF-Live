@@ -1,17 +1,21 @@
 import React from 'react';
-import FeedContainer from './containers/FeedContainer';
-import HeadingContainer from './containers/HeadingContainer';
-import About from './components/About';
-import Changelog from './components/Changelog';
-import PageNotFound from './components/PageNotFound';
-import Login from './components/Login';
 import {
 	BrowserRouter as Router,
 	Route,
 	Redirect,
 	Switch
 } from 'react-router-dom';
-import * as qs from 'query-string';
+
+import FeedContainer from './containers/FeedContainer';
+import HeadingContainer from './containers/HeadingContainer';
+
+import About from './components/About';
+import Changelog from './components/Changelog';
+import Login from './components/Login';
+import CommentFaces from './components/CommentFaces';
+import PageNotFound from './components/PageNotFound';
+
+import qs from 'querystring';
 
 import './style.scss';
 
@@ -67,19 +71,20 @@ class App extends React.Component {
 					/>
 					<Route
 						exact path='/changelog'
-						render={ () => {
-							return <Changelog />
-						}}
+						render={ () => (<Changelog />) }
 					/>
 					<Route
 						exact path='/reddit_oauth_login'
-						render={ () => {
-							return <Login 
+						render={ () => ( <Login 
 								handleLogin={this.handleLogin} 
 								state={params.state}
 								code={params.code}
 							/>
-						}}
+						)}
+					/>
+					<Route
+						exact path='/faces'
+						component={CommentFaces}
 					/>
 					<Route component={PageNotFound} />
 				</Switch>

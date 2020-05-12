@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { CommentContext } from '../components/Comment';
+import { FeedContext } from './FeedContainer';
 
 import Editor from '../components/Editor';
 
@@ -10,8 +11,9 @@ const EditorContainer = props => {
 	const [text, changeText] = useState('');
 	const [error, setError] = useState(null);
 	const textAreaRef = useRef();
+	const feed = useContext(FeedContext);
 	const {
-		_id, id, accessToken, editFeed, prependToFeed
+		_id, id, accessToken, editFeed
 	} = useContext(CommentContext);
 
 	const focusTextArea = () => textAreaRef.current.focus();
@@ -77,7 +79,7 @@ const EditorContainer = props => {
 				props.toggleEditor(props.editorMode);
 				let data = res.data.json.data.things[0].data;
 				startSending(false);
-				prependToFeed([
+				feed.prependToFeed([
 					{
 						kind: 'comment',
 						author: data.author,

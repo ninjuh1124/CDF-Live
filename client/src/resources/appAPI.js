@@ -58,7 +58,7 @@ export const getHistory = newerThan => {
 				res.data.message && 
 				Array.isArray(res.data.message) && 
 				res.data.message.length === 0
-			) return null;
+			) return [];
 			else throw ({ response: res });
 		});
 };

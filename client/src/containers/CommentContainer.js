@@ -21,7 +21,6 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-	prependToFeed: arr => dispatch(prependToFeed(arr)),
 	editFeed: comment => dispatch(editFeed(comment)),
 	deleteFromFeed: () => dispatch(deleteFromFeed(ownProps._id)),
 	upvote: (_id = ownProps._id) => dispatch(upvote(_id)),

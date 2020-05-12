@@ -36,7 +36,7 @@ const Feed = (props) => {
 			<a 
 				className="link-primary"
 				href='javascript:void(0)'
-				onClick={props.loadMore}
+				onClick={feed.loadMore}
 			>
 				load more comments
 			</a>
