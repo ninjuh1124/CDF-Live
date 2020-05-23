@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { FeedContext } from '../containers/FeedContainer';
-import CommentContainer from '../containers/CommentContainer';
+import Comment from '../components/CommentContainer';
 
-const Feed = (props) => {
+const Feed = props => {
 	const feed = useContext(FeedContext);
 
 	const comments = feed.comments && feed.comments
@@ -10,7 +10,7 @@ const Feed = (props) => {
 		.filter(comment => /^t3_\S+/.test(comment.parentID))
 		.map(comment => {
 			return (
-				<CommentContainer
+				<Comment
 					_id={comment._id}
 					key={comment.id}
 					id={comment.id}
@@ -19,7 +19,6 @@ const Feed = (props) => {
 					permalink={comment.permalink}
 					created={comment.created}
 					depth={0}
-					className="parent"
 				/>
 			);
 		});

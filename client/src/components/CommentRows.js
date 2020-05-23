@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import { CommentContext } from './Comment';
+import React, { useState } from 'react';
 
 import TimeAgo from 'react-timeago';
 
@@ -9,16 +8,9 @@ import EditorContainer from '../containers/EditorContainer';
 import RedditButton from '../resources/RedditButton';
 import Source from './Source';
 
-import {
-	deletePost,
-	savePost,
-	unsavePost,
-	upvotePost } from '../resources/redditAPI';
-import { deleteComment } from '../resources/appAPI';
+/** TODO implement with hooks **/
 
 const CommentAuthorRow = () => {
-	const { permalink, author, created } = useContext(CommentContext);
-
 	return (
 		<div className="author-row">
 			<h5>
@@ -47,7 +39,6 @@ const CommentAuthorRow = () => {
 }
 
 const CommentBodyRow = () => {
-	const { body } = useContext(CommentContext);
 
 	return (
 		<div className="body-row">
@@ -62,14 +53,6 @@ const CommentBodyRow = () => {
 }
 
 const CommentButtonsRow = () => {
-	const [source, toggleSource] = useState('hidden');
-	const [editorMode, toggleEditor] = useState('hidden');
-
-	const { 
-		_id, id, ownPost, upvoted, body, accessToken, isUpvoted, setError,
-		isSaved, isHidden, deleteFromFeed, upvote, hide, save, loggedInAs 
-	} = useContext(CommentContext);
-
 	return (
 		<div className="reddit-buttons-row">
 			{(ownPost || loggedInAs !== "") ||
@@ -86,10 +69,7 @@ const CommentButtonsRow = () => {
 			}
 
 			<RedditButton
-				onClick={() => toggleSource(source === 'hidden' ?
-					'visible' : 
-					'hidden'
-				)}
+				onClick={() => toggleSource(!showSource)}
 			>
 				source
 			</RedditButton>
