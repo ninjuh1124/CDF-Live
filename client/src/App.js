@@ -6,91 +6,51 @@ import {
 	Switch
 } from 'react-router-dom';
 
-import FeedContainer from './containers/FeedContainer';
-import HeadingContainer from './containers/HeadingContainer';
+import {
+	About,
+	Changelog,
+	CommentFaces,
+	Feed,
+	Heading,
+	Login,
+	PageNotFound } from './components';
 
-import About from './components/About';
-import Changelog from './components/Changelog';
-import Login from './components/Login';
-import CommentFaces from './components/CommentFaces';
-import PageNotFound from './components/PageNotFound';
-
-import qs from 'querystring';
+import {
+	FeedProvider, RedditProvider,
+	useFeed, useReddit } from './context';
 
 import './style.scss';
 
-class App extends React.Component {
-	constructor() {
-		super();
-		this.generateString = this.generateString.bind(this);
-		this.handleLogin = this.handleLogin.bind(this);
-	}
+const App = props => {
+	/** CONTEXT **/
+	const feed = useFeed();
+	const reddit = useReddit();
 
-	handleLogin(refreshToken, accessToken) {
-		localStorage.setItem('refreshToken', refreshToken);
-		sessionStorage.setItem('accesToken', accessToken);
-	}
+	/** ROUTE COMPONENTS **/
+	const FeedRoute = () => (
+		<RedditProvider value={reddit}>
+			<div style={{ padding: '3px' }}>
+				<Heading />
+				<FeedProvider value={feed}>
+					<Feed />
+				</FeedProvider>
+			</div>
+		</RedditProvider>
+	);
 
-	generateString() {
-		let str = "";
-		let chars = "1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
-		for (let i=1; i<20; i++) {
-			str += chars[Math.floor(Math.random() * chars.length)];
-		}
-		return str;
-	}
-
-	componentDidMount() {
-		// set unique string for device, for use in Reddit OAuth
-		if (localStorage.getItem('device') == null) {
-			localStorage.setItem('device', this.generateString());
-		}
-	}
-
-	render() {
-		let api = process.env.REACT_APP_API;
-		let params = qs.parse(window.location.search, {ignoreQueryPrefix: true});
-		return (
-			<Router><div id="content">
-				<Switch>
-					<Redirect exact from='/' to='/feed' />
-					<Route
-						exact path='/feed'
-						render={ () => {
-							return <div stype={{padding: '3px'}}>
-								<HeadingContainer />
-								<FeedContainer />
-							</div>
-						}}
-					/>
-					<Route
-						exact path='/about'
-						render={ () => {
-							return <About api={api} />
-						}}
-					/>
-					<Route
-						exact path='/changelog'
-						render={ () => (<Changelog />) }
-					/>
-					<Route
-						exact path='/reddit_oauth_login'
-						render={ () => ( <Login 
-								handleLogin={this.handleLogin} 
-								state={params.state}
-								code={params.code}
-							/>
-						)}
-					/>
-					<Route
-						exact path='/faces'
-						component={CommentFaces}
-					/>
-					<Route component={PageNotFound} />
-				</Switch>
-			</div></Router>
-		);
-	}
+	return (
+		<Router><div id='content'><Switch>
+			<Redirect exact from='/' to='/feed' />
+			<Route exact path='/feed' component={FeedRoute} />
+			<Route exact path='/about' component={About} />
+			<Route exact path='/changelog' component={Changelog} />
+			<Route exact path='/reddit_oauth_login' component={Login} />
+			<Route exact path='/faces' component={CommentFaces} />
+			<Route component={PageNotFound} />
+		</Switch></div></Router>
+	)
 }
+
+// let params = qs.parse(window.location.search, {ignoreQueryPrefix: true});
 
 export default App;

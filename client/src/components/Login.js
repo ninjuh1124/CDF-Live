@@ -1,42 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+import qs from 'querystring';
 
 import { getMe } from '../resources/redditAPI';
 import { getRefreshToken } from '../resources/appAPI';
 
-import { setUser,
-	setAccessToken,
-	setRefreshToken } from '../redux/actions';
+import { RedditContext } from '../context';
 
-import { connect } from 'react-redux';
 
 const Login = props => {
 	const [gotToken, receiveToken] = useState(false);
-	const [error, setError] = useState(null);
+	const reddit = useContext(RedditContext);
 
-	useEffect( () => {
-		if (props.state && props.code) {
-			getRefreshToken(props.code)
-				.then(tokens => {
-					let rt = tokens.refresh_token;
-					let at = tokens.access_token;
+	const params = qs.parse(
+		window.location.search, 
+		{ ignoreQueryPrefix: true }
+	);
 
-					props.setRefreshToken(rt);
-					props.setAccessToken(at);
+	if (params.state && params.code) {
+		getRefreshToken(params.code)
+			.then(tokens => {
+				let rt = tokens.refresh_token;
+				let at = tokens.access_token;
 
-					localStorage.setItem('refreshToken', rt);
+				reddit.setRefreshToken(rt);
+				reddit.setAccessToken(at);
 
-					getMe(at).then(res => {
-						props.setUser(res.data.name);
-						receiveToken(true);
-					});
-				})
-				.catch(err => {
-					setError(err);
-					console.log(err);
-				});
-		}
-	}, []);
+				recieveToken(true);
+			})
+			.catch(err => {
+				reddit.setError(err);
+			});
+	} else {
+		reddit.setError(new Error('Could not retrieve reddit token'));
+		return <Redirect to='/feed' />
+	}
 
 	if (gotToken) {
 		return <Redirect to='/feed' />
@@ -45,12 +43,10 @@ const Login = props => {
 			<p>Authorizing</p>
 		);
 	}
-}
 
-const mapDispatchToProps = dispatch => ({
-	setRefreshToken: token => dispatch(setRefreshToken(token)),
-	setAccessToken: token => dispatch(setAccessToken(token)),
-	setUser: user => dispatch(setUser(user))
-});
+	return (
+		gotToken ? <Redirect to='/feed' /> : <p>Authorizing</p>
+	);
+};
 
-export default connect(null, mapDispatchToProps)(Login);
+export default Login;

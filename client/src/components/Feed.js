@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { FeedContext } from '../containers/FeedContainer';
-import Comment from '../components/CommentContainer';
+import { FeedContext } from '../context'
+import Comment from '../components/Comment';
 
 const Feed = props => {
 	const feed = useContext(FeedContext);

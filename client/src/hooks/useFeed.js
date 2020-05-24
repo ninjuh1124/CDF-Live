@@ -4,50 +4,16 @@ import {
 	useContext,
 	useReducer } from 'react';
 
-/** TODO import reducer logic from redux **/
-/** REDUCERS **/
-const feedReducer = (state, action) => {
-	switch (action.type) {
-		case 'prepend': break;
-		case 'append': break;
-		case 'update': break;
-		case 'edit': break;
-		case 'delete': break;
-		case 'hide': break;
-		case 'save': break;
-		case 'upvote': break;
-		default: break;
-	}
-}
-
-const upvoteReducer = (state, action) => {
-	switch (action.type) {
-		case 'upvote': break;
-		case 'unvote': break;
-		case 'downvote': break;
-		default: break;
-	}
-}
-
-const hideReducer = (state, action) => {
-	switch (action.type) {
-		case 'hide': break;
-		case 'unhide': break;
-		default: break;
-	}
-}
-
-const saveReducer = (state, action) => {
-	switch (action.type) {
-		case 'save': break;
-		case 'unsave': break;
-		default: break;
-}
+import {
+	historyReducer,
+	upvoteReducer,
+	hideReducer,
+	saveReducer } from './reducers/feedReducers';
 
 /** HOOKS **/
 const useFeed = () => {
 	/** FEED ACTIONS **/
-	const [history, historyDispatch] = useReducer(feedReducer, []);
+	const [history, historyDispatch] = useReducer(historyReducer, []);
 	const [upvoted, upvoteDispatch] = useReducer(
 		upvoteReducer, JSON.parse(localStorage.getItem('upvoted'))
 	);
@@ -118,6 +84,19 @@ const useFeed = () => {
 		))
 	}, [emptyCalls]);
 
+	/** BROWSER SIDE-EFFECTS **/
+	useEffect(() => {
+		localStorage.setItem('upvoted', JSON.stringify(upvoted));
+	}, [upvoted]);
+
+	useEffect(() => {
+		localStorage.setItem('hidden', JSON.stringify(hidden));
+	}, [hidden]);
+
+	useEffect(() => {
+		localStorage.setItem('saved', JSON.stringify(saved));
+	}, [saved]);
+
 	/** RETURN HOOKS **/
 	return {
 		history, isLoading,
@@ -128,6 +107,6 @@ const useFeed = () => {
 		upvoted, upvoteDispatch,
 		hidden, hideDispatch,
 		saved, saveDispatch,
-		error
+		error, setError
 	}
 }

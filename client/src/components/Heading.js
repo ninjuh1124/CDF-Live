@@ -1,65 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import EditorContainer from '../containers/EditorContainer';
 import RedditButton from '../resources/RedditButton';
 
-import { getMe } from '../resources/redditAPI';
-import { getThread, getAccessToken } from '../resources/appAPI';
+import useThread from '../hooks/useThread';
+
+import { RedditContext } from '../context';
 
 const Heading = props => {
 	const [editorMode, toggleEditor] = useState('hidden');
-	const [error, setError] = useState(null);
-
-	const keepGettingAccessToken = () => {
-		setTimeout( () => {
-			getAccessToken(props.refreshToken)
-				.then(accessToken => {
-					props.setAccessToken(accessToken);
-				})
-				.catch(err => {
-					setError(err);
-					console.log(err);
-				});
-
-			keepGettingAccessToken();
-		}, 3300000)
-	}
-
-	useEffect( () => {
-		getThread()
-			.then(thread => props.updateThread(thread))
-			.catch(err => {
-				setError(err);
-				console.log(err);
-			});
-
-		if (props.refreshToken) {
-			getAccessToken(props.refreshToken)
-				.then(accessToken => {
-					props.setAccessToken(accessToken);
-
-					if (!props.loggedInAs) {
-						getMe(accessToken)
-							.then(me => {
-								props.setUser(me.name)
-							})
-							.catch(err => {
-								setError(err);
-								console.log(error);
-								props.logout();
-							});
-					}
-				})
-				.catch(err => {
-					setError(err);
-					console.log(error);
-					props.logout();
-				});
-
-			keepGettingAccessToken();
-		}
-	}, []);
+	const thread = useThread();
+	const reddit = useContext(RedditContext);
 
 	let uriBase = "https://reddit.com/api/v1/authorize?",
 		redirect = encodeURIComponent(process.env.REACT_APP_REDIRECT),
@@ -67,7 +19,7 @@ const Heading = props => {
 		params = [
 			`client_id=${process.env.REACT_APP_CLIENT_ID}`,
 			"response_type=code",
-			`state=${localStorage.getItem('device')}`,
+			`state=${reddit.device}`,
 			`redirect_uri=${redirect}`,
 			"duration=permanent",
 			`scope=${scope.join('+')}`
@@ -85,29 +37,32 @@ const Heading = props => {
 			<h5 id="latest"><a
 				className="link-primary"
 				href={
-					props.thread.permalink ? 
-					props.thread.permalink :
+					thread.permalink ? 
+					thread.permalink :
 					"https://reddit.com/r/anime"
 				}
 				rel="noreferrer noopener"
 				target="_blank"
-			>Latest Thread</a></h5>
+			>{thread.error || 'Latest Thread'}</a></h5>
+
+			{ thread.error &&
+				<h5 className='text-error'>{thread.error}</h5> }
 
 			<h6 id='logged-in-as'>
-				{props.refreshToken &&
-				(props.loggedInAs
-					? <small>
-						Logged in as {props.loggedInAs} (<a 
+				{ reddit.refreshToken &&
+				(reddit.user.name ? 
+					<small>
+						Logged in as {reddit.user.name} (<a 
 							href='javascript:void(0)'
-							onClick={props.logout}>logout</a>)
-					</small>
-					: <small>Loading user info...</small>)
+							onClick={() => setRefreshToken(null)}>logout</a>)
+					</small> : 
+					<small>Loading user info...</small>)
 				}
 			</h6>
 
 			<hr id='topbar' />
 	
-			{props.isLoggedIn ?
+			{ reddit.user ?
 				(<RedditButton
 					onClick={() => toggleEditor(editorMode === 'hidden' ?
 						'reply' :
@@ -117,10 +72,10 @@ const Heading = props => {
 				(<a
 					id="reddit-login-button"
 					href={uriBase+params}
-				><i className="fab fa-reddit" /> Login</a>)
+				><i className="fab fa-reddit" />Login</a>)
 			}
 
-			{editorMode === 'hidden' ||
+			{ editorMode === 'hidden' ||
 				<EditorContainer
 					editorMode={editorMode}
 					toggleEditor={() => toggleEditor('hidden')}
@@ -128,6 +83,6 @@ const Heading = props => {
 			}
 		</div>
 	);
-}
+};
 
 export default Heading;
