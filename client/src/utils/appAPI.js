@@ -12,6 +12,13 @@ const appAPI = process.env.REACT_APP_API;
  * Calls to these functions should supply their own catch block
  *
  **/
+
+export const query = endpoint => {
+	return axios
+		.get(`${appAPI}${endpoint}`, { crossdomain: true })
+		.then(res => res.data.message);
+};
+
 export const getThread = () => {
 	return axios
 		.get(`${appAPI}v1/thread.json`, { crossdomain: true })

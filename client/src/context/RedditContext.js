@@ -5,6 +5,9 @@ const RedditContext = createContext({
 	setRefreshToken: null,
 	accessToken: null,
 	setAccessToken: null
+	user: null,
+	error: new Error('Reddit context parameters not set'),
+	setError: null
 });
 
 export default RedditContext;

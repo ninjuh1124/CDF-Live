@@ -7,12 +7,11 @@ import {
 } from 'react-router-dom';
 
 import {
-	About,
-	Changelog,
 	CommentFaces,
-	Feed,
+	FeedRoute,
 	Heading,
 	Login,
+	MarkdownPage,
 	PageNotFound } from './components';
 
 import {
@@ -28,25 +27,42 @@ const App = props => {
 
 	/** ROUTE COMPONENTS **/
 	const FeedRoute = () => (
-		<RedditProvider value={reddit}>
-			<div style={{ padding: '3px' }}>
-				<Heading />
-				<FeedProvider value={feed}>
-					<Feed />
-				</FeedProvider>
-			</div>
-		</RedditProvider>
+		<div style={{ padding: '3px' }}>
+			<Heading 
+				title='Casual Discussion Friday'
+				prebar={() => {
+				}}
+				postbar={() => {
+				}}
+			/>
+			<FeedProvider defaultValue={feed}>
+				<Feed />
+			</FeedProvider>
+		</div>
 	);
 
 	return (
 		<Router><div id='content'><Switch>
-			<Redirect exact from='/' to='/feed' />
-			<Route exact path='/feed' component={FeedRoute} />
-			<Route exact path='/about' component={About} />
-			<Route exact path='/changelog' component={Changelog} />
-			<Route exact path='/reddit_oauth_login' component={Login} />
-			<Route exact path='/faces' component={CommentFaces} />
-			<Route component={PageNotFound} />
+			<RedditProvider defaultValue={reddit}>
+				<Redirect exact 
+					from='/' to='/feed' />
+				<Route exact 
+					path='/feed' component={FeedRoute} />
+				<Route exact 
+					path='/about' component={() => {
+						<MarkdownPage endpoint='content/about.md' />
+					}} />
+				<Route exact 
+					path='/changelog' component={() => {
+						<MarkdownPage endpoint='content/changelog.md' />
+					}} />
+				<Route exact 
+					path='/reddit_oauth_login' component={Login} />
+				<Route exact 
+					path='/faces' component={CommentFaces} />
+				<Route 
+					component={PageNotFound} />
+			</RedditProvider>
 		</Switch></div></Router>
 	)
 }

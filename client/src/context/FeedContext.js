@@ -2,11 +2,17 @@ import { createContext } from 'react';
 
 const FeedContext = createContext({
 	history: [],
-	hidden: [],
 	isLoading: false,
-	error: null,
 	prepend: null,
-	loadMore: null
+	loadMore: null,
+	upvoted: [],
+	hidden: [],
+	saved: [],
+	upvoteDispatch: null,
+	hideDispatch: null,
+	saveDispatch: null,
+	error: new Error('Feed context parameters not set'),
+	setError: null
 });
 
 export default FeedContext;
