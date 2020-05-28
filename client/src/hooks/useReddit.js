@@ -1,4 +1,4 @@
-import { useState } from 'React';
+import { useState, useRef } from 'React';
 
 import { getAccessToken } from '../utils/appAPI'
 import { getMe } from '../utils/redditAPI';
@@ -9,7 +9,7 @@ const useReddit = () => {
 	const [refreshToken, setRefreshToken] = useState(
 		JSON.parse(localStorage.getItem('refreshToken') || null)
 	);
-	const [accessToken, setAccessToken] = useState(
+	const accessToken = useRef(
 		JSON.parse(sessionStorage.getItem('accessToken') || null)
 	);
 	const [device, setDevice] = useState(
@@ -23,15 +23,15 @@ const useReddit = () => {
 	}, [refreshToken]);
 
 	useEffect(() => {
-		sessionStorage.setItem('accessToken', accessToken)
-	}, [accessToken]);
+		sessionStorage.setItem('accessToken', accessToken.current)
+	}, [accessToken.current]);
 
 	/** OTHER EFFECTS **/
 	useEffect(() => {
-		if (accessToken) {
+		if (accessToken.current) {
 			// set user to context
 			if (!user) {
-				getMe(accessToken)
+				getMe(accessToken.current)
 					.then(user => {
 						setUser(user);
 					})
@@ -43,24 +43,24 @@ const useReddit = () => {
 			// keep refreshing token
 			setTimeout(() => {
 				getRefreshToken(refreshToken)
-					.then(accessToken => {
-						setAccessToken(accessToken);
+					.then(at => {
+						accessToken.current = at;
 						setError(null);
 					})
 					.catch(error => {
 						setError(error);
-						setAccessToken(null);
+						accessToken.current = null;
 					});
 			}, 3300000);
 		}
-	}, [accessToken]);
+	}, [accessToken.current]);
 
 	/** ERROR HANDLING **/
 	const [error, setError] = useState(null);
 
 	return {
 		refreshToken, setRefreshToken,
-		accessToken, setAccessToken,
+		accessToken: accessToken.current,
 		user,
 		error, setError
 	};

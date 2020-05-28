@@ -25,8 +25,8 @@ const useFeed = () => {
 	);
 
 	/** API STATE **/
-	const [timeoutId, setTimeoutId] = useState(0);
-	const [emptyCalls, setEmptyCalls] = useState(0);
+	const timeoutId = useRef(0);
+	const emptyCalls = useRef(0);
 	const [isLoading, setLoading] = useState(false);
 	const [newestComment, setNewestComment] = useState(null);
 
@@ -39,13 +39,14 @@ const useFeed = () => {
 		app.getHistory(newestComment)
 			.then(comments => {
 				if (comments.length > 0) {
-					clearTimeout(timeoutId);
-					setEmptyCalls(1);
+					emptyCalls.current = 1;
 					historyDispatch({
 						type: 'prepend',
 						comments
 					});
 					setLoading(false);
+				} else {
+					emptyCalls.current++;
 				}
 			})
 			.catch(error => {
@@ -63,8 +64,7 @@ const useFeed = () => {
 		app.loadMore(parents[parents.length - 1])
 			.then(comments => {
 				if (comments.length > 0) {
-					clearTimeout(timeoutId);
-					setEmptyCalls(1);
+					emptyCalls.current = 1;
 					historyDispatch({
 						type: 'append', comments
 					});
@@ -78,9 +78,10 @@ const useFeed = () => {
 
 	/** AUTOREFRESH HISTORY ON DECAYING TIMER **/
 	useEffect(() => {
-		setTimeoutId(setTimeout(
+		clearTimeout(timeoutId.current);
+		timeoutId.current = (setTimeout(
 			getHistory,
-			emptyCalls < 24 ? emptyCalls * 5000 : 24*5000
+			emptyCalls.current < 24 ? emptyCalls.current * 5000 : 24*5000
 		))
 	}, [emptyCalls]);
 
