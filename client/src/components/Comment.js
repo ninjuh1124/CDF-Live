@@ -1,51 +1,38 @@
 import React from 'react';
 
-import CommentContainer from '../containers/CommentContainer';
-import { FeedContext } from '../containers/FeedContainer';
+import { FeedContext } from '../context';
+
+import useComment from '../hooks/useComment';
+import useEditor from '../hooks/useEditor';
+
 import { CommentBodyRow,
 	CommentAuthorRow,
 	CommentButtonsRow } from './CommentRows';
 
 const Comment = props => {
-	const meta = useComment(props);
+	const meta = useComment({ ...props });
 	
 	return (meta.hidden &&
 		<li
 			className={
 			`${meta.className} comment ${meta.ownPost ? 'own-post' : ''}`
 			}
-			id={props._id}
+			id={meta._id}
 		>
 
 			<CommentAuthorRow 
-				permalink={props.permalink}
-				author={props.author}
-				created={props.created}
+				comment={meta}
 			/>
 			<CommentBodyRow 
-				body={props.body}
+				comment={meta}
 			/>
 			<CommentButtonsRow 
-				_id={id}
-				id={id}
-				ownPost={meta.ownPost}
-				upvoted={meta.upvoted}
-				setError={meta.setError}
-				isSaved={meta.saved}
-				isHidden={meta.hidden}
-				showSource={meta.showSource}
-				showEditor={meta.showEditor}
-				delete={meta.delete}
-				upvote={meta.upvote}
-				hide{meta.hide}
-				save{meta.save}
-				toggleSource={meta.toggleSource}
-				toggleEditor={meta.toggleEditor}
+				comment={meta}
 			/>
 
 			<div className="arrow">
 				<h2 className="arrow-link"><a
-					href={props.permalink}
+					href={meta.permalink}
 					target="_blank"
 					rel="noopener noreferrer"
 					title="View comment on reddit"

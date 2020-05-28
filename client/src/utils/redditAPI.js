@@ -35,7 +35,7 @@ export const getMe = accessToken => {
 		.then(res => res.data);
 };
 
-export const deletePost = ({ accessToken, _id, id }) => {
+export const deletePost = ({ accessToken, _id }) => {
 	return axios({
 		method: 'post',
 		url: 'https://oauth.reddit.com/api/del',
@@ -77,7 +77,7 @@ export const unsavePost = ({ accessToken, _id }) => {
 	});
 };
 
-export const upvotePost = ({ accessToken, _id, upvoted }) => {
+export const upvotePost = ({ accessToken, _id, dir }) => {
 	return axios({
 		method: 'post',
 		url: 'https://oauth.reddit.com/api/vote',
@@ -108,7 +108,7 @@ export const editPost = ({ accessToken, _id, body }) => {
 	});
 };
 
-export const comment = ({ accessToken, parent_id, body }) => {
+export const commentPost = ({ accessToken, parent_id, body }) => {
 	return axios({
 		method: 'post',
 		headers: {
@@ -120,6 +120,6 @@ export const comment = ({ accessToken, parent_id, body }) => {
 			text: body,
 			api_type: 'json',
 			thing_id: parent_id
-		})
+		}).then(res => res.data.json.data.things[0].data);
 	});
 };

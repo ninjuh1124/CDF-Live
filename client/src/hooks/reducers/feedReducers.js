@@ -1,3 +1,9 @@
+import {
+	deletePost,
+	savePost,
+	unsavePost,
+	upvotePost } from '../../utils/redditAPI'
+
 /**
  * Reducers assume type-checking, etc. is done before reducers are called
  **/
@@ -23,9 +29,11 @@ export const historyReducer = (state, action) => {
 export const upvoteReducer = (state, action) => {
 	switch (action.type) {
 		case 'upvote': 
+			upvotePost({ ...action, dir: 1 });
 			return [...state, action._id];
 			break;
 		case 'unvote': 
+			upvotePost({ ...action, dir: 0 });
 			return state.filter(_id => _id !== action._id);
 			break;
 		default: 
@@ -51,9 +59,11 @@ export const hideReducer = (state, action) => {
 export const saveReducer = (state, action) => {
 	switch (action.type) {
 		case 'save': 
+			savePost({ ...action });
 			return [...state, action._id];
 			break;
 		case 'unsave': 
+			unsavePost({ ...action });
 			return state.filter(_id => _id !== action._id);
 			break;
 		default: 

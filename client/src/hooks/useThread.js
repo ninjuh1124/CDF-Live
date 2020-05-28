@@ -16,7 +16,7 @@ const useThread = () => {
 
 	},[thread])
 
-	return { thread, error };
+	return { ...thread, error };
 }
 
 export default useThread;

@@ -99,11 +99,8 @@ const useFeed = () => {
 
 	/** RETURN HOOKS **/
 	return {
-		history, isLoading,
-		prepend: comments => {
-			dispatch({ type: prepend, comments })
-		},
-		loadMore,
+		history, historyDispatch,
+		isLoading, loadMore,
 		upvoted, upvoteDispatch,
 		hidden, hideDispatch,
 		saved, saveDispatch,

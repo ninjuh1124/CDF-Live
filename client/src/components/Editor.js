@@ -2,65 +2,62 @@ import React from 'react';
 import Markdown from './Markdown';
 import FormattingBar from './FormattingBar';
 
-const Editor = ({
-	text, isSending, editorMode, textAreaRef, focusTextArea,
-	wrapSelection, handleChange, submit, cancel
-}) => {
-	return (
-		<div>
-			{text.trim() === '' ||
-				<div 
-					className="comment preview"
-					style={{ float: 'none', marginBottom: '5px' }}
-				>
+const Editor = { editor, ...props } => (
+	<div>
+		{text.trim() === '' ||
+			<div 
+				className='comment preview'
+				style={{ float: 'none', marginBottom: '5px' }}
+			>
 
-					<p className="author-row">
-						<strong>Preview</strong>
-					</p>
+				<p className='author-row'>
+					<strong>Preview</strong>
+				</p>
 
-					<span className="body-row">
-						<Markdown
-							source={text}
-						/>
-					</span>
+				<span className='body-row'>
+					<Markdown
+						source={editor.text}
+					/>
+				</span>
 
-				<br />
-				</div>
-			}
+			<br />
+			</div>
+		}
 
-			<FormattingBar wrapSelection={wrapSelection} />
+		<FormattingBar wrapSelection={editor.wrapSelection} />
 
-			<form onSubmit={submit}>
-				<textarea 
-					className='editor-box'
-					ref={textAreaRef}
-					rows='6'
-					cols='50'
-					onChange={handleChange}
-					value={text}
-					disabled={isSending}
-				/>
+		<form onSubmit={editor.submit}>
+			<textarea 
+				className='editor-box'
+				ref={editor.textAreaRef}
+				rows='6'
+				cols='50'
+				disabled={editor.isSending}
+			/>
 
-				<br />
+			<br />
 
-				<button
-					className="form-button"
-					type="submit"
-					disabled={isSending}
-				>
-					{editorMode}
-				</button>
-				<button
-					className="form-button"
-					onClick={cancel}
-					type="button"
-					disabled={isSending}
-				>
-					cancel
-				</button>
-			</form>
-		</div>
-	);
-}
+			<button
+				className='form-button'
+				type='submit'
+				disabled={editor.isSending}
+			>
+				{editor.type}
+			</button>
+			<button
+				className='form-button'
+				onClick={() => { editor.setShowEditor(false); }}
+				type='button'
+				disabled={editor.isSending}
+			>
+				cancel
+			</button>
+
+			{editor.error && <span className='error'>
+				Error {editor.error}
+			</span>}
+		</form>
+	</div>
+);
 
 export default Editor;

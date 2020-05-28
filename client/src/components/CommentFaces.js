@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { map, list } from '../resources/facecodes';
-import CommentFace from '../resources/CommentFace';
+import CommentFace from './CommentFace';
+import Heading from './Heading';
 
 const CommentFaces = props => {
 	const sorts = {
@@ -76,7 +77,21 @@ const CommentFaces = props => {
 		setTables(generateTables(groups));
 	}, [sort]);
 
-	return (<>{tables}</>);
+	return (
+		<>
+			<Heading
+				title='Comment Faces'
+				prebar={() => (
+					<h4>How to use:</h4>
+					<p><code>[top text **bottom text**](#therethere "hover text")</code> will produce the following</p>
+					<CommentFace title='hover text' code='#therethere'>
+						top text <strong>bottom text</strong>
+					</CommentFace>
+				)}
+			/>
+			{tables}
+		</>
+	);
 }
 
 export default CommentFaces;

@@ -5,6 +5,7 @@ import RedditButton from './RedditButton';
 
 import useThread from '../hooks/useThread';
 import useFeed from '../hooks/useFeed';
+import useEditor from '../hooks/useEditor';
 
 import { RedditContext } from '../context';
 
@@ -14,6 +15,11 @@ import Heading from './Heading';
 const FeedRoute = props => {
 	const thread = useThread();
 	const feed = useFeed();
+	const editor = useEditor({
+		_id: thread._id,
+		text: '',
+		defaultType: 'reply'
+	});
 
 	const reddit = useContext(RedditContext);
 
@@ -69,11 +75,9 @@ const FeedRoute = props => {
 					{reddit.user ?
 						(
 							<RedditButton
-								onClick{() => toggleEditor(
-									editorMode === 'hidden' ?
-									'reply' :
-									'hidden'
-								)}
+								onClick{() => {
+									editor.setShowEditor(true);
+								}}
 							>reply to thread</RedditButton>
 						) :
 						(
@@ -84,11 +88,8 @@ const FeedRoute = props => {
 						)
 					}
 
-					{editorMode === 'hidden' ||
-						<EditorContainer
-							editorMode={editorMode}
-							toggleEditor={() => toggleEditor('hidden')}
-						/>
+					{editor.showEditor &&
+						<Editor editor={editor} />
 					}
 				}}
 			/>

@@ -1,17 +1,13 @@
-import About from './About';
-import Changelog from './Changelog';
 import CommentFaces from './CommentFaces';
-import Feed from './Feed';
-import Heading from './Heading';
+import FeedRoute from './FeedRoute';
 import Login from './Login';
+import MarkdownPage from './MarkdownPage';
 import PageNotFound from './PageNotFound';
 
 export default { 
-	About;
-	Changelog;
-	CommentFaces;
-	Feed;
-	Heading;
-	Login;
+	CommentFaces,
+	FeedRoute,
+	Login,
+	MarkdownPage,
 	PageNotFound
 };

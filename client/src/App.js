@@ -9,7 +9,6 @@ import {
 import {
 	CommentFaces,
 	FeedRoute,
-	Heading,
 	Login,
 	MarkdownPage,
 	PageNotFound } from './components';
@@ -49,13 +48,19 @@ const App = props => {
 				<Route exact 
 					path='/feed' component={FeedRoute} />
 				<Route exact 
-					path='/about' component={() => {
-						<MarkdownPage endpoint='content/about.md' />
-					}} />
+					path='/about' component={() => (
+						<MarkdownPage 
+							title='About'
+							endpoint='content/about.md' 
+						/>
+					)} />
 				<Route exact 
-					path='/changelog' component={() => {
-						<MarkdownPage endpoint='content/changelog.md' />
-					}} />
+					path='/changelog' component={() => (
+						<MarkdownPage 
+							title='Changelog'
+							endpoint='content/changelog.md' 
+						/>
+					)} />
 				<Route exact 
 					path='/reddit_oauth_login' component={Login} />
 				<Route exact 
@@ -66,7 +71,5 @@ const App = props => {
 		</Switch></div></Router>
 	)
 }
-
-// let params = qs.parse(window.location.search, {ignoreQueryPrefix: true});
 
 export default App;
