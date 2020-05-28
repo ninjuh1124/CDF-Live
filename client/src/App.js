@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	BrowserRouter as Router,
 	Route,
@@ -20,9 +20,10 @@ import {
 import './style.scss';
 
 const App = props => {
-	/** CONTEXT **/
-	const feed = useFeed();
-	const reddit = useReddit();
+	/** CONTEXT VALUES **/
+	/** https://reactjs.org/docs/context.html#caveats **/
+	const [feed, setFeedHook] = useState(useFeed());
+	const [reddit, setRedditHook] = useState(useReddit());
 
 	/** ROUTE COMPONENTS **/
 	const FeedRoute = () => (
