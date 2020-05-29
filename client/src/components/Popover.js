@@ -1,5 +1,5 @@
 import React from 'react';
-import popover from '../resources/popover.module.scss';
+import popover from '../styles/popover.module.scss';
 
 const Popover = props => {
 	return (

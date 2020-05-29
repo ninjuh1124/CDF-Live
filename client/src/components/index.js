@@ -4,8 +4,7 @@ import Login from './Login';
 import MarkdownPage from './MarkdownPage';
 import PageNotFound from './PageNotFound';
 
-export default { 
-	CommentFaces,
+export { CommentFaces,
 	FeedRoute,
 	Login,
 	MarkdownPage,

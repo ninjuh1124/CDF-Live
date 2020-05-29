@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import qs from 'querystring';
 
-import { getMe } from '../resources/redditAPI';
-import { getRefreshToken } from '../resources/appAPI';
+import { getMe } from '../utils/redditAPI';
+import { getRefreshToken } from '../utils/appAPI';
 
 import { RedditContext } from '../context';
 
@@ -26,7 +26,7 @@ const Login = props => {
 				reddit.setRefreshToken(rt);
 				reddit.setAccessToken(at);
 
-				recieveToken(true);
+				receiveToken(true);
 			})
 			.catch(err => {
 				reddit.setError(err);

@@ -13,33 +13,15 @@ import {
 	MarkdownPage,
 	PageNotFound } from './components';
 
-import {
-	FeedProvider, RedditProvider,
-	useFeed, useReddit } from './context';
+import { RedditProvider } from './context';
+import useReddit from './hooks/useReddit';
 
-import './style.scss';
+import './styles/style.scss';
 
 const App = props => {
 	/** CONTEXT VALUES **/
 	/** https://reactjs.org/docs/context.html#caveats **/
-	const [feed, setFeedHook] = useState(useFeed());
 	const [reddit, setRedditHook] = useState(useReddit());
-
-	/** ROUTE COMPONENTS **/
-	const FeedRoute = () => (
-		<div style={{ padding: '3px' }}>
-			<Heading 
-				title='Casual Discussion Friday'
-				prebar={() => {
-				}}
-				postbar={() => {
-				}}
-			/>
-			<FeedProvider defaultValue={feed}>
-				<Feed />
-			</FeedProvider>
-		</div>
-	);
 
 	return (
 		<Router><div id='content'><Switch>
@@ -66,8 +48,6 @@ const App = props => {
 					path='/reddit_oauth_login' component={Login} />
 				<Route exact 
 					path='/faces' component={CommentFaces} />
-				<Route 
-					component={PageNotFound} />
 			</RedditProvider>
 		</Switch></div></Router>
 	)

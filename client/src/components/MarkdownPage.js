@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import ReactMarkdown from 'react-markdown';
 
 import { query } from '../utils/appAPI'
+
+import Heading from './Heading';
 
 const MarkdownPage = props => {
 	const [md, changeMd] = useState('Loading');

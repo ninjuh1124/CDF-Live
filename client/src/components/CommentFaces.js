@@ -81,13 +81,13 @@ const CommentFaces = props => {
 		<>
 			<Heading
 				title='Comment Faces'
-				prebar={() => (
+				prebar={() => (<>
 					<h4>How to use:</h4>
 					<p><code>[top text **bottom text**](#therethere "hover text")</code> will produce the following</p>
 					<CommentFace title='hover text' code='#therethere'>
 						top text <strong>bottom text</strong>
 					</CommentFace>
-				)}
+				</>)}
 			/>
 			{tables}
 		</>

@@ -7,4 +7,4 @@ const generateString = () => {
 	return str;
 };
 
-export default generateStr;
+export default generateString;

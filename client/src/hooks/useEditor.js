@@ -1,40 +1,43 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 
 import { FeedContext, RedditContext } from '../context';
 
 import makeWrapSelection from '../utils/makeWrapSelection';
+import { commentPost, editPost } from '../utils/redditAPI';
 
-const useEditor = ({ _id, text = '', defaultType = null }) => {
-	const [type, setType] = useState(defaultType);
+const useEditor = ({ _id, defaultText, defaultType }) => {
+	const [type, setType] = useState(defaultType || null);
 
 	/** CONTEXTS **/
 	const feed = useContext(FeedContext);
 	const reddit = useContext(RedditContext);
 
 	/** TEXT AREA **/
-	const [text, setText] = useState(text);
+	const [text, setText] = useState(defaultText || '');
 	const [showEditor, setShowEditor] = useState(false);
 	const textAreaRef = useRef();
 	const focusTextArea = () => textAreaRef.current.focus();
 	// may have to useEffect to keep wrapSelection ref up to date
-	const wrapSelection = makeWrapSelection(textAreaRef.current());
+	const wrapSelection = makeWrapSelection(textAreaRef.current);
 	useEffect(() => { /** UPDATE STATE ALONGSIDE TEXT AREA **/
-		changeText(textAreaRef.current.value)
-	}, [textAreaRef.current.value]);
+		if (textAreaRef.current) {
+			setText(textAreaRef.current.value);
+		}
+	}, [textAreaRef.current]);
 
 	/** API CALLS **/
 	const [isSending, setIsSending] = useState(false);
 	const [error, setError] = useState(null);
 	const submit = e => {
 		if (!text.trim()) {
-			setError = new Error('No input');
+			setError(new Error('No input'));
 			return;
 		}
 		
 		setIsSending(true);
 		if (type === 'reply') { /** REPLY TO COMMENT/FEED **/
-			redditAPI.comment({
-				reddit.accessToken,
+			commentPost({
+				accessToken: reddit.accessToken,
 				parent_id: _id,
 				body: text.trim()
 			})
@@ -47,7 +50,7 @@ const useEditor = ({ _id, text = '', defaultType = null }) => {
 							author: res.author,
 							_id: res.name,
 							id: res.id,
-							thread: res.link_id
+							thread: res.link_id,
 							created: res.created_utc,
 							permalink: `https://reddit.com${res.permalink}`,
 							parentID: res.parent_id,
@@ -63,8 +66,8 @@ const useEditor = ({ _id, text = '', defaultType = null }) => {
 					setIsSending(false);
 				});
 		} else if (type === 'edit') { /** UPDATE FEED **/
-			redditAPI.editPost({
-				reddit.accessToken,
+			editPost({
+				accessToken: reddit.accessToken,
 				_id,
 				body: text.trim()
 			})
@@ -87,9 +90,11 @@ const useEditor = ({ _id, text = '', defaultType = null }) => {
 	}
 
 	return {
-		text, textAreaRef, type 
+		text, textAreaRef, type, setType,
 		showEditor, setShowEditor, 
 		focusTextArea, wrapSelection,
 		submit, isSending, error
-	}
-}
+	};
+}}
+
+export default useEditor;

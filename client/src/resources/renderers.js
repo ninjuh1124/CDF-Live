@@ -1,7 +1,7 @@
 import React from 'react';
-import CommentFace from './CommentFace';
-import Spoiler from './Spoiler';
-import Embed from './Embed';
+import CommentFace from '../components/CommentFace';
+import Spoiler from '../components/Spoiler';
+import Embed from '../components/Embed';
 
 import psl from 'psl';
 import path from 'path';

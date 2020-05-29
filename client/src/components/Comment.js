@@ -44,7 +44,7 @@ const Comment = props => {
 				id={`${props._id}-replies`}
 			>
 				{
-					meta.children.map(comment => {
+					meta.children.map(comment => 
 						<Comment
 							_id={comment._id}
 							id={comment.id}
@@ -55,7 +55,7 @@ const Comment = props => {
 							created={comment.created}
 							depth={props.depth+1}
 						/>
-					})
+					)
 				}
 			</ul>
 

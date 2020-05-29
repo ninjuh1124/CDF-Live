@@ -1,7 +1,7 @@
 import {
-	createContext,
 	useState,
-	useContext,
+	useEffect,
+	useRef,
 	useReducer } from 'react';
 
 import {
@@ -9,6 +9,8 @@ import {
 	upvoteReducer,
 	hideReducer,
 	saveReducer } from './reducers/feedReducers';
+
+import { loadMore as lm, getHistory as gh } from '../utils/appAPI';
 
 /** HOOKS **/
 const useFeed = () => {
@@ -28,7 +30,7 @@ const useFeed = () => {
 	const timeoutId = useRef(0);
 	const emptyCalls = useRef(0);
 	const [isLoading, setLoading] = useState(false);
-	const [newestComment, setNewestComment] = useState(null);
+	const newestComment = useRef(null);
 
 	/** ERROR **/
 	const [error, setError] = useState(null);
@@ -36,7 +38,7 @@ const useFeed = () => {
 	/** (RE)LOAD HISTORY **/
 	const getHistory = () => {
 		setLoading(true);
-		app.getHistory(newestComment)
+		gh(newestComment.current)
 			.then(comments => {
 				if (comments.length > 0) {
 					emptyCalls.current = 1;
@@ -48,6 +50,7 @@ const useFeed = () => {
 				} else {
 					emptyCalls.current++;
 				}
+				newestComment.current = history[0]._id;
 			})
 			.catch(error => {
 				setError(error);
@@ -61,7 +64,7 @@ const useFeed = () => {
 		const parents = history
 			.map(comment => comment.parentID)
 			.filter(id => /^t3_\S+$/.test(id))
-		app.loadMore(parents[parents.length - 1])
+		lm(parents[parents.length - 1])
 			.then(comments => {
 				if (comments.length > 0) {
 					emptyCalls.current = 1;
@@ -108,3 +111,5 @@ const useFeed = () => {
 		error, setError
 	}
 }
+
+export default useFeed;

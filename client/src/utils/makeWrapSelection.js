@@ -24,7 +24,7 @@ const makeWrapSelection = box => (prefix, suffix) => {
 	}
 	selectedText = selectedText.substring(0, cursor + 1);
 
-	changeText(beforeSelection+prefix+selectedText+suffix+trailingSpace+afterSelection);
+	box.value = (beforeSelection+prefix+selectedText+suffix+trailingSpace+afterSelection);
 	
 	box.selectionEnd = beforeSelection.length+prefix.length+selectedText.length;
 	if (selectionStart === selectionEnd) {
@@ -36,3 +36,5 @@ const makeWrapSelection = box => (prefix, suffix) => {
 	box.scrollTop = scrollTop;
 	box.focus();
 }
+
+export default makeWrapSelection;

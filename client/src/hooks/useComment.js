@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react';
 
-import { FeedContext } from '../containers/FeedContainer';
-import { RedditContext } from '../containers/HeadingContainer';
+import useEditor from './useEditor';
+
+import { FeedContext, RedditContext } from '../context';
 
 const useComment = comment => {
 	/** CONTEXTS **/
@@ -16,7 +17,7 @@ const useComment = comment => {
 
 	return {
 		/** COMMENT DATA **/
-		...comment
+		...comment,
 
 		/** TEXT AREA HANDLERS **/
 		editor, showSource, setShowSource,
@@ -125,3 +126,5 @@ const useComment = comment => {
 		error, setError
 	}
 }
+
+export default useComment;

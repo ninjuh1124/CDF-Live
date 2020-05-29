@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 
-import EditorContainer from '../containers/EditorContainer';
+import Editor from './Editor';
 import RedditButton from './RedditButton';
 
 import useThread from '../hooks/useThread';
 import useFeed from '../hooks/useFeed';
 import useEditor from '../hooks/useEditor';
 
-import { RedditContext } from '../context';
+import { FeedProvider, RedditContext } from '../context';
 
 import Feed from './Feed';
 import Heading from './Heading';
 
 const FeedRoute = props => {
+	const [feed, setFeed] = useState(useFeed());
 	const thread = useThread();
-	const feed = useFeed();
 	const editor = useEditor({
 		_id: thread._id,
 		text: '',
@@ -40,13 +40,13 @@ const FeedRoute = props => {
 			<Heading
 				title='Casual Discussion Friday'
 
-				prebar={() => {
+				prebar={() => <>
 					<h5 id='latest'><a
 						className='link-primary'
 						href={
 							thread.permalink ?
 							thread.permalink :
-							'https://reddit.com/r/anime
+							'https://reddit.com/r/anime'
 						}
 						rel='noreferrer noopener'
 						target='_blank'
@@ -65,33 +65,31 @@ const FeedRoute = props => {
 									onClick={() => {
 										reddit.setRefreshToken(null)
 									}}>(logout)</a>
-							</small> :
+							</small> 
+							:
 							<small>Loading user info...</small>
 						}
 					</h6>
-				}}
+				</>}
 
-				postbar={() => {
+				postbar={() => <>
 					{reddit.user ?
-						(
-							<RedditButton
-								onClick{() => {
-									editor.setShowEditor(true);
-								}}
-							>reply to thread</RedditButton>
-						) :
-						(
-							<a
-								id='reddit-login-button'
-								href={`${uriBase}?${params}`}
-							><i className='fab fa-reddit' />Login</a>
-						)
+						<RedditButton
+							onClick={() => {
+								editor.setShowEditor(true);
+							}}
+						>reply to thread</RedditButton> 
+						:
+						<a
+							id='reddit-login-button'
+							href={`${uriBase}?${params}`}
+						><i className='fab fa-reddit' />Login</a>
 					}
 
 					{editor.showEditor &&
 						<Editor editor={editor} />
 					}
-				}}
+				</>}
 			/>
 
 			<FeedProvider defaultValue={feed}>

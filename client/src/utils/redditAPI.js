@@ -87,7 +87,7 @@ export const upvotePost = ({ accessToken, _id, dir }) => {
 		},
 		data: querystring.encode({
 			id: _id,
-			dir: (upvoted ? 0 : 1)
+			dir
 		})
 	});
 };
@@ -120,6 +120,6 @@ export const commentPost = ({ accessToken, parent_id, body }) => {
 			text: body,
 			api_type: 'json',
 			thing_id: parent_id
-		}).then(res => res.data.json.data.things[0].data);
-	});
+		})
+	}).then(res => res.data.json.data.things[0].data);
 };

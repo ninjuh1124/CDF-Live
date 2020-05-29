@@ -1,6 +1,6 @@
-import { useState, useRef } from 'React';
+import { useState, useEffect, useRef } from 'react';
 
-import { getAccessToken } from '../utils/appAPI'
+import { getRefreshToken, getAccessToken } from '../utils/appAPI'
 import { getMe } from '../utils/redditAPI';
 import generateString from '../utils/generateString';
 

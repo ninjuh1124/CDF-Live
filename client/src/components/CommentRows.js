@@ -1,8 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import TimeAgo from 'react-timeago';
-
-import useEditor from '../hooks/useEditor';
-import RedditContext from '../context';
 
 import Markdown from './Markdown';
 import Editor from './Editor';
@@ -30,7 +27,7 @@ const CommentAuthorRow = ({ comment, ...props }) => (
 			<span
 				className="link-primary"
 				style={{float: 'right'}}
-				title={new Date(created*1000)}
+				title={new Date(comment.created*1000)}
 			>
 				<TimeAgo
 					date={comment.created*1000}
@@ -60,7 +57,7 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 			<RedditButton
 				onClick={() => {
 					if (comment.upvoted) {
-						upvote({
+						upvotePost({
 							accessToken: comment.accessToken,
 							_id: comment._id,
 							dir: 0
@@ -72,7 +69,7 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 								comment.setError(error);
 							});
 					} else {
-						upvote({
+						upvotePost({
 							accessToken: comment.accessToken,
 							_id: comment._id,
 							dir: 1
@@ -93,7 +90,7 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 		}
 
 		<RedditButton
-			onClick={() => setShowSource(!showSource)}
+			onClick={() => comment.setShowSource(!comment.showSource)}
 		>
 			source
 		</RedditButton>
@@ -101,7 +98,10 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 		{comment.ownPost &&
 			<RedditButton
 				onClick={() => {
-					deletePost({ accessToken, _id })
+					deletePost({
+						accessToken: comment.accessToken,
+						_id: comment._id 
+					})
 						.then(res => {
 							comment.delete();
 						})
@@ -158,7 +158,7 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 			{comment.hidden ? 'unhide' : 'hide'}
 		</RedditButton>
 		
-		{ownPost &&
+		{comment.ownPost &&
 			<RedditButton
 				onClick={() => {
 					if (comment.editor.showEditor && 

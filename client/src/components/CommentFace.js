@@ -1,5 +1,5 @@
 import React from 'react';
-import { map as facecodes } from './facecodes';
+import { map as facecodes } from '../resources/facecodes';
 
 const CommentFace = (props) => {
 	if (!facecodes[props.code]) {

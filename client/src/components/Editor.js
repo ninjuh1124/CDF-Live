@@ -2,9 +2,9 @@ import React from 'react';
 import Markdown from './Markdown';
 import FormattingBar from './FormattingBar';
 
-const Editor = { editor, ...props } => (
+const Editor = ({ editor, ...props }) => (
 	<div>
-		{text.trim() === '' ||
+		{editor.text.trim() === '' ||
 			<div 
 				className='comment preview'
 				style={{ float: 'none', marginBottom: '5px' }}
