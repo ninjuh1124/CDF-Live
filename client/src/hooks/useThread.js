@@ -7,8 +7,8 @@ const useThread = () => {
 
 	useEffect(() => {
 		getThread()
-			.then(thread => {
-				setThread(thread);
+			.then(t => {
+				if (thread === null) setThread(t[0]);
 			})
 			.catch(error => {
 				setError(error);

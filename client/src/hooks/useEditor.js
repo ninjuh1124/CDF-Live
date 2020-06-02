@@ -15,7 +15,7 @@ const useEditor = ({ _id, defaultText, defaultType }) => {
 	/** TEXT AREA **/
 	const [text, setText] = useState(defaultText || '');
 	const [showEditor, setShowEditor] = useState(false);
-	const textAreaRef = useRef();
+	const textAreaRef = useRef({ value: null });
 	const focusTextArea = () => textAreaRef.current.focus();
 	// may have to useEffect to keep wrapSelection ref up to date
 	const wrapSelection = makeWrapSelection(textAreaRef.current);
@@ -23,7 +23,7 @@ const useEditor = ({ _id, defaultText, defaultType }) => {
 		if (textAreaRef.current) {
 			setText(textAreaRef.current.value);
 		}
-	}, [textAreaRef.current]);
+	}, [textAreaRef.current.value]);
 
 	/** API CALLS **/
 	const [isSending, setIsSending] = useState(false);

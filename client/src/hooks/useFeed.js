@@ -17,14 +17,16 @@ const useFeed = () => {
 	/** FEED ACTIONS **/
 	const [history, historyDispatch] = useReducer(historyReducer, []);
 	const [upvoted, upvoteDispatch] = useReducer(
-		upvoteReducer, JSON.parse(localStorage.getItem('upvoted'))
+		upvoteReducer, 
+		JSON.parse(localStorage.getItem('upvoted')) ? JSON.parse(localStorage.getItem('upvoted')) : []
 	);
 	const [hidden, hideDispatch] = useReducer(
-		hideReducer, JSON.parse(localStorage.getItem('hidden'))
+		hideReducer, 
+		JSON.parse(localStorage.getItem('hidden')) ? JSON.parse(localStorage.getItem('hidden')) : []
 	);
 	const [saved, saveDispatch] = useReducer(
-		saveReducer, JSON.parse(localStorage.getItem('saved'))
-	);
+		saveReducer, 
+		JSON.parse(localStorage.getItem('saved')) ? JSON.parse(localStorage.getItem('saved')) : []);
 
 	/** API STATE **/
 	const timeoutId = useRef(0);
@@ -47,10 +49,11 @@ const useFeed = () => {
 						comments
 					});
 					setLoading(false);
+					newestComment.current = history[0]._id;
 				} else {
 					emptyCalls.current++;
 				}
-				newestComment.current = history[0]._id;
+				setError(null);
 			})
 			.catch(error => {
 				setError(error);
@@ -72,6 +75,7 @@ const useFeed = () => {
 						type: 'append', comments
 					});
 				}
+				setError(null);
 			})
 			.catch(error => {
 				setError(error);

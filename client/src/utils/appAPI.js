@@ -33,7 +33,7 @@ export const getAccessToken = refreshToken => {
 		)
 		.then(res => {
 			if (res.data.message.access_token) return res.data.message.access_token;
-			else throw ({ response: res });
+			else throw new Error('');
 		});
 };
 

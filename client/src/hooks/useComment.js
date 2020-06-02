@@ -28,7 +28,7 @@ const useComment = comment => {
 
 		/** FEED ACTION HANDLERS **/
 		/** SAVE HANDLERS **/
-		saved: feed.saved.icludes(comment._id),
+		saved: feed.saved.includes(comment._id),
 		save: () => { 
 			try {
 				feed.saveDispatch({ 
@@ -118,11 +118,11 @@ const useComment = comment => {
 		},
 
 		children: feed.history
-			.filter(comment => comment.parentID === comment._id),
+			.filter(c => c.parentID === comment._id),
 
 		/** MISC **/
 		ownPost: reddit.user === comment.author,
-		className: comment.parentID[1] === '3' ? 'parent' : 'reply',
+		className: `comment ${comment.parentID !== undefined && comment.parentID[1] === '3' ? 'parent' : 'reply'} ${reddit.user === comment.author ? 'own-post' : ''}`,
 		error, setError
 	}
 }

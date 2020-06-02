@@ -16,11 +16,7 @@ const Heading = props => (
 
 		<h2 id="title">{props.title}</h2>
 
-		{props.prebar}
-
-		<hr id='topbar' />
-
-		{props.postbar}
+		{props.children}
 
 	</div>
 );

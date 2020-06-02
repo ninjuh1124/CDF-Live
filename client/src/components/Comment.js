@@ -1,9 +1,6 @@
 import React from 'react';
 
-import { FeedContext } from '../context';
-
 import useComment from '../hooks/useComment';
-import useEditor from '../hooks/useEditor';
 
 import { CommentBodyRow,
 	CommentAuthorRow,
@@ -14,9 +11,7 @@ const Comment = props => {
 	
 	return (meta.hidden &&
 		<li
-			className={
-			`${meta.className} comment ${meta.ownPost ? 'own-post' : ''}`
-			}
+			className={meta.className}
 			id={meta._id}
 		>
 

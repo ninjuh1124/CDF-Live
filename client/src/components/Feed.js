@@ -5,7 +5,7 @@ import Comment from '../components/Comment';
 const Feed = props => {
 	const feed = useContext(FeedContext);
 
-	const comments = feed.comments && feed.comments
+	const comments = feed.history.length > 0 ? feed.history
 		.filter(comment => !feed.hidden.includes(comment._id))
 		.filter(comment => /^t3_\S+/.test(comment.parentID))
 		.map(comment => {
@@ -21,13 +21,13 @@ const Feed = props => {
 					depth={0}
 				/>
 			);
-		});
+		}) : null;
 
 	return (
 		<div>
 			<ul id="feed">
-				{feed.error && <p>Something went wrong: {feed.error}</p>}
-				{feed.isLoading && feed.comments.length === 0 &&
+				{feed.error && <p>Something went wrong: {`${feed.error}`}</p>}
+				{feed.isLoading && feed.history.length === 0 &&
 					<p>Loading...</p>
 				}
 				{comments}

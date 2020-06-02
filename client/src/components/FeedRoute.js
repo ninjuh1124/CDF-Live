@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import Editor from './Editor';
 import RedditButton from './RedditButton';
@@ -13,7 +13,7 @@ import Feed from './Feed';
 import Heading from './Heading';
 
 const FeedRoute = props => {
-	const [feed, setFeed] = useState(useFeed());
+	const feed = useFeed();
 	const thread = useThread();
 	const editor = useEditor({
 		_id: thread._id,
@@ -37,11 +37,10 @@ const FeedRoute = props => {
 
 	return (
 		<div style={{ padding: '3px' }}>
-			<Heading
-				title='Casual Discussion Friday'
-
-				prebar={() => <>
-					<h5 id='latest'><a
+			<Heading title='Casual Discussion Friday'>
+				{<>
+				<h5 id='latest'>
+					<a
 						className='link-primary'
 						href={
 							thread.permalink ?
@@ -50,29 +49,23 @@ const FeedRoute = props => {
 						}
 						rel='noreferrer noopener'
 						target='_blank'
-					>{thread.error || 'Latest Thread'}</a></h5>
+					>Latest Thread
+					</a>
+				</h5>
 
-					{thread.error &&
-						<h5 className='text-error'>{thread.error}</h5>
+				{reddit.refreshToken === null ||
+				<h6 id='logged-in-as'>
+					{reddit.user === '' ?
+					'Loading user info'
+					:
+					`Logged in as ${reddit.user}`
 					}
-
-					<h6 id='logged-in-as'>
-						{reddit.refreshToken &&
-							reddit.user.name ?
-							<small>
-								Logged in as {reddit.user.name} <a
-									href='javascript:void(0)'
-									onClick={() => {
-										reddit.setRefreshToken(null)
-									}}>(logout)</a>
-							</small> 
-							:
-							<small>Loading user info...</small>
-						}
-					</h6>
+				</h6>
+				}
 				</>}
 
-				postbar={() => <>
+				<hr id='topbar' />
+				{<>
 					{reddit.user ?
 						<RedditButton
 							onClick={() => {
@@ -86,13 +79,12 @@ const FeedRoute = props => {
 						><i className='fab fa-reddit' />Login</a>
 					}
 
-					{editor.showEditor &&
-						<Editor editor={editor} />
-					}
+					{reddit.user !== null && editor.showEditor && 
+						<Editor editor={editor} />}
 				</>}
-			/>
+			</Heading>
 
-			<FeedProvider defaultValue={feed}>
+			<FeedProvider defaultValue={{...feed}}>
 				<Feed />
 			</FeedProvider>
 		</div>
