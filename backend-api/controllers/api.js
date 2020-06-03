@@ -11,22 +11,26 @@ module.exports = ({
 		};
 
 		dbService.history(query)
-			.then(comments => helpers.send(res, null, comments))
+			.then(comments => {
+				helpers.send(res, null, comments)
+			})
 			.catch(err => {
 				helpers.send(res, {
 					code: (err.code ? err.code : 500),
-					message: `Something went wrong: ${err}`
+					message: `${err}`
 				})
 			});
 	},
 
 	thread: (req, res) => {
 		dbService.thread()
-			.then(thread => helpers.send(res, null, thread))
+			.then(thread => {
+				helpers.send(res, null, thread)
+			})
 			.catch(err => {
 				helpers.send(res, {
 					code: 500,
-					message: err.message ? err.message : `Something went wrong: ${err}`
+					message: err.message ? err.message : `${err}`
 				});
 			});
 	},

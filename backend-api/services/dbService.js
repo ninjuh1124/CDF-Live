@@ -3,27 +3,52 @@ const axios = require('axios');
 const uri = process.env.DB_SERVICE_URI
 
 module.exports = ({
-	history: query => {
-		axios.get(`${uri}/v1/history.json`)
-			.then(res => {})
-			.catch(err => {
-				console.error(err)
-			});
+	history: async query => {
+		let history = [];
+		try {
+			history = await axios.get(
+				`${uri}/v1/history.json`,
+				{
+					crossdomain: true,
+					params: { ...query }
+				}
+			);
+			return history.data.message;
+		} catch (err) {
+			throw err;
+		}
 	},
 
-	thread: () => {
-		axios.get(`${uri}/v1/thread.json`)
-			.then(res => {})
-			.catch(err => {
-				console.error(err)
-			});
+	thread: async () => {
+		let thread = {};
+		try {
+			thread = await axios.get(
+				`${uri}/v1/thread.json`,
+				{ crossdomain: true }
+			);
+			return thread.data.message;
+		} catch (err) {
+			throw err;
+		}
+
 	},
 
-	comment: query => {
-		axios.get(`${uri}/comment.json`)
-			.then(res => {})
-			.catch(err => {
-				console.error(err)
-			});
+	comment: async query => {
+		let comment = {};
+		try {
+			comment = axios.get(
+				`${uri}/comment.json`,
+				{
+					crossdomain: true,
+					params: { ...query }
+				}
+			)
+				.then(res => {})
+				.catch(err => {
+					console.error(err)
+				});
+		} catch (err) {
+			throw err;
+		}
 	}
 });
