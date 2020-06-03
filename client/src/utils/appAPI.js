@@ -33,7 +33,7 @@ export const getAccessToken = refreshToken => {
 		)
 		.then(res => {
 			if (res.data.message.access_token) return res.data.message.access_token;
-			else throw new Error('');
+			else throw new Error('accessToken request made successfully, but did not return accessToken');
 		});
 };
 
@@ -46,7 +46,7 @@ export const getRefreshToken = async (code) => {
 		.then(res => {
 			if (res.data.message.refresh_token) {
 				return res.data.message;
-			} else throw ({ response: res });
+			} else throw new Error('refreshToken request made successfully, but did not return refreshToken');
 		});
 }
 
@@ -66,7 +66,7 @@ export const getHistory = newerThan => {
 				Array.isArray(res.data.message) && 
 				res.data.message.length === 0
 			) return [];
-			else throw ({ response: res });
+			else throw new Error('history request made successfully, but did not return history');
 		});
 };
 
@@ -88,7 +88,7 @@ export const loadMore = olderThan => {
 				Array.isArray(res.data.message) && 
 				res.data.message.length === 0
 			) return null;
-			else throw ({ response: res });
+			else throw new Error('history request made successfully, but did not return history');
 		});
 }
 
