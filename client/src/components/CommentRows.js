@@ -205,7 +205,8 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 			/>
 		}
 
-		<Editor editor={comment.editor} />
+		{comment.editor.showEditor &&
+		<Editor editor={comment.editor} />}
 	</div>
 );
 

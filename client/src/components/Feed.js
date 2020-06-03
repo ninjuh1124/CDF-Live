@@ -18,6 +18,7 @@ const Feed = props => {
 					body={comment.body}
 					permalink={comment.permalink}
 					created={comment.created}
+					parentID={comment.parentID}
 					depth={0}
 				/>
 			);

@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import qs from 'querystring';
 
-import { getMe } from '../utils/redditAPI';
 import { getRefreshToken } from '../utils/appAPI';
 
 import { RedditContext } from '../context';

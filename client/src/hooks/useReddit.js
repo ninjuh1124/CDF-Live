@@ -17,16 +17,21 @@ const useReddit = () => {
 	);
 	const [user, setUser] = useState(null);
 
-	/** BROWSER STORAGE **/
+	/** TOKEN EFFECTS **/
 	useEffect(() => {
-		localStorage.setItem('refreshToken', refreshToken);
+		if (refreshToken) getAccessToken(refreshToken)
+			.then(at => {
+				accessToken.current = at;
+			})
+			.catch(err =>{
+				setError(err);
+			});
+
+		return (() => { 
+			localStorage.setItem('refreshToken', refreshToken); 
+		});
 	}, [refreshToken]);
 
-	useEffect(() => {
-		sessionStorage.setItem('accessToken', accessToken.current)
-	}, [accessToken.current]);
-
-	/** OTHER EFFECTS **/
 	useEffect(() => {
 		if (accessToken.current) {
 			// set user to context
@@ -53,6 +58,10 @@ const useReddit = () => {
 					});
 			}, 3300000);
 		}
+
+		return (() => {
+			sessionStorage.setItem('accessToken', accessToken.current);
+		});
 	}, [accessToken.current]);
 
 	/** ERROR HANDLING **/

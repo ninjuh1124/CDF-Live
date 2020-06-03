@@ -20,7 +20,8 @@ const useComment = comment => {
 		...comment,
 
 		/** TEXT AREA HANDLERS **/
-		editor, showSource, setShowSource,
+		editor: { ...editor }, 
+		showSource, setShowSource,
 
 		/** REDDIT ACCESS **/
 		accessToken: reddit.accessToken,
@@ -122,7 +123,7 @@ const useComment = comment => {
 
 		/** MISC **/
 		ownPost: reddit.user === comment.author,
-		className: `comment ${comment.parentID !== undefined && comment.parentID[1] === '3' ? 'parent' : 'reply'} ${reddit.user === comment.author ? 'own-post' : ''}`,
+		className: `comment ${comment.parentID !== undefined && /^t3_\S+/.test(comment.parentID) ? 'parent' : 'reply'} ${reddit.user === comment.author ? 'own-post' : ''}`,
 		error, setError
 	}
 }

@@ -32,7 +32,7 @@ const useFeed = () => {
 	const timeoutId = useRef(0);
 	const emptyCalls = useRef(0);
 	const [isLoading, setLoading] = useState(false);
-	const newestComment = useRef(null);
+	const newestComment = useRef('');
 
 	/** ERROR **/
 	const [error, setError] = useState(null);
@@ -41,22 +41,30 @@ const useFeed = () => {
 	const getHistory = () => {
 		setLoading(true);
 		gh(newestComment.current)
+			.then(comments => {	// filter comments
+				return comments.filter(comment => {
+					return !history
+						.map(c => c._id)
+						.includes(comment._id);
+				});
+			})
 			.then(comments => {
 				if (comments.length > 0) {
-					emptyCalls.current = 1;
 					historyDispatch({
 						type: 'prepend',
 						comments
 					});
+					emptyCalls.current = 1;
 					setLoading(false);
-					newestComment.current = history[0]._id;
 				} else {
 					emptyCalls.current++;
 				}
+				newestComment.current = comments.length > 0 ? comments[0]._id : '';
 				setError(null);
 			})
-			.catch(error => {
-				setError(error);
+			.catch(err => {
+				console.log(err);
+				setError(err);
 				setLoading(false);
 			});
 	}
@@ -77,8 +85,9 @@ const useFeed = () => {
 				}
 				setError(null);
 			})
-			.catch(error => {
-				setError(error);
+			.catch(err => {
+				console.log(err);
+				setError(err);
 				setLoading(false);
 			});
 	}
@@ -90,7 +99,7 @@ const useFeed = () => {
 			getHistory,
 			emptyCalls.current < 24 ? emptyCalls.current * 5000 : 24*5000
 		))
-	}, [emptyCalls]);
+	}, [emptyCalls.current]);
 
 	/** BROWSER SIDE-EFFECTS **/
 	useEffect(() => {

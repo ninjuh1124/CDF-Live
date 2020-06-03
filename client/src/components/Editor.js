@@ -4,7 +4,7 @@ import FormattingBar from './FormattingBar';
 
 const Editor = ({ editor, ...props }) => (
 	<div>
-		{editor.text.trim() === '' ||
+		{(editor && editor.text === '') ||
 			<div 
 				className='comment preview'
 				style={{ float: 'none', marginBottom: '5px' }}
@@ -16,7 +16,7 @@ const Editor = ({ editor, ...props }) => (
 
 				<span className='body-row'>
 					<Markdown
-						source={editor.text}
+						source={editor.text || ''}
 					/>
 				</span>
 

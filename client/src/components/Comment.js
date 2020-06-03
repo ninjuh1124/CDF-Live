@@ -9,7 +9,7 @@ import { CommentBodyRow,
 const Comment = props => {
 	const meta = useComment({ ...props });
 	
-	return (meta.hidden &&
+	return (meta.hidden ||
 		<li
 			className={meta.className}
 			id={meta._id}
