@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 
 import Editor from './Editor';
 import RedditButton from './RedditButton';
+import { ErrorBoundary } from './';
 
 import useThread from '../hooks/useThread';
 import useFeed from '../hooks/useFeed';
@@ -64,6 +65,12 @@ const FeedRoute = props => {
 				}
 				</>}
 
+				{reddit.error === null ||
+				<h6 class='error' id='reddit-error'>
+					`${reddit.error}`
+				</h6>
+				}
+
 				<hr id='topbar' />
 				{<>
 					{reddit.user ?
@@ -84,9 +91,9 @@ const FeedRoute = props => {
 				</>}
 			</Heading>
 
-			<FeedProvider defaultValue={{...feed}}>
+			<ErrorBoundary><FeedProvider defaultValue={{...feed}}>
 				<Feed />
-			</FeedProvider>
+			</FeedProvider></ErrorBoundary>
 		</div>
 	);
 }

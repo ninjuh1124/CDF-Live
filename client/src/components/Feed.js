@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { FeedContext } from '../context'
 import Comment from '../components/Comment';
+import RedditButton from './RedditButton';
 
 const Feed = props => {
 	const feed = useContext(FeedContext);
@@ -27,19 +28,21 @@ const Feed = props => {
 	return (
 		<div>
 			<ul id="feed">
-				{feed.error && <p>Something went wrong: {`${feed.error}`}</p>}
-				{feed.isLoading && feed.history.length === 0 &&
-					<p>Loading...</p>
+				{feed.error && 
+					<p class='error' id='feed-error'>
+						Something went wrong: {`${feed.error}`}
+					</p>
 				}
 				{comments}
 			</ul>
-			<a 
-				className="link-primary"
-				href='javascript:void(0)'
+			
+			{feed.isLoading && <p>Loading...</p>}
+			<RedditButton 
+				disabled={feed.isLoading}
 				onClick={feed.loadMore}
 			>
 				load more comments
-			</a>
+			</RedditButton>
 		</div>
 	);
 }

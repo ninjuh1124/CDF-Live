@@ -17,14 +17,21 @@ const useReddit = () => {
 	);
 	const [user, setUser] = useState(null);
 
+	const logout = () => {
+		setRefreshToken(null);
+		accessToken.current = null;
+		setUser(null);
+	};
+
 	/** TOKEN EFFECTS **/
 	useEffect(() => {
 		if (refreshToken) getAccessToken(refreshToken)
 			.then(at => {
 				accessToken.current = at;
 			})
-			.catch(err =>{
+			.catch(err =>{	// on error, force logout
 				setError(err);
+				logout();
 			});
 
 		return (() => { 
@@ -42,6 +49,7 @@ const useReddit = () => {
 					})
 					.catch(error => {
 						setError(error);
+						logout();
 					});
 			}
 
@@ -54,7 +62,7 @@ const useReddit = () => {
 					})
 					.catch(error => {
 						setError(error);
-						accessToken.current = null;
+						logout();
 					});
 			}, 3300000);
 		}
@@ -70,7 +78,7 @@ const useReddit = () => {
 	return {
 		refreshToken, setRefreshToken,
 		accessToken: accessToken.current,
-		user,
+		user, logout,
 		error, setError
 	};
 }

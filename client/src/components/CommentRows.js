@@ -41,6 +41,11 @@ const CommentAuthorRow = ({ comment, ...props }) => (
 
 const CommentBodyRow = ({ comment, ...props }) => (
 	<div className="body-row">
+		{comment.error &&
+			<p className='error' id='comment-error'>
+				{`Something went wrong: ${comment.error}`}
+			</p>
+		}
 
 		<div className="body">
 			<Markdown
@@ -160,6 +165,7 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 		
 		{comment.ownPost &&
 			<RedditButton
+				disabled={comment.editor.isSending}
 				onClick={() => {
 					if (comment.editor.showEditor && 
 						comment.editor.type === 'edit') {
@@ -177,6 +183,7 @@ const CommentButtonsRow = ({ comment, ...props }) => (
 
 		{comment.user !== '' ||
 			<RedditButton
+				disabled={comment.editor.isSending}
 				onClick={() => {
 					if (comment.editor.showEditor && 
 						comment.editor.type === 'reply') {

@@ -5,6 +5,7 @@ import useComment from '../hooks/useComment';
 import { CommentBodyRow,
 	CommentAuthorRow,
 	CommentButtonsRow } from './CommentRows';
+import { ErrorBoundary } from './';
 
 const Comment = props => {
 	const meta = useComment({ ...props });
@@ -21,9 +22,9 @@ const Comment = props => {
 			<CommentBodyRow 
 				comment={meta}
 			/>
-			<CommentButtonsRow 
+			<ErrorBoundary><CommentButtonsRow 
 				comment={meta}
-			/>
+			/></ErrorBoundary>
 
 			<div className="arrow">
 				<h2 className="arrow-link"><a

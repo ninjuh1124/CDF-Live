@@ -55,7 +55,6 @@ const useFeed = () => {
 						comments
 					});
 					emptyCalls.current = 1;
-					setLoading(false);
 				} else {
 					emptyCalls.current++;
 				}
@@ -65,6 +64,8 @@ const useFeed = () => {
 			.catch(err => {
 				console.log(err);
 				setError(err);
+			})
+			.finally(() => {
 				setLoading(false);
 			});
 	}
@@ -73,9 +74,8 @@ const useFeed = () => {
 	const loadMore = () => {
 		setLoading(true);
 		const parents = history
-			.map(comment => comment.parentID)
-			.filter(id => /^t3_\S+$/.test(id))
-		lm(parents[parents.length - 1])
+			.filter(comment => /^t3_\S+$/.test(comment.parentID))
+		lm(parents[parents.length - 1]._id)
 			.then(comments => {
 				if (comments.length > 0) {
 					emptyCalls.current = 1;
@@ -88,6 +88,9 @@ const useFeed = () => {
 			.catch(err => {
 				console.log(err);
 				setError(err);
+				setLoading(false);
+			})
+			.finally(() => {
 				setLoading(false);
 			});
 	}

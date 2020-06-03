@@ -42,10 +42,6 @@ const Login = props => {
 			<p>Authorizing</p>
 		);
 	}
-
-	return (
-		gotToken ? <Redirect to='/feed' /> : <p>Authorizing</p>
-	);
 };
 
 export default Login;

@@ -24,15 +24,6 @@ hr {
 	border-color: $border-primary;
 }
 
-#topbar {
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-#logged-in-as {
-	color: $link-primary;
-}
-
 #root {
 	background: $background-primary;
 }
@@ -47,25 +38,11 @@ hr {
 	font-weight: 500;
 }
 
-.corner-link {
-	text-align: right;
-}
-
 #content {
 	max-width: 1200px;
 	margin: auto;
 	background: $background-primary;
 	color: $text-primary;
-}
-
-#reddit-login-button {
-	background-color: $reddit-orange;
-	color: white; 
-	padding: 7px;
-	border-radius: 5px;
-	margin-bottom: 5px;
-	margin-top: -10px;
-	display: inline-block;
 }
 
 a {

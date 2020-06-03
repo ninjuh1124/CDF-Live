@@ -8,6 +8,7 @@ import {
 
 import {
 	CommentFaces,
+	ErrorBoundary,
 	FeedRoute,
 	Login,
 	MarkdownPage,
@@ -25,7 +26,7 @@ const App = props => {
 
 	return (
 		<Router><div id='content'><Switch>
-			<RedditProvider defaultValue={reddit}>
+			<ErrorBoundary><RedditProvider defaultValue={reddit}>
 				<Redirect exact 
 					from='/' to='/feed' />
 				<Route exact 
@@ -48,7 +49,7 @@ const App = props => {
 					path='/reddit_oauth_login' component={Login} />
 				<Route exact 
 					path='/faces' component={CommentFaces} />
-			</RedditProvider>
+			</RedditProvider></ErrorBoundary>
 		</Switch></div></Router>
 	)
 }
