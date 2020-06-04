@@ -12,21 +12,17 @@ const MarkdownPage = props => {
 	const [md, changeMd] = useState('Loading');
 
 	query(props.endpoint)
-		.then(markdown => changeMd)
+		.then(markdown => { 
+			console.log(markdown);
+			changeMd(markdown); 
+		})
 		.catch(err => {
 			changeMd(`Error loading content: ${err}`);
 		});
 
 	return (
-		<div>
-			<h6
-				className="corner-link"
-			><small>
-				<Link to='/feed'>Feed</Link>
-			</small></h6>
-
+		<div className='markdown-page'>
 			<Heading title={props.title} />
-
 			<ReactMarkdown source={md} />
 		</div>
 	);

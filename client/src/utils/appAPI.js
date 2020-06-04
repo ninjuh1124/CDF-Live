@@ -16,7 +16,7 @@ const appAPI = process.env.REACT_APP_API;
 export const query = endpoint => {
 	return axios
 		.get(`${appAPI}${endpoint}`, { crossdomain: true })
-		.then(res => res.data.message);
+		.then(res => res.data);
 };
 
 export const getThread = () => {

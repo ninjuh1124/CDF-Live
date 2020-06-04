@@ -25,10 +25,10 @@ const App = props => {
 	const [reddit, setRedditHook] = useState(useReddit());
 
 	return (
-		<Router><div id='content'><Switch>
-			<ErrorBoundary><RedditProvider defaultValue={reddit}>
-				<Redirect exact 
-					from='/' to='/feed' />
+		<div id='content'><RedditProvider defaultValue={reddit}>
+			<Router><Switch><ErrorBoundary>
+				<Route exact path='/' render={()=> (<Redirect to='/feed' />)}
+				/>
 				<Route exact 
 					path='/feed' component={FeedRoute} />
 				<Route exact 
@@ -49,8 +49,13 @@ const App = props => {
 					path='/reddit_oauth_login' component={Login} />
 				<Route exact 
 					path='/faces' component={CommentFaces} />
-			</RedditProvider></ErrorBoundary>
-		</Switch></div></Router>
+				{/*
+				<Route exact
+					path='/pagenotfound' component={PageNotFound} />
+				<Route render={() => (<Redirect to='/pagenotfound' />)} />
+				*/}
+			</ErrorBoundary></Switch></Router>
+		</RedditProvider></div>
 	)
 }
 
