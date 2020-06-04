@@ -39,10 +39,25 @@ hr {
 }
 
 #content {
+	background: $background-primary;
+	background-image: url('/background.png');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: right bottom;
+	background-size: 20%;
+	color: $text-primary;
+	opacity: .95;
+}
+
+#feed {
 	max-width: 1200px;
 	margin: auto;
-	background: $background-primary;
-	color: $text-primary;
+	opacity: .95;
+
+	ul {
+		background: $background-primary;
+		padding-left: 0px;
+	}
 }
 
 a {

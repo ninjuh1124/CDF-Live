@@ -2,7 +2,7 @@
 	color: $text-primary
 }
 
-#about, #logged-in-as {
+#logged-in-as {
 	text-align: right;
 }
 
@@ -10,7 +10,7 @@
 	text-align: center;
 }
 
-.link-primary {
+.link-primary, .nav-link {
 	color: $link-primary;
 	text-decoration: none;
 
@@ -20,8 +20,25 @@
 	}
 }
 
-.corner-link {
+.nav-link {
+	display: inline-block;
 	text-align: right;
+
+	&:after {
+		content: '|';
+	}
+	&:last-child:after {
+		content: '';
+	}
+}
+
+.nav-links {
+	text-align: right;
+}
+
+.heading {
+	max-width: 1200px;
+	margin: auto;
 }
 
 #topbar {

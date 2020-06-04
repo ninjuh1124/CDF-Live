@@ -37,7 +37,7 @@ const FeedRoute = props => {
 		].join('&');
 
 	return (
-		<div style={{ padding: '3px' }}>
+		<div style={{ padding: '0px 3px 0px 3px' }}>
 			<Heading title='Casual Discussion Friday'>
 				{<>
 				<h5 id='latest'>
