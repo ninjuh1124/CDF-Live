@@ -26,8 +26,8 @@ const Feed = props => {
 		}) : null;
 
 	return (
-		<div id="feed">
-			<ul>
+		<div>
+			<ul id="feed">
 				{feed.error && 
 					<p class='error' id='feed-error'>
 						Something went wrong: {`${feed.error}`}

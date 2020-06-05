@@ -27,31 +27,35 @@ const App = props => {
 	return (
 		<div id='content'><RedditProvider defaultValue={reddit}>
 			<Router><Switch><ErrorBoundary>
-				<Route exact path='/' render={()=> (<Redirect to='/feed' />)}
+				<Route 
+					exact path='/' 
+					render={()=> (<Redirect to='/feed' />)}
 				/>
-				<Route exact 
-					path='/feed' component={FeedRoute} />
-				<Route exact 
-					path='/about' component={() => (
+				<Route 
+					exact path='/feed' component={FeedRoute} />
+				<Route 
+					exact path='/about' 
+					component={() => (
 						<MarkdownPage 
 							title='About'
 							endpoint='content/about.md' 
 						/>
 					)} />
-				<Route exact 
-					path='/changelog' component={() => (
+				<Route 
+					exact path='/changelog' 
+					component={() => (
 						<MarkdownPage 
 							title='Changelog'
 							endpoint='content/changelog.md' 
 						/>
 					)} />
-				<Route exact 
-					path='/reddit_oauth_login' component={Login} />
-				<Route exact 
-					path='/faces' component={CommentFaces} />
+				<Route 
+					exact path='/reddit_oauth_login' component={Login} />
+				<Route 
+					exact path='/faces' component={CommentFaces} />
 				{/*
-				<Route exact
-					path='/pagenotfound' component={PageNotFound} />
+				<Route 
+					exact path='/pagenotfound' component={PageNotFound} />
 				<Route render={() => (<Redirect to='/pagenotfound' />)} />
 				*/}
 			</ErrorBoundary></Switch></Router>

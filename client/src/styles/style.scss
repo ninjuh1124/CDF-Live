@@ -12,22 +12,25 @@
 
 body {
 	background-color: $background-primary;
+	background-image: url('/background.png');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: right bottom;
+	background-size: 19%;
 	line-height: 1.4285714285714286em;
 	font: normal 14px verdana,arial,helvetica,sans-serif;
+}
+
+#content {
+	max-width: 1200px;
+	margin: auto;
+	color: $text-primary;
+	opacity: .95;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
-
-hr {
-	border-color: $border-primary;
-}
-
-#root {
-	background: $background-primary;
-	min-height: 100%;
 }
 
 #title {
@@ -40,26 +43,17 @@ hr {
 	font-weight: 500;
 }
 
-#content {
-	background: $background-primary;
-	background-image: url('/background.png');
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: right bottom;
-	background-size: 20%;
-	color: $text-primary;
+hr {
+	border-color: $border-primary;
+}
+
+#feed, .markdown-page {
 	opacity: .95;
+	background: $background-primary;
 }
 
 #feed {
-	max-width: 1200px;
-	margin: auto;
-	opacity: .95;
-
-	ul {
-		background: $background-primary;
-		padding-left: 0px;
-	}
+	padding-left: 0;
 }
 
 a {
@@ -69,11 +63,4 @@ a {
 		color: $link-primary-hover;
 		text-decoration: underline;
 	}
-}
-
-.markdown-page {
-	background-color: $background-primary;
-	opacity: .95;
-	max-width: 1200px;
-	margin: auto;
 }
