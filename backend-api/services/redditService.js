@@ -26,12 +26,25 @@ module.exports = ({
 	 * or an access token if supplied a refresh token.
 	 **/
 	getToken: ({ code, refreshToken }) => {
-		return axios.post()
+		return axios.post(`${uri}/v1/token`, { code, refreshToken })
 			.then(res => {
 			})
 			.catch(err => {
 				console.error(err);
 			});
+	},
+
+	verifyUser: async ({ _id, accessToken }) => {
+		try {
+			let rUser = axios.get().then(res => res.data.name);
+			let dbUser = dbService.comment().then(res => res.data.author);
+
+			await Promise.all([rUser, dbUser]);
+
+			return rUser === dbUser;
+		} catch (err) {
+			throw err;
+		}
 	}
 });
 /*
