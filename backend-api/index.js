@@ -1,11 +1,11 @@
-const dotenv = require('dotenv'),
-	app = require('./app');
+const app = require('./app');
 
 const express = require('express'),
 	helmet = require('helmet'),
 	bodyParser = require('body-parser');
 
-dotenv.load();
+const dotenv = require('dotenv').config();
+
 const apiPort = process.env.API_PORT ? process.env.API_PORT : 8080;
 
 /** LOAD MIDDLEWARE **/
