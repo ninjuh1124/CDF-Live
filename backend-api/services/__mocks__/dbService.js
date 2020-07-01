@@ -1,37 +1,47 @@
-const TEST_COMMENT = {
-	_id: 't3_a',
-	id: 'a',
-	kind: 'comment',
-	thread: 't1_a',
-	author: 'author',
-	created: 0,
-	permalink: 'https://redd.it/a/a',
-	parentID: 't1_a',
-	body: 'body'
-};
+const COMMENTS = [
+	{
+		"_id": "t1_fwk0000",
+		"author": "author 1",
+		"body": "parent comment",
+		"created": 1593610000,
+		"id": "fwk0000",
+		"kind": "comment",
+		"parentID": "t3_hfx4xn",
+		"permalink": "link_to_parent",
+		"thread": "t3_hfx4xn"
+	},
+	{
+		"_id": "t1_fwk0001",
+		"author": "author 2",
+		"body": "child comment",
+		"created": 1593610000,
+		"id": "fwk0001",
+		"kind": "comment",
+		"parentID": "t1_fwk0000",
+		"permalink": "link_to_child",
+		"thread": "t3_hfx4xn"
+	}
+];
 
-const TEST_THREAD = {
-	_id: 't3_a',
-	id: 'a',
-	kind: 'comment',
-	thread: 't1_a',
-	author: 'author',
-	created: 0,
-	permalink: 'link',
-	parentID: 't1_a',
-	body: 'body'
-};
+const THREAD = [
+	{
+		_id: 't3_hfx4xn',
+		id: 'hfx4xn',
+		kind: 'submission',
+		permalink: 'https://redd.it/hfx4xn'
+	}
+];
 
 module.exports = ({
 	history: async () => {
-		return [TEST_COMMENT];
+		return COMMENTS;
 	},
 
 	thread: async () => {
-		return [TEST_THREAD];
+		return THREAD;
 	},
 
 	comment: async () => {
-		return TEST_COMMENT;
+		return COMMENTS[0];
 	}
 });

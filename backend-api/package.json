@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon index.js",
-    "test": "jest --verbose"
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -16,11 +16,15 @@
   },
   "main": "index.js",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "jest": "^26.1.0",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "superagent": "^5.3.1",
+    "supertest": "^4.0.2"
   },
   "jest": {
-    "automock": true
+    "verbose": true
   },
   "repository": {
     "type": "git",

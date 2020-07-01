@@ -1,0 +1,16 @@
+module.exports = ({
+	getUser: async (accessToken) => {
+		if (accessToken) return 'user';
+		else throw new Error();
+	},
+
+	getToken: async ({ code, refreshToken }) => {
+		if (code) return { access_token: 'foo', refresh_token: 'bar' };
+		else if (refreshToken) return { access_token: 'foo' };
+		else throw new Error('NoAuthorization')
+	},
+
+	verifyUser: async ({ _id, accessToken }) => {
+
+	}
+});
