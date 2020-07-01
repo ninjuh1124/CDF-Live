@@ -49,5 +49,27 @@ module.exports = ({
 		} catch (err) {
 			throw err;
 		}
+	},
+
+	editComment: async query => {
+		try {
+			const res = await axios.put(`${uri}/comment`, query);
+			if (!res.data.error) return res.message;
+			else if (res.data.error) throw new Error(res.data.error.message);
+			else throw new Error();
+		} catch (err) {
+			throw err;
+		}
+	},
+
+	deleteComment: async query => {
+		try {
+			const res = await axios.delete(`${uri}/comment`, query);
+			if (!res.data.error) return res.message;
+			else if (res.data.error) throw new Error(res.data.error.message);
+			else throw new Error();
+		} catch (err) {
+			throw err;
+		}
 	}
 });

@@ -3,45 +3,21 @@ const axios = require('axios'),
 
 const uri = process.env.REDDIT_SERVICE_URI;
 
-module.exports = ({
-	/**
-	 * Gets the owner of a reddit access token.
-	 * Probably should research into best practices
-	 * about using OAuth2 tokens
-	 **/
-	getUser: accessToken => {
-		return axios.get(
-			'https://oauth.reddit.com/api/v1/me',
-			{ headers: { Authorization: `Bearer ${accessToken}` }}
-		)
-			.then(res => res.data.name)
-			.catch(err => {
-				console.error(err);
-			});
-	},
-
-	/**
+module.exports = ({/**
 	 * Gets a new token from the reddit api.
 	 * Returns a refresh/access pair if supplied a code
 	 * or an access token if supplied a refresh token.
 	 **/
-	getToken: ({ code, refreshToken }) => {
-		return axios.post(`${uri}/v1/token`, { code, refreshToken })
-			.then(res => {
-			})
-			.catch(err => {
-				console.error(err);
-			});
-	},
+	getToken: async ({ code, refreshToken }) => {
+		if (!code && !refreshToken) throw new Error('NoAuthorization');
 
-	verifyUser: async ({ _id, accessToken }) => {
 		try {
-			let rUser = axios.get().then(res => res.data.name);
-			let dbUser = dbService.comment().then(res => res.data.author);
-
-			await Promise.all([rUser, dbUser]);
-
-			return rUser === dbUser;
+			return await axios.post(`${uri}/v1/token`, { code, refreshToken })
+				.then(res => {
+				})
+				.catch(err => {
+					console.error(err);
+				});
 		} catch (err) {
 			throw err;
 		}
@@ -60,7 +36,7 @@ module.exports = ({
 	getToken: ({ code, refreshToken }) => {
 		if (!code && !refreshToken) throw new Error("NoAuthorization");
 
-		const auth = "Basic " + 
+		const auth = "Basic " +
 			Buffer.from(`${process.env.REDDIT_CLIENT_ID}:${process.env.REDDIT_CLIENT_SECRET}`).toString('base64');
 
 		const headers = {

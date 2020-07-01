@@ -1,4 +1,5 @@
 const db = require('../db');
+const redditService = require('../services/redditService');
 
 module.exports = {
 	send: (res, err, d) => {
@@ -16,9 +17,9 @@ module.exports = {
 
 	refreshHistory: (newerThan, callback) => {
 		db.getComments(
-			{ _id: { $gt: newerThan }},
+			{ _id: { $gt: newerThan } },
 			null,
-			{ sort: { _id: -1 }},
+			{ sort: { _id: -1 } },
 			callback
 		)
 	},
@@ -42,15 +43,18 @@ module.exports = {
 
 			(err, id) => {
 				db.getComments(
-					{ $and: [
-						{ _id: { $gte: id[0] }},
-						{ _id: query.olderThan ? 
-							{ $lt: query.olderThan } :
-							/^t1_\S+$/
-						}
-					]},
+					{
+						$and: [
+							{ _id: { $gte: id[0] } },
+							{
+								_id: query.olderThan ?
+									{ $lt: query.olderThan } :
+									/^t1_\S+$/
+							}
+						]
+					},
 					null,
-					{ sort: { _id: -1 }},
+					{ sort: { _id: -1 } },
 					callback
 				)
 			}
@@ -73,15 +77,50 @@ module.exports = {
 		db.insertThread(thread, callback);
 	},
 
-	deleteComment: (query, callback) => {
-		db.deleteComment({ _id: query._id }, {}, callback);
-	},
-
 	deleteThread: (query, callback) => {
 		db.deleteThread({ _id: query._id }, {}, callback);
 	},
 
-	editComment: (query, callback) => {
-		db.editComment(query._id, query.body, callback);
+	deleteComment: async (query, callback) => {
+		try {
+			const [rUser, dbUser] = await Promise.all([
+				// user according to reddit
+				redditService.getUser(query.accessToken),
+				// user according to db
+				db.getComment({ _id: query._id }).exec(comment => comment.author)
+			]);
+
+			// verify
+			if (rUser === dbUser) {
+				db.deleteComment({ _id: query._id }, {}, callback);
+			} else {
+				throw new Error('Unauthorized');
+			}
+		} catch (err) {
+			// error in promise
+			callback(err);
+		}
+	},
+
+	editComment: async (query, callback) => {
+		try {
+			const [rUser, dbUser] = await Promise.all([
+				// user according to reddit
+				redditService.getUser(query.accessToken),
+				// user according to db
+				db.getComment({ _id: query._id }).exec(comment => comment.author)
+			]);
+
+			// verify
+			if (rUser === dbUser) {
+				db.editComment(query._id, query.body, callback);
+			} else {
+				throw new Error('Unauthorized');
+			}
+		} catch (err) {
+			// error in promise
+			callback(err);
+		}
+
 	}
 };

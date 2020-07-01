@@ -84,8 +84,9 @@ module.exports = ({
 			accessToken: req.body.token,
 			body: req.body.body
 		};
+
 		try {
-			const r = await redditService.editComment(query);
+			const r = await dbService.editComment(query);
 			return send(res, null, "success")
 		} catch (err) {
 			const error = {};
@@ -115,8 +116,9 @@ module.exports = ({
 			_id: req.body._id,
 			accessToken: req.body.token
 		};
+
 		try {
-			const r = redditService.editComment(query);
+			const r = dbService.deleteComment(query);
 			return send(res, null, "success");
 		} catch (err) {
 			const error = {};
