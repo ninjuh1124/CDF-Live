@@ -9,4 +9,5 @@ exports.send = (res, err, d) => {
 	let data = d ? d : null;
 
 	res.status(code).json({ error: err, message: data });
+	return ({ error: err, message: data });
 }
