@@ -30,20 +30,19 @@ module.exports = ({
 		} catch (err) {
 			throw err;
 		}
-
 	},
 
 	comment: async query => {
 		let comment = {};
 		try {
-			comment = axios.get(
+			comment = await axios.get(
 				`${uri}/comment.json`,
 				{
 					crossdomain: true,
 					params: { ...query }
 				}
 			)
-				.then(res => {})
+				.then(res => res.data.message)
 				.catch(err => {
 					console.error(err)
 				});
