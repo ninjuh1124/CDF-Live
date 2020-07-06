@@ -1,0 +1,10 @@
+{
+	"include": [
+		"./src/**/*"
+	],
+	"compilerOptions": {
+		// "module": "ES6", BREAKS IMPORTS FOR SOME REASON
+		"outDir": "./dist",
+		"sourceMap": true
+	}
+}
