@@ -12,7 +12,7 @@ const cred = {
 	username: process.env.REDDIT_USERNAME,
 	password: process.env.REDDIT_PASSWORD
 };
-console.log(cred);
+
 const client = new snoowrap(cred);
 const threads: string[] = [];
 
