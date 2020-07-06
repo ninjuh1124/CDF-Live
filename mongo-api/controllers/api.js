@@ -3,7 +3,6 @@ const {
 	refreshHistory,
 	generateHistory,
 	getComment,
-	getComments,
 	getThread,
 	insertComments,
 	insertThread,
@@ -41,15 +40,23 @@ module.exports = ({
 	},
 
 	insertComments: (req, res) => {
-		insertComments(req.query, (err, data) => {
-			send(res, err, data);
-		});
+		if (req.header.authorization === process.env.REDDIT_CLIENT_SECRET) {
+			insertComments(req.query, (err, data) => {
+				send(res, err, data);
+			});
+		} else {
+			send(res, { code: 400, message: "Unauthorized" });
+		}
 	},
 
 	insertThread: (req, res) => {
-		insertThread(req.query, (err, data) => {
-			send(res, err, data);
-		});
+		if (req.header.authorization === process.env.REDDIT_CLIENT_SECRET) {
+			insertThread(req.query, (err, data) => {
+				send(res, err, data);
+			});
+		} else {
+			send(res, { code: 400, message: "Unauthorized" });
+		}
 	},
 
 	deleteComment: (req, res) => {

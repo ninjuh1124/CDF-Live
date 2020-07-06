@@ -1,5 +1,4 @@
-const express = require('express'),
-	bodyParser = require('body-parser');
+const express = require('express');
 
 module.exports = (() => {
 	const app = express();
