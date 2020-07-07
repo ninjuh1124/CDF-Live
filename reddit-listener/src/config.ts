@@ -1,9 +1,6 @@
 import * as snoowrap from 'snoowrap';
 import * as snoostorm from 'snoostorm';
 
-const approvedSubmitters = [];
-const title = 'Casual Discussion Friday';
-
 export const cred = {
 	userAgent: process.env.REDDIT_USER_AGENT,
 	clientId: process.env.REDDIT_CLIENT_ID,
@@ -13,6 +10,8 @@ export const cred = {
 };
 
 export const isNewCdf = (submission: snoowrap.Submission): boolean => {
+	const approvedSubmitters = ['t2_6wrl6'];
+	const title = 'Casual Discussion Friday';
 	return (
 		approvedSubmitters.includes(submission.author_fullname) &&
 		submission.title.includes(title)

@@ -3,9 +3,11 @@
 		"./src/**/*"
 	],
 	"compilerOptions": {
-		"module": "ESNext",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"target": "es6",
 		"outDir": "./dist",
 		"sourceMap": true,
-		"moduleResolution": "node"
+		"removeComments": true
 	}
 }

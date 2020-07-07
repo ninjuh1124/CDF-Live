@@ -6,17 +6,17 @@ import { Thread } from './thread.model';
 axios.defaults.headers.post['Authorization'] = process.env.REDDIT_CLIENT_SECRET;
 axios.defaults.baseURL = process.env.DB_SERVICE;
 
-const makeReq = (uri: string, body: any) => {
+export const makeReq = (uri: string, body: any) => {
 	return axios.post(uri, body);
 }
 
 // check if submission should be processed
-const isNewThread = (submission: snoowrap.Submission, filter: (submssion: snoowrap.Submission) => boolean): boolean => {
+export const isNewThread = (submission: snoowrap.Submission, filter: (submssion: snoowrap.Submission) => boolean): boolean => {
 	return filter(submission);
 }
 
 // adhere comment to db model
-const mapComment = (comment: snoowrap.Comment): Comment => {
+export const mapComment = (comment: snoowrap.Comment): Comment => {
 	return {
 		kind: 'comment',
 		author: comment.author.name,
@@ -31,7 +31,7 @@ const mapComment = (comment: snoowrap.Comment): Comment => {
 }
 
 // adhere submission to db model
-const mapSubmission = (submission: snoowrap.Submission): Thread => {
+export const mapSubmission = (submission: snoowrap.Submission): Thread => {
 	return {
 		kind: 'submission',
 		_id: submission.name,
@@ -39,5 +39,3 @@ const mapSubmission = (submission: snoowrap.Submission): Thread => {
 		permalink: `https://redd.it/${submission.id}`
 	}
 }
-
-export { makeReq, mapComment, mapSubmission, isNewThread };
