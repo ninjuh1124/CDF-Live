@@ -1,55 +1,40 @@
-import { config } from 'dotenv';
-import * as snoostorm from 'snoostorm';
-import * as snoowrap from 'snoowrap';
-import { makeReq, mapComment, isNewCdf, mapSubmission } from './utils';
+import dotenv = require('dotenv');
+import snoowrap = require('snoowrap');
+import { makeReq, mapComment, isNewThread, mapSubmission } from './utils';
+import {
+	cred,
+	isNewCdf,
+	commentStream as cs,
+	submissionStream as ss,
+	getLatestThreads
+} from './config';
 
-config({ path: './.env' });
+dotenv.config({ path: './.env' });
 
-const cred = {
-	userAgent: process.env.REDDIT_USER_AGENT,
-	clientId: process.env.REDDIT_CLIENT_ID,
-	clientSecret: process.env.REDDIT_CLIENT_SECRET,
-	username: process.env.REDDIT_USERNAME,
-	password: process.env.REDDIT_PASSWORD
-};
-
+// initialize reddit
 const client = new snoowrap(cred);
-const threads: string[] = [];
 
 // get latest thread ids
-client.search({
-	query: 'Casual Discussion Friday',
-	subreddit: 'anime',
-	sort: 'new',
-	time: 'week'
-}).then((listing: snoowrap.Listing<snoowrap.Submission>) => {
+const threads: string[] = [];
+getLatestThreads(client).then((listing: snoowrap.Listing<snoowrap.Submission>) => {
 	listing.forEach((submission: snoowrap.Submission) => {
 		threads.push(submission.name)
 	});
-}).catch(err => { });
-
-// listen for new content
-const comments = new snoostorm.CommentStream(client, {
-	subreddit: 'anime',
-	limit: 100,
-	pollTime: 10 * 1000
 });
 
-const submissions = new snoostorm.SubmissionStream(client, {
-	subreddit: 'anime',
-	limit: 50,
-	pollTime: 15 * 60 * 1000
-});
+// initialize listeners
+const commentStream = cs(client);
+const submissionStream = ss(client);
 
 // send filtered content to db
-comments.on('item', (item: snoowrap.Comment) => {
+commentStream.on('item', (item: snoowrap.Comment) => {
 	if (threads.includes(item.link_id)) {
 		makeReq('/comment', [mapComment(item)]);
 	}
 });
 
-submissions.on('item', (item: snoowrap.Submission) => {
-	if (isNewCdf(item)) {
+submissionStream.on('item', (item: snoowrap.Submission) => {
+	if (isNewThread(item, isNewCdf)) {
 		threads.unshift(item.name);
 		threads.pop();
 		makeReq('/thread', mapSubmission(item));

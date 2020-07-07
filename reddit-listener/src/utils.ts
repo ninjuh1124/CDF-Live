@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Snoowrap = require('snoowrap');
+import snoowrap = require('snoowrap');
 import { Comment } from './comment.model'
 import { Thread } from './thread.model';
 
@@ -11,17 +11,12 @@ const makeReq = (uri: string, body: any) => {
 }
 
 // check if submission should be processed
-const isNewCdf = (submission: Snoowrap.Submission): boolean => {
-	const approvedSubmitters = [];
-	const title = 'Casual Discussion Friday';
-	return (
-		approvedSubmitters.includes(submission.author_fullname) &&
-		submission.title.includes(title)
-	);
+const isNewThread = (submission: snoowrap.Submission, filter: (submssion: snoowrap.Submission) => boolean): boolean => {
+	return filter(submission);
 }
 
 // adhere comment to db model
-const mapComment = (comment: Snoowrap.Comment): Comment => {
+const mapComment = (comment: snoowrap.Comment): Comment => {
 	return {
 		kind: 'comment',
 		author: comment.author.name,
@@ -36,7 +31,7 @@ const mapComment = (comment: Snoowrap.Comment): Comment => {
 }
 
 // adhere submission to db model
-const mapSubmission = (submission: Snoowrap.Submission): Thread => {
+const mapSubmission = (submission: snoowrap.Submission): Thread => {
 	return {
 		kind: 'submission',
 		_id: submission.name,
@@ -45,4 +40,4 @@ const mapSubmission = (submission: Snoowrap.Submission): Thread => {
 	}
 }
 
-export { makeReq, mapComment, mapSubmission, isNewCdf };
+export { makeReq, mapComment, mapSubmission, isNewThread };
