@@ -1,7 +1,7 @@
-import snoowrap = require('snoowrap');
-import snoostorm = require('snoostorm')
+import * as snoowrap from 'snoowrap';
+import * as snoostorm from 'snoostorm';
 
-const approvedSubmitters = ['t2_6wrl6'];
+const approvedSubmitters = [];
 const title = 'Casual Discussion Friday';
 
 export const cred = {

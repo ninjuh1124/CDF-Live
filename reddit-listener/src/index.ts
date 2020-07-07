@@ -1,5 +1,5 @@
-import dotenv = require('dotenv');
-import snoowrap = require('snoowrap');
+import * as dotenv from 'dotenv';
+import * as snoowrap from 'snoowrap';
 import { makeReq, mapComment, isNewThread, mapSubmission } from './utils';
 import {
 	cred,

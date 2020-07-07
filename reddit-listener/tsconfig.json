@@ -3,8 +3,9 @@
 		"./src/**/*"
 	],
 	"compilerOptions": {
-		// "module": "ES6", BREAKS IMPORTS FOR SOME REASON
+		"module": "ESNext",
 		"outDir": "./dist",
-		"sourceMap": true
+		"sourceMap": true,
+		"moduleResolution": "node"
 	}
 }

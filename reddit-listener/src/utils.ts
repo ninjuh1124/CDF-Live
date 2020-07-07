@@ -1,5 +1,5 @@
 import axios from 'axios';
-import snoowrap = require('snoowrap');
+import * as snoowrap from 'snoowrap';
 import { Comment } from './comment.model'
 import { Thread } from './thread.model';
 
