@@ -1,0 +1,13 @@
+{
+	"include": [
+		"./src/**/*"
+	],
+	"compilerOptions": {
+		"module": "CommonJS",
+		"target": "es6",
+		"moduleResolution": "node",
+		"outDir": "./dist",
+		"removeComments": true,
+		"sourceMap": true
+	}
+}

@@ -29,7 +29,7 @@ const submissionStream = ss(client);
 // send filtered content to db
 commentStream.on('item', (item: snoowrap.Comment) => {
 	if (threads.includes(item.link_id)) {
-		makeReq('/comment', [mapComment(item)]);
+		makeReq('/comment', { comments: [mapComment(item)] });
 	}
 });
 
@@ -37,6 +37,6 @@ submissionStream.on('item', (item: snoowrap.Submission) => {
 	if (isNewThread(item, isNewCdf)) {
 		threads.unshift(item.name);
 		threads.pop();
-		makeReq('/thread', mapSubmission(item));
+		makeReq('/thread', { thread: mapSubmission(item) });
 	}
 })

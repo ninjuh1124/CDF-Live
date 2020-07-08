@@ -1,6 +1,7 @@
-const router = require('express').Router();
+import * as express from 'express';
+const router = express.Router();
 
-module.exports = controller => {
+export const apiRouter = (controller): express.Router => {
 	// retrieve resource
 	router.get('/history.json', controller.history);
 	router.get('/comment.json', controller.getComment);
