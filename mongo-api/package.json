@@ -2,9 +2,10 @@
   "name": "fridaydotmoe-db",
   "version": "1.0.0",
   "description": "Backend DB handler for website",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon dist/index.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
