@@ -18,7 +18,7 @@
   "homepage": "https://github.com/ninjuh1124/fridaydotmoe#readme",
   "dependencies": {
     "dotenv": "^6.2.0",
-    "mongodb": "^2.2.36",
+    "mongodb": "^3.6.1",
     "snoostorm": "0.0.5",
     "snoowrap": "^1.15.2"
   },
